@@ -1,0 +1,10 @@
+name: build_and_test
+on: [push]
+jobs:
+  build_and_test:
+    runs-on: macos-latest
+    steps:
+      - run: brew install pdm 
+      - run: pdm install
+      - run: python3 -m unittest chesspy.tests  
+

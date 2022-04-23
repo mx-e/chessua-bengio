@@ -77,13 +77,3 @@ def extract_en_passant_tile(ep_str:str):
     col, row = ep_str
     return np.array([abc_to_num(col) -1, int(row) - 1])
     
-
-import unittest
-
-class TestUtils(unittest.TestCase):
-    def test_get_char_to_int_tile_state(self):
-        self.assertEqual(get_char_to_int_tile_state("K"),6)
-        self.assertEqual(get_char_to_int_tile_state(22), 0)
-        self.assertEqual(get_char_to_int_tile_state("g"), 0)
-        self.assertEqual(get_char_to_int_tile_state('p'), -1)
-        
