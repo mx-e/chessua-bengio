@@ -9,5 +9,5 @@ jobs:
       - run: python3 -m pip install --upgrade build
       - run: python3 -m pip install .
       - run: python3 main.py
-      - run: python3 -m unittest chesspy.tests  
+      - run: python3 -m unittest chesspy.test
 
