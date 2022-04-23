@@ -1,3 +1,4 @@
+import numpy as np
 
 reverse_map = lambda map_:{ v: k for k, v in map_.items() }
 
@@ -22,11 +23,57 @@ get_idx_to_char_can_castle = lambda int: can_castle_idx_to_char_map.get(int, '-'
 abc_to_num = lambda char: ord(char) - 96 if ord(char) > 96 and ord(char) < 123 else -1
 num_to_abc = lambda i: chr(i + 96) if i>1 and i<27 else ' '
 
+def board_row_to_repr_str(board_row:np.array):
+    row_str = ''
+    for tile in board_row:
+        char_tile_state= get_int_to_char_tile_state(tile)
+        row_str += '◇' if char_tile_state == ' ' else char_tile_state
+            
+    
+    return row_str
 
+def board_row_to_row_str(board_row:np.array):
+    row_str = ''
+    consec_empty = 0
+    for tile in board_row:
+        char_tile_state= get_int_to_char_tile_state(tile)
+        if(char_tile_state == ' '):
+            consec_empty += 1
+        else:
+            if(consec_empty > 0):
+                row_str += consec_empty
+                consec_empty = 0
+            row_str += char_tile_state
+    if(consec_empty > 0):
+        row_str += str(consec_empty)
+    return row_str
+            
+            
 
+def row_str_to_board_row(row_str:str):
+    int_board_row = []
+    for char in row_str:
+        int_tile_state = get_char_to_int_tile_state(char)
+        if(int_tile_state != 0):
+            int_board_row.append(int_tile_state)
+        else:
+            n_empty_fields = int(char)
+            for _ in range(n_empty_fields):
+                int_board_row.append(0) 
+    return int_board_row
 
+def can_castle_string_to_arr(castle_str:str):
+    can_castle = np.array([False, False, False, False])
+    for char in castle_str:
+        idx_castle = get_char_to_idx_can_castle(char)
+        if(idx_castle == -1):
+            return can_castle
+        can_castle[idx_castle] = True
+    return can_castle
 
-# const int white_kingside = 0;
-# const int white_queenside = 1;
-# const int black_kingside = 2;
-# const int black_queenside = 3;
+def extract_en_passant_tile(ep_str:str):
+    if(ep_str == '-'): return np.array([-1, -1])
+    assert(len(ep_str) == 2)
+    col, row = ep_str
+    return np.array([abc_to_num(col) -1, int(row) - 1])
+    
