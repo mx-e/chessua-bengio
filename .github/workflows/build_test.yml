@@ -5,8 +5,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - run: pip3 install numpy setuptools
-      - run: pip3 install .
+      - run: python3 -m pip install numpy setuptools
+      - run: python3 -m pip install --upgrade build
+      - run: python3 -m pip install .
       - run: python3 main.py
       - run: python3 -m unittest chesspy.tests  
 
