@@ -7,5 +7,6 @@ jobs:
       - uses: actions/checkout@v3
       - run: brew install pdm 
       - run: pdm install
+      - run: python3 -m pip install .  
       - run: python3 -m unittest chesspy.tests  
 

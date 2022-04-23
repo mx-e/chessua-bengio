@@ -1,14 +1,4 @@
 [[package]]
-name = "chess-ai"
-version = "UNKNOWN"
-requires_python = ">=3.9"
-path = "./."
-summary = "UNKNOWN"
-dependencies = [
-    "numpy>=1.22.3",
-]
-
-[[package]]
 name = "numpy"
 version = "1.22.3"
 requires_python = ">=3.8"
@@ -28,7 +18,7 @@ summary = "Easily download, build, install, upgrade, and uninstall Python packag
 
 [metadata]
 lock_version = "3.1"
-content_hash = "sha256:cd83f63f2ad536547fedee6672a85f44085e4373b5436c66ffa94898dedc98c0"
+content_hash = "sha256:e4f4f4d9f8cffcf1fafb69b9a6fe38d73930b8f84c13808cfa1f40946c663449"
 
 [metadata.files]
 "numpy 1.22.3" = [

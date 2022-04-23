@@ -6,9 +6,7 @@ authors = [
     {name = "mx-e", email = "maxi.eissler@gmail.com"},
 ]
 dependencies = [
-    "numpy>=1.22.3",
-    "chess-ai @ file:///${PROJECT_ROOT}",
-]
+    "numpy>=1.22.3"]
 requires-python = ">=3.9"
 license = {text = "MIT"}
 [project.optional-dependencies]
