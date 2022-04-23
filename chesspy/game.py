@@ -21,6 +21,7 @@ def import_fen(fen_str:str):
     assert(len(fen_str.split(' ')) == 6)
     board_state, to_move, can_castle, en_passant_tile, n_reversible_halfmoves, n_moves = fen_str.split()
     assert(n_reversible_halfmoves.isnumeric() and n_moves.isnumeric())
+    assert(len(board_state.split('/')) == 8)
 
     int_board_state = np.array([row_str_to_board_row(row_str) for row_str in board_state.split('/')], dtype=int)
     int_to_move = get_char_to_int_to_move(to_move)
