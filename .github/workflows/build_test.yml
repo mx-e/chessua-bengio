@@ -5,7 +5,10 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - run: brew install pdm 
+      - uses: pdm-project/setup-pdm@main
+        with:
+          python-version: 3.9  # Version range or exact version of a Python version to use, the same as actions/setup-python
+          enable-pep582: true  # Enable PEP 582 package loading globally
       - run: pdm install
       - run: pdm build
       - run: python3 main.py
