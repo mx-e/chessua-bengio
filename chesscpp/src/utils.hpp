@@ -34,10 +34,3 @@ const int black_kingside = 2;
 const int black_queenside = 3;
 
 std::vector<std::string> split_string(std::string str, std::string delimiter);
-int fen_char_to_board_state(char const symbol);
-int fen_castling_char_to_idx(char const symbol);
-
-// maps small letters to numbers, a->1, b->2, etc.
-int abc_to_123(char const col_char);
-int char_to_int(char const ch);
-char board_state_to_char(int state);
