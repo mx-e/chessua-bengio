@@ -1,1 +1,1 @@
-from chesspy.test.utils import *
+from .utils import * 
