@@ -1,56 +1,3 @@
-#include <array>
-#include <vector>
-#include "main.hpp"
-
-float big_loop(int size)
-{
-    int result = 0;
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            result += 1;
-        }
-    }
-    return (float)result;
-}
-
-Board get_board()
-{
-    Board m = {};
-    return m;
-}
-
-Board add_1_to_board(Board board)
-{
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            board[i].at(j) += 1;
-        }
-    }
-    return board;
-}
-
-
-
-bool on_board(Position position)
-{
-    return position.first >= 0 && position.first < 8 && position.second >= 0 && position.second;
-}
-
-bool is_free(Position position, Board board)
-{
-    return board[position.first][position.second] == 0;
-}
-
-Position operator+(const Position &x, const Position &y)
-{
-    return std::make_pair(x.first + y.first, x.first + y.first);
-}
-
-
 class Piece
 {
 public:
@@ -61,11 +8,11 @@ public:
      * @param position
      * @return Directions
      */
-    Directions get_directions(Position position) {};
+    virtual Directions get_directions(Position position);
 
-    int get_steps() {};
+    virtual int get_steps();
 
-    Piece(int piece_id);
+    explicit Piece(int piece_id);
 
     int get_id();
 
@@ -146,21 +93,4 @@ void add_boards_for_piece(Boards boards, Board board, Piece piece, int x, int y)
     {
         add_boards_along(boards, board_template, direction, position, piece);
     }
-}
-
-Boards get_possible_boards(Board board, int color)
-{
-    Boards boards;
-    for (int x = 0; x < 8; x++)
-    {
-        for (int y = 0; y < 8; y++)
-        {
-            if (color * board[x][y] > 0)
-            {
-                Piece piece = PIECES[board[x][y] + 16];
-                add_boards_for_piece(boards, board, piece, x, y);
-            }
-        }
-    }
-    return boards;
 }
