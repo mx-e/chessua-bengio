@@ -103,7 +103,7 @@ class King : public Piece
     public:
         virtual Directions get_directions(Position position)
         {
-            Directions directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+            Directions directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {1, 1}, {-1, -1}};
             return directions;
         }
 
@@ -133,7 +133,7 @@ void add_boards_along(Boards& boards, Board board, Direction direction, Position
     while (on_board(position) && is_free(position, board) && steps > 0)
     {
         Board new_board = board;
-        new_board[position.first].at(position.second) = 1;//piece.get_id();
+        new_board[position.first].at(position.second) = piece.get_id();
         boards.push_back(new_board);
 
         position = position + direction;
