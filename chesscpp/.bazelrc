@@ -1,0 +1,4 @@
+build --action_env=BAZEL_CXXOPTS="-std=c++17"
+build:debug -c dbg 
+build:debug --copt="-g"
+build:debug --strip="never"
