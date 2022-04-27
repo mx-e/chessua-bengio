@@ -5,8 +5,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - run: python3 -m pip install numpy setuptools
+      - run: python3 -m pip install numpy setuptools invoke python-dotenv
       - run: python3 -m pip install --upgrade build
-      - run: python3 -m pip install .
-      - run: python3 -m unittest chesspy.test
+      - run: invoke build --python=python3
 
