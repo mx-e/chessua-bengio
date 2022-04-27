@@ -1,4 +1,4 @@
-#include "src/main.hpp"
+#include "../src/main.hpp"
 #include <gtest/gtest.h>
 
 TEST(HelloTest, BasicAssertions) {

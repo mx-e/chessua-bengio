@@ -9,7 +9,7 @@ class BuildExt(build_ext):
 
 setup(
     ext_modules=[
-        Pybind11Extension("chesscpp", sorted(glob("./chesscpp/src/*.cpp")))
+        Pybind11Extension("chesscpp", sorted(["./chesscpp/pybind11_wrapper.cpp"] + glob("./chesscpp/src/*.cpp")))
     ],
     name="chess-ai",
     cmdclass={"build_ext": build_ext},

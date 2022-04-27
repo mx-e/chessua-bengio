@@ -3,20 +3,8 @@
 #include <map>
 #include <memory>
 #include "main.hpp"
+#include "pieces.hpp"
 #include <iostream>
-
-float big_loop(int size)
-{
-    int result = 0;
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            result += 1;
-        }
-    }
-    return (float)result;
-}
 
 Board get_board()
 {
@@ -24,96 +12,50 @@ Board get_board()
     return m;
 }
 
-Board add_1_to_board(Board board)
-{
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            board[i].at(j) += 1;
-        }
-    }
-    return board;
-}
-
-
 Position operator+(const Position &x, const Position &y)
 {
     return std::make_pair(x.first + y.first, x.first + y.first);
 }
 
-
-class Piece
-{
-    public:
-        /**
-         * @brief Provides the immediate directions a piece can move, given the current position.
-         * Note that the method should return also directions that are invalid given the
-         * game state or board limits. In a sense, this method returns all conceivable moves.
-         * @param position
-         * @return Directions
-         */
-        virtual Directions get_directions(Position position) = 0;
-
-        virtual int get_steps() = 0;
-
-        Piece(int id)
-        {
-            this->id = id;
-        }
-
-        virtual ~Piece() {}
-
-        int get_id()
-        {
-            return this->id;
-        }
-
-    private:
-        int id;
-
-};
-
 class Pawn : public Piece
 {
     using Piece::Piece;
-    public:
-        virtual Directions get_directions(Position position)
-        {
-            Directions directions = {{0, 1}};
-            return directions;
 
-            if (position.first == 0 && position.second == 1)
-            {
-                directions.push_back({0, 2});
-            }
-            return directions;
-        }
+public:
+    virtual Directions get_directions(Position position)
+    {
+        Directions directions = {{0, 1}};
+        return directions;
 
-        virtual int get_steps()
+        if (position.first == 0 && position.second == 1)
         {
-            return 1;
+            directions.push_back({0, 2});
         }
+        return directions;
+    }
+
+    virtual int get_steps()
+    {
+        return 1;
+    }
 };
-
 
 class King : public Piece
 {
     using Piece::Piece;
-    public:
-        virtual Directions get_directions(Position position)
-        {
-            Directions directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {1, 1}, {-1, -1}};
-            return directions;
-        }
 
-        virtual int get_steps()
-        {
-            return 1;
-        }
+public:
+    virtual Directions get_directions(Position position)
+    {
+        Directions directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {1, 1}, {-1, -1}};
+        return directions;
+    }
+
+    virtual int get_steps()
+    {
+        return 1;
+    }
 };
-
-
 
 bool on_board(Position position)
 {
@@ -125,7 +67,7 @@ bool is_free(Position position, Board board)
     return board[position.first][position.second] == 0;
 }
 
-void add_boards_along(Boards& boards, Board board, Direction direction, Position position, Piece& piece)
+void add_boards_along(Boards &boards, Board board, Direction direction, Position position, Piece &piece)
 {
     position = position + direction;
     int steps = piece.get_steps();
@@ -141,7 +83,7 @@ void add_boards_along(Boards& boards, Board board, Direction direction, Position
     }
 }
 
-void add_boards_for_piece(Boards& boards, Board board, Piece& piece, int x, int y)
+void add_boards_for_piece(Boards &boards, Board board, Piece &piece, int x, int y)
 {
     Position position(x, y);
     board[x].at(y) = 0;
@@ -158,13 +100,13 @@ void add_boards_for_piece(Boards& boards, Board board, Piece& piece, int x, int 
 
 Boards get_possible_boards(Board board, int color)
 {
-    std::map<int, std::shared_ptr<Piece>> p = {
-        { -2, std::make_shared<King>(-2) },
-        { -1, std::make_shared<Pawn>(-1) },
-        {  1, std::make_shared<Pawn>( 1) },
-        {  2, std::make_shared<King>( 2) },
+    std::map<int, std::shared_ptr<Piece> > p = {
+        {-2, std::make_shared<King>(-2)},
+        {-1, std::make_shared<Pawn>(-1)},
+        {1, std::make_shared<Pawn>(1)},
+        {2, std::make_shared<King>(2)},
     };
-    
+
     Boards boards;
 
     for (int x = 0; x < 8; x++)
@@ -172,8 +114,8 @@ Boards get_possible_boards(Board board, int color)
         for (int y = 0; y < 8; y++)
         {
             if (color * board[x][y] > 0)
-            {   
-                Piece& piece = *p[board[x][y]]; //*pieces[3]; //PIECES[board[x][y]];
+            {
+                Piece &piece = *p[board[x][y]];
                 add_boards_for_piece(boards, board, piece, x, y);
             }
         }
