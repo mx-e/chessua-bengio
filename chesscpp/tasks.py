@@ -72,7 +72,7 @@ def clean(c):
         c.run(f'rm -rf {TARGET}/build')
 
 @task
-def test(c, debug=False, remake=False, bot_mode=False, output_on_failure=False, rerun_failed=False):
+def test(c, debugger='', remake=False, bot_mode=False, output_on_failure=False, rerun_failed=False):
     cmd = Cmd(c, bot_mode)
     cmd.add(f"cd {TARGET}")
 
@@ -91,7 +91,7 @@ def test(c, debug=False, remake=False, bot_mode=False, output_on_failure=False, 
     
     cmd.add("cmake --build .")
 
-    if not debug:
+    if debugger == '':
         ctest_cmd = "ctest"
         if output_on_failure:
             ctest_cmd += " --output-on-failure"
@@ -99,7 +99,7 @@ def test(c, debug=False, remake=False, bot_mode=False, output_on_failure=False, 
             ctest_cmd += " --rerun-failed"
         cmd.add(ctest_cmd)
     else:
-        cmd.add("lldb chesscpp")
+        cmd.add(f"{debugger} chesscpp")
 
     cmd(verbose=True)
     
