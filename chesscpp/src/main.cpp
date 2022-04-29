@@ -70,30 +70,39 @@ private:
     Position previous_position;
     Move &move;
     int steps;
+
+    void update_positions();
 };
 
 BoardHead::BoardHead(Board board, Piece &piece, Position position, Move &move) : piece(piece), move(move)
 {
     this->board = board;
     this->piece = piece;
-
-    this->previous_position = position;
-    this->position = position;
-
-    move.step(this->position);
-
     this->move = move;
+    this->position = position;
     this->steps = piece.get_steps();
+
+    this->update_positions();
+}
+
+void BoardHead::update_positions() 
+{
+    this->previous_position = this->position;
+    move.step(this->position);
 }
 
 bool BoardHead::is_done()
 {
-    return on_board(this->position) && is_free(this->position, this->board) && this->steps > 0;
+    return !(on_board(this->position) && is_free(this->position, this->board) && this->steps > 0);
 }
 
 Board BoardHead::do_move()
 {
     this->move.update(this->board, this->piece, this->position);
+    this->board[this->previous_position.first].at(this->previous_position.second) = 0;
+
+    this->steps -= 1;
+    this->update_positions();
 
     Board board_copy = this->board;
     return board_copy;
@@ -101,21 +110,27 @@ Board BoardHead::do_move()
 
 void add_boards_along(Boards &boards, Board board, Direction direction, Position position, Piece &piece)
 {
-    Position previous = position;
-    position = position + direction;
-    int steps = piece.get_steps();
 
-    while (on_board(position) && is_free(position, board) && steps > 0)
+    DirectionalMove move { direction };
+    BoardHead head { board, piece, position, move };
+
+    //Position previous = position;
+    //position = position + direction;
+    //int steps = piece.get_steps();
+
+    while (!head.is_done())//(on_board(position) && is_free(position, board) && steps > 0)
     {
-        board[previous.first].at(previous.second) = 0;
-        board[position.first].at(position.second) = piece.get_id();
+        //board[previous.first].at(previous.second) = 0;
+        //board[position.first].at(position.second) = piece.get_id();
 
-        Board new_board = board;
-        boards.push_back(new_board);
+        Board board_copy = head.do_move();
 
-        previous = position;
-        position = position + direction;
-        steps -= 1;
+        //Board new_board = board;
+        boards.push_back(board_copy);
+
+        //previous = position;
+        //position = position + direction;
+        //steps -= 1;
     }
 }
 
