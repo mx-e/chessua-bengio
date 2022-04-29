@@ -25,6 +25,7 @@ add_executable(
     main.cpp
     ../src/main.hpp
     ../src/pieces.hpp
+    ../src/types.hpp
     ../src/pieces.cpp
     ../src/main.cpp
 )

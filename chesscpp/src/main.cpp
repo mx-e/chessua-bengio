@@ -8,7 +8,7 @@ Board get_board()
 
 Position operator+(const Position &x, const Position &y)
 {
-    return std::make_pair(x.first + y.first, x.first + y.first);
+    return std::make_pair(x.first + y.first, x.second + y.second);
 }
 
 bool on_board(Position position)
@@ -21,17 +21,99 @@ bool is_free(Position position, Board board)
     return board[position.first][position.second] == 0;
 }
 
+class Move
+{
+public:
+    virtual void step(Position &position) = 0;
+    virtual void update(Board &board, Piece &piece, Position position) = 0;
+};
+
+class DirectionalMove : public Move
+{
+public:
+    DirectionalMove(Direction direction);
+    virtual void step(Position &position);
+    virtual void update(Board &board, Piece &piece, Position position);
+
+private:
+    Direction direction;
+};
+
+DirectionalMove::DirectionalMove(Direction direction)
+{
+    this->direction = direction;
+}
+
+void DirectionalMove::step(Position &position)
+{
+    position = position + direction;
+}
+
+void DirectionalMove::update(Board &board, Piece &piece, Position position)
+{
+    board[position.first].at(position.second) = piece.get_id();
+}
+
+class BoardHead
+{
+public:
+    BoardHead(Board board, Piece &piece, Position position, Move &move);
+
+    Board do_move();
+
+    bool is_done();
+
+private:
+    Board board;
+    Piece &piece;
+    Position position;
+    Position previous_position;
+    Move &move;
+    int steps;
+};
+
+BoardHead::BoardHead(Board board, Piece &piece, Position position, Move &move) : piece(piece), move(move)
+{
+    this->board = board;
+    this->piece = piece;
+
+    this->previous_position = position;
+    this->position = position;
+
+    move.step(this->position);
+
+    this->move = move;
+    this->steps = piece.get_steps();
+}
+
+bool BoardHead::is_done()
+{
+    return on_board(this->position) && is_free(this->position, this->board) && this->steps > 0;
+}
+
+Board BoardHead::do_move()
+{
+    this->move.update(this->board, this->piece, this->position);
+
+    Board board_copy = this->board;
+    return board_copy;
+}
+
 void add_boards_along(Boards &boards, Board board, Direction direction, Position position, Piece &piece)
 {
+    Position previous = position;
     position = position + direction;
     int steps = piece.get_steps();
 
     while (on_board(position) && is_free(position, board) && steps > 0)
     {
+        board[previous.first].at(previous.second) = 0;
+        board[position.first].at(position.second) = piece.get_id();
+
         Board new_board = board;
-        new_board[position.first].at(position.second) = piece.get_id();
         boards.push_back(new_board);
 
+        previous = position;
         position = position + direction;
         steps -= 1;
     }
@@ -40,7 +122,6 @@ void add_boards_along(Boards &boards, Board board, Direction direction, Position
 void add_boards_for_piece(Boards &boards, Board board, Piece &piece, int x, int y)
 {
     Position position(x, y);
-    board[x].at(y) = 0;
 
     for (auto direction : piece.get_directions(position))
     {
