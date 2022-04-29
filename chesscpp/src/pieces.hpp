@@ -1,4 +1,6 @@
-#include "main.hpp"
+#include "types.hpp"
+#include <memory>
+#include <map>
 
 class Piece
 {
@@ -14,12 +16,73 @@ public:
 
     virtual int get_steps() = 0;
 
-    Piece(int id);
+    virtual int get_id() = 0;
+};
 
-    virtual ~Piece() {}
+typedef std::map<int, std::shared_ptr<Piece> > AvailablePieces;
 
-    int get_id();
+class Pawn : public Piece
+{
+    using Piece::Piece;
 
-private:
-    int id;
+    virtual Directions get_directions(Position position);
+
+    virtual int get_steps();
+
+    virtual int get_id();
+};
+
+class King : public Piece
+{
+    using Piece::Piece;
+
+    virtual Directions get_directions(Position position);
+
+    virtual int get_steps();
+
+    virtual int get_id();
+};
+
+class Queen : public Piece
+{
+    using Piece::Piece;
+
+    virtual Directions get_directions(Position position);
+
+    virtual int get_steps();
+
+    virtual int get_id();
+};
+
+class Bishop : public Piece
+{
+    using Piece::Piece;
+
+    virtual Directions get_directions(Position position);
+
+    virtual int get_steps();
+
+    virtual int get_id();
+};
+
+class Knight : public Piece
+{
+    using Piece::Piece;
+
+    virtual Directions get_directions(Position position);
+
+    virtual int get_steps();
+
+    virtual int get_id();
+};
+
+class Rook : public Piece
+{
+    using Piece::Piece;
+
+    virtual Directions get_directions(Position position);
+
+    virtual int get_steps();
+
+    virtual int get_id();
 };

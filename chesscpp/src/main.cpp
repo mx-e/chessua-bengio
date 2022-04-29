@@ -1,10 +1,4 @@
-#include <array>
-#include <vector>
-#include <map>
-#include <memory>
 #include "main.hpp"
-#include "pieces.hpp"
-#include <iostream>
 
 Board get_board()
 {
@@ -16,46 +10,6 @@ Position operator+(const Position &x, const Position &y)
 {
     return std::make_pair(x.first + y.first, x.first + y.first);
 }
-
-class Pawn : public Piece
-{
-    using Piece::Piece;
-
-public:
-    virtual Directions get_directions(Position position)
-    {
-        Directions directions = {{0, 1}};
-        return directions;
-
-        if (position.first == 0 && position.second == 1)
-        {
-            directions.push_back({0, 2});
-        }
-        return directions;
-    }
-
-    virtual int get_steps()
-    {
-        return 1;
-    }
-};
-
-class King : public Piece
-{
-    using Piece::Piece;
-
-public:
-    virtual Directions get_directions(Position position)
-    {
-        Directions directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {1, 1}, {-1, -1}};
-        return directions;
-    }
-
-    virtual int get_steps()
-    {
-        return 1;
-    }
-};
 
 bool on_board(Position position)
 {
@@ -88,24 +42,38 @@ void add_boards_for_piece(Boards &boards, Board board, Piece &piece, int x, int 
     Position position(x, y);
     board[x].at(y) = 0;
 
-    Directions dirs2 = piece.get_directions(position);
-
-    Directions dirs = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
-
     for (auto direction : piece.get_directions(position))
     {
         add_boards_along(boards, board, direction, position, piece);
     }
 }
 
+template <class T>
+void add(AvailablePieces &pieces, int color)
+{
+    std::shared_ptr<Piece> piece = std::make_shared<T>();
+    pieces[piece->get_id()] = piece;
+}
+
+AvailablePieces get_available_pieces()
+{
+    AvailablePieces pieces;
+    for (auto color : {-1, 1})
+    {
+        add<King>(pieces, color);
+        add<Queen>(pieces, color);
+        add<Bishop>(pieces, color);
+        add<Knight>(pieces, color);
+        add<Rook>(pieces, color);
+        add<Pawn>(pieces, color);
+    }
+    return pieces;
+}
+
 Boards get_possible_boards(Board board, int color)
 {
-    std::map<int, std::shared_ptr<Piece> > p = {
-        {-2, std::make_shared<King>(-2)},
-        {-1, std::make_shared<Pawn>(-1)},
-        {1, std::make_shared<Pawn>(1)},
-        {2, std::make_shared<King>(2)},
-    };
+
+    AvailablePieces p = get_available_pieces();
 
     Boards boards;
 
