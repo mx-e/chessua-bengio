@@ -19,3 +19,24 @@ void DirectionalMove::update(Board &board, Piece &piece, Position position)
 {
     board[position.first].at(position.second) = piece.get_id();
 }
+
+Castle::Castle(CastleSide side)
+{
+    this->side = side;
+}
+
+void Castle::step(Position &position)
+{
+    Direction direction = {side == KingSide ? 2 : -2 , 0};
+    position = position + direction;
+}
+
+void Castle::update(Board &board, Piece &piece, Position position)
+{
+    int color = piece.get_color();
+    Position rookPosition = {side == KingSide ? 7 : 0, color == COLOR_WHITE ? 0 : 7};
+    Rook utilityRook { color };
+
+    board[position.first].at(position.second) = piece.get_id();
+    board[rookPosition.first].at(rookPosition.second) = utilityRook.get_id();
+}

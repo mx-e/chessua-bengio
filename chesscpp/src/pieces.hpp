@@ -5,6 +5,8 @@
 class Piece
 {
 public:
+    Piece(int color);
+
     /**
      * @brief Provides the immediate directions a piece can move, given the current position.
      * Note that the method should return also directions that are invalid given the
@@ -17,6 +19,11 @@ public:
     virtual int get_steps() = 0;
 
     virtual int get_id() = 0;
+
+    virtual int get_color();
+
+protected:
+    int color;
 };
 
 typedef std::map<int, std::shared_ptr<Piece> > AvailablePieces;
@@ -78,6 +85,7 @@ class Knight : public Piece
 
 class Rook : public Piece
 {
+public:
     using Piece::Piece;
 
     virtual Directions get_directions(Position position);
