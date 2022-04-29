@@ -23,10 +23,12 @@ enable_testing()
 add_executable(
     chesscpp 
     main.cpp
+    ../src/moves.hpp
     ../src/main.hpp
     ../src/pieces.hpp
     ../src/types.hpp
     ../src/pieces.cpp
+    ../src/moves.cpp
     ../src/main.cpp
 )
 

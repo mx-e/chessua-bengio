@@ -6,11 +6,6 @@ Board get_board()
     return m;
 }
 
-Position operator+(const Position &x, const Position &y)
-{
-    return std::make_pair(x.first + y.first, x.second + y.second);
-}
-
 bool on_board(Position position)
 {
     return position.first >= 0 && position.first < 8 && position.second >= 0 && position.second < 8;
@@ -19,39 +14,6 @@ bool on_board(Position position)
 bool is_free(Position position, Board board)
 {
     return board[position.first][position.second] == 0;
-}
-
-class Move
-{
-public:
-    virtual void step(Position &position) = 0;
-    virtual void update(Board &board, Piece &piece, Position position) = 0;
-};
-
-class DirectionalMove : public Move
-{
-public:
-    DirectionalMove(Direction direction);
-    virtual void step(Position &position);
-    virtual void update(Board &board, Piece &piece, Position position);
-
-private:
-    Direction direction;
-};
-
-DirectionalMove::DirectionalMove(Direction direction)
-{
-    this->direction = direction;
-}
-
-void DirectionalMove::step(Position &position)
-{
-    position = position + direction;
-}
-
-void DirectionalMove::update(Board &board, Piece &piece, Position position)
-{
-    board[position.first].at(position.second) = piece.get_id();
 }
 
 class BoardHead
