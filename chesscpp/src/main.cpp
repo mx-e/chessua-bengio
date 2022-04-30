@@ -19,12 +19,12 @@ bool is_free(Position position, Board board)
 class BoardHead
 {
 public:
-    BoardHead(Board board, Piece &piece, Position position, Move &move);
+    BoardHead(BoardState boardState, Piece &piece, Position position, Move &move);
     Board do_move();
     bool is_done();
 
 private:
-    Board board;
+    BoardState boardState;
     Piece &piece;
     Position position;
     Position previous_position;
@@ -34,9 +34,9 @@ private:
     void update_positions();
 };
 
-BoardHead::BoardHead(Board board, Piece &piece, Position position, Move &move) : piece(piece), move(move)
+BoardHead::BoardHead(BoardState boardState, Piece &piece, Position position, Move &move) : piece(piece), move(move)
 {
-    this->board = board;
+    this->boardState = boardState;
     this->piece = piece;
     this->move = move;
     this->position = position;
@@ -52,25 +52,24 @@ void BoardHead::update_positions()
 
 bool BoardHead::is_done()
 {
-    return !(on_board(position) && is_free(position, board) && steps > 0);
+    return !(on_board(position) && is_free(position, boardState.board) && steps > 0);
 }
 
 Board BoardHead::do_move()
 {
-    move.update(board, piece, position);
-    board[previous_position.first].at(previous_position.second) = 0;
+    move.update(boardState.board, boardState, piece, position);
+    boardState.board[previous_position.first].at(previous_position.second) = 0;
 
     steps -= 1;
     update_positions();
 
-    Board board_copy = board;
+    Board board_copy = boardState.board;
     return board_copy;
 }
 
-void add_boards_along(Boards &boards, Board board, Direction direction, Position position, Piece &piece)
+void add_boards_along(Boards &boards, BoardState boardState, Move &move, Position position, Piece &piece)
 {
-    DirectionalMove move{direction};
-    BoardHead head{board, piece, position, move};
+    BoardHead head{boardState, piece, position, move};
 
     while (!head.is_done())
     {
@@ -78,13 +77,13 @@ void add_boards_along(Boards &boards, Board board, Direction direction, Position
     }
 }
 
-void add_boards_for_piece(Boards &boards, Board board, Piece &piece, int x, int y)
+void add_boards_for_piece(Boards &boards, BoardState boardState, Piece &piece, int x, int y)
 {
     Position position(x, y);
 
-    for (auto direction : piece.get_directions(position))
+    for (auto move : piece.get_moves(boardState, position))
     {
-        add_boards_along(boards, board, direction, position, piece);
+        add_boards_along(boards, boardState, *move, position, piece);
     }
 }
 
@@ -98,7 +97,7 @@ void add(AvailablePieces &pieces, int color)
 AvailablePieces get_available_pieces()
 {
     AvailablePieces pieces;
-    for (auto color : {-1, 1})
+    for (auto color : {COLOR_BLACK, COLOR_WHITE})
     {
         add<King>(pieces, color);
         add<Queen>(pieces, color);
@@ -110,10 +109,12 @@ AvailablePieces get_available_pieces()
     return pieces;
 }
 
-Boards get_possible_boards(Board board, int color)
+Boards get_possible_boards(BoardState boardState)
 {
     AvailablePieces pieces = get_available_pieces();
     Boards boards;
+    Board board = boardState.board;
+    int color = boardState.color;
 
     for (int x = 0; x < 8; x++)
     {
@@ -122,7 +123,7 @@ Boards get_possible_boards(Board board, int color)
             if (color * board[x][y] > 0)
             {
                 Piece &piece = *pieces[board[x][y]];
-                add_boards_for_piece(boards, board, piece, x, y);
+                add_boards_for_piece(boards, boardState, piece, x, y);
             }
         }
     }

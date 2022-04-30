@@ -31,6 +31,8 @@ enable_testing()
 add_executable(
     chesscpp 
     main.cpp
+    custom.hpp
+    custom.cpp
 {1}
 )
 

@@ -1,6 +1,13 @@
+#ifndef PIECES_H
+#define PIECES_H
 #include "types.hpp"
+#include "moves.hpp"
 #include <memory>
 #include <map>
+
+class Move;
+
+typedef std::vector<std::shared_ptr<Move>> Moves;
 
 class Piece
 {
@@ -12,9 +19,9 @@ public:
      * Note that the method should return also directions that are invalid given the
      * game state or board limits. In a sense, this method returns all conceivable moves.
      * @param position
-     * @return Directions
+     * @return Moves
      */
-    virtual Directions get_directions(Position position) = 0;
+    virtual Moves get_moves(BoardState boardState, Position position) = 0;
 
     virtual int get_steps() = 0;
 
@@ -32,7 +39,7 @@ class Pawn : public Piece
 {
     using Piece::Piece;
 
-    virtual Directions get_directions(Position position);
+    virtual Moves get_moves(BoardState boardState, Position position);
 
     virtual int get_steps();
 
@@ -43,7 +50,7 @@ class King : public Piece
 {
     using Piece::Piece;
 
-    virtual Directions get_directions(Position position);
+    virtual Moves get_moves(BoardState boardState, Position position);
 
     virtual int get_steps();
 
@@ -54,7 +61,7 @@ class Queen : public Piece
 {
     using Piece::Piece;
 
-    virtual Directions get_directions(Position position);
+    virtual Moves get_moves(BoardState boardState, Position position);
 
     virtual int get_steps();
 
@@ -65,7 +72,7 @@ class Bishop : public Piece
 {
     using Piece::Piece;
 
-    virtual Directions get_directions(Position position);
+    virtual Moves get_moves(BoardState boardState, Position position);
 
     virtual int get_steps();
 
@@ -76,7 +83,7 @@ class Knight : public Piece
 {
     using Piece::Piece;
 
-    virtual Directions get_directions(Position position);
+    virtual Moves get_moves(BoardState boardState, Position position);
 
     virtual int get_steps();
 
@@ -88,9 +95,11 @@ class Rook : public Piece
 public:
     using Piece::Piece;
 
-    virtual Directions get_directions(Position position);
+    virtual Moves get_moves(BoardState boardState, Position position);
 
     virtual int get_steps();
 
     virtual int get_id();
 };
+
+#endif

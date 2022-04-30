@@ -23,6 +23,8 @@ enable_testing()
 add_executable(
     chesscpp 
     main.cpp
+    custom.hpp
+    custom.cpp
     ../src/moves.hpp
     ../src/main.hpp
     ../src/pieces.hpp
