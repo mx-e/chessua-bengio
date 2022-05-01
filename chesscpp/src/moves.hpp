@@ -7,19 +7,24 @@ class Piece;
 class Move
 {
 public:
-    virtual void step(Position &position) = 0;
-    virtual void update(Board &board, BoardState boardState, Piece &piece, Position position) = 0;
+    virtual void step() = 0;
+    virtual bool is_possible(BoardState boardState);
+    virtual void update(Board &board, BoardState boardState, Piece &piece) = 0;
+
+protected:
+    Position position;
 };
 
 class DirectionalMove : public Move
 {
 public:
-    DirectionalMove(Direction direction);
-    virtual void step(Position &position);
-    virtual void update(Board &board, BoardState boardState, Piece &piece, Position position);
+    DirectionalMove(Direction direction, Position position);
+    virtual void step();
+    virtual void update(Board &board, BoardState boardState, Piece &piece);
 
 private:
     Direction direction;
+    Position previous;
 };
 
 enum CastleSide { KingSide, QueenSide };
@@ -27,12 +32,13 @@ enum CastleSide { KingSide, QueenSide };
 class Castle : public Move
 {
 public:
-    Castle(CastleSide side);
-    virtual void step(Position &position);
-    virtual void update(Board &board, BoardState boardState, Piece &piece, Position position);
+    Castle(CastleSide side, Position position);
+    virtual void step();
+    virtual void update(Board &board, BoardState boardState, Piece &piece);
 
 private:
     CastleSide side;
+    Position previous;
 };
 
 #endif

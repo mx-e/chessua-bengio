@@ -1,6 +1,7 @@
 #include <array>
 #include <vector>
 #include <tuple>
+#include <optional>
 
 typedef std::array<std::array<int, 8>,8> Board;
 typedef std::vector<Board> Boards;
@@ -25,6 +26,14 @@ struct CastlingRights
 
 typedef std::vector<Position> EnPassants;
 
+struct Window
+{
+    int x;
+    int y;
+    int x_;
+    int y_;
+};
+
 struct BoardState
 {
     Board board;
@@ -33,4 +42,5 @@ struct BoardState
     EnPassants enpassant;
     int halfMove;
     int fullMove;
+    std::optional<Window> window;
 };

@@ -7,7 +7,7 @@
 
 class Move;
 
-typedef std::vector<std::shared_ptr<Move>> Moves;
+typedef std::vector<std::shared_ptr<Move> > Moves;
 
 class Piece
 {
@@ -22,11 +22,8 @@ public:
      * @return Moves
      */
     virtual Moves get_moves(BoardState boardState, Position position) = 0;
-
     virtual int get_steps() = 0;
-
     virtual int get_id() = 0;
-
     virtual int get_color();
 
 protected:
@@ -38,33 +35,24 @@ typedef std::map<int, std::shared_ptr<Piece> > AvailablePieces;
 class Pawn : public Piece
 {
     using Piece::Piece;
-
     virtual Moves get_moves(BoardState boardState, Position position);
-
     virtual int get_steps();
-
     virtual int get_id();
 };
 
 class King : public Piece
 {
     using Piece::Piece;
-
     virtual Moves get_moves(BoardState boardState, Position position);
-
     virtual int get_steps();
-
     virtual int get_id();
 };
 
 class Queen : public Piece
 {
     using Piece::Piece;
-
     virtual Moves get_moves(BoardState boardState, Position position);
-
     virtual int get_steps();
-
     virtual int get_id();
 };
 
