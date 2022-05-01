@@ -76,10 +76,10 @@ int Rook::get_id() { return color * 5; }
 
 void add_diagonal_captures(Directions &directions, BoardState boardState, Position position)
 {
-    for (Direction direction : Directions{{1, 1}, {-1, 1}})
+    for (Direction direction : Directions{{1, boardState.color * 1}, {-1, boardState.color * 1}})
     {
         Position diagonal = position + direction;
-        if (boardState.board[diagonal.first][diagonal.second] < 0)
+        if (boardState.color * boardState.board[diagonal.first][diagonal.second] < 0)
         {
             directions.push_back(direction);
         }
@@ -88,10 +88,10 @@ void add_diagonal_captures(Directions &directions, BoardState boardState, Positi
 
 Moves Pawn::get_moves(BoardState boardState, Position position)
 {
-    Directions directions = {{0, 1}};
-    if (position.first == 0 && position.second == 1)
+    Directions directions = {{0, boardState.color * 1}};
+    if (position.second == (boardState.color == COLOR_WHITE ? 1 : 6))
     {
-        directions.push_back({0, 2});
+        directions.push_back({0, boardState.color * 2});
     }
 
     add_diagonal_captures(directions, boardState, position);
