@@ -25,6 +25,7 @@ add_executable(
     main.cpp
     custom.hpp
     custom.cpp
+    ../src/types.cpp
     ../src/moves.hpp
     ../src/main.hpp
     ../src/pieces.hpp

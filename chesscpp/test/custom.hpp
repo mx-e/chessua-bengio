@@ -4,11 +4,11 @@
 #include <gtest/gtest.h>
 
 bool has_castle(Boards boards, CastleSide side, int color);
-
 void fill_column_with_pawns(Board &board, int column, int color);
-
 void fill_row_with_pawns(Board &board, int row, int color);
+bool exists(Boards boards, std::function<bool(Board)> boardCondition);
 
 #define EXPECT_CASTLE_EXISTS(boards, side, color) EXPECT_EQ(has_castle(boards, side, color), true)
+#define EXPECT_EXISTS(boards, boardCondition) EXPECT_EQ(exists(boards, boardCondition), true)
 
 #endif

@@ -9,6 +9,8 @@ typedef std::pair<int, int> Position;
 typedef Position Direction;
 typedef std::vector<Direction> Directions;
 
+Position operator+(const Position &x, const Position &y);
+
 const int COLOR_WHITE = 1;
 const int COLOR_BLACK = -1;
 

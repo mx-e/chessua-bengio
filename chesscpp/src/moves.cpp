@@ -1,10 +1,5 @@
 #include "moves.hpp"
 
-Position operator+(const Position &x, const Position &y)
-{
-    return std::make_pair(x.first + y.first, x.second + y.second);
-}
-
 bool on_board(Position position, Window window)
 {
     return position.first >= window.x && position.first < window.x_ && position.second >= window.y && position.second < window.y_;
@@ -23,7 +18,7 @@ void move(Board &board, Piece &piece, Position previous, Position position)
 
 bool Move::is_possible(BoardState boardState)
 {
-    return on_board(position, *boardState.window) && is_free(position, boardState);
+    return on_board(position, *boardState.window) && is_free(position, boardState) && !captured;
 }
 
 DirectionalMove::DirectionalMove(Direction direction, Position position)
@@ -40,6 +35,7 @@ void DirectionalMove::step()
 
 void DirectionalMove::update(Board &board, BoardState boardState, Piece &piece)
 {
+    captured = board[position.first].at(position.second) != 0;
     move(board, piece, previous, position);
 }
 

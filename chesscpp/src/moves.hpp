@@ -13,6 +13,7 @@ public:
 
 protected:
     Position position;
+    bool captured = false;
 };
 
 class DirectionalMove : public Move

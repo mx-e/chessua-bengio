@@ -29,3 +29,13 @@ bool has_castle(Boards boards, CastleSide side, int color)
     }
     return exists;
 }
+
+bool exists(Boards boards, std::function<bool(Board)> boardCondition)
+{
+    bool found;
+    for (auto board : boards)
+    {
+        found = found || boardCondition(board);
+    }
+    return found;
+}

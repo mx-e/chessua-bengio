@@ -31,11 +31,11 @@ Moves King::get_moves(BoardState boardState, Position position)
         moves.push_back(std::make_shared<Castle>(KingSide, position));
     }
 
-    if (castlingRights.queenSide) 
+    if (castlingRights.queenSide)
     {
         moves.push_back(std::make_shared<Castle>(QueenSide, position));
     }
-        
+
     return moves;
 }
 
@@ -74,6 +74,18 @@ Moves Rook::get_moves(BoardState boardState, Position position)
 int Rook::get_steps() { return 8; }
 int Rook::get_id() { return color * 5; }
 
+void add_diagonal_captures(Directions &directions, BoardState boardState, Position position)
+{
+    for (Direction direction : Directions{{1, 1}, {-1, 1}})
+    {
+        Position diagonal = position + direction;
+        if (boardState.board[diagonal.first][diagonal.second] < 0)
+        {
+            directions.push_back(direction);
+        }
+    }
+}
+
 Moves Pawn::get_moves(BoardState boardState, Position position)
 {
     Directions directions = {{0, 1}};
@@ -81,6 +93,9 @@ Moves Pawn::get_moves(BoardState boardState, Position position)
     {
         directions.push_back({0, 2});
     }
+
+    add_diagonal_captures(directions, boardState, position);
+
     return from_directions(directions, position);
 }
 
