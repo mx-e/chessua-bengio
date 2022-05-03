@@ -193,8 +193,29 @@ TEST(PossibleBoards, EnPassantBlack)
                   { return board[1][2] == -6 && board[0][3] == 6; });
 }
 
+TEST(PossibleBoards, CheckBlack)
+{
+    Board board = get_board();
+    board[0].at(0) = 1;
+    board[0].at(2) = -2;
+
+    BoardState boardState{.board = board, .color = COLOR_BLACK};
+
+    EXPECT_THROW(get_possible_boards(boardState), BoardInCheckException);
+}
+
+TEST(PossibleBoards, CheckWhite)
+{
+    Board board = get_board();
+    board[0].at(0) = -1;
+    board[0].at(2) = 2;
+
+    BoardState boardState{.board = board, .color = COLOR_WHITE};
+
+    EXPECT_THROW(get_possible_boards(boardState), BoardInCheckException);
+}
+
 /**
  * @brief TODOS
- * Implement check-check
  * Document and Test everything
  */

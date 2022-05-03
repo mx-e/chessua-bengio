@@ -2,6 +2,8 @@
 #define MOVES_H
 #include "pieces.hpp"
 
+class BoardInCheckException : public std::exception {};
+
 class Piece;
 
 class Move

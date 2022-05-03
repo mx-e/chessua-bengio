@@ -36,6 +36,12 @@ void DirectionalMove::step()
 void DirectionalMove::update(Board &board, BoardState boardState, Piece &piece)
 {
     captured = board[position.first].at(position.second) != 0;
+
+    if(board[position.first].at(position.second) == boardState.color * -1)
+    {
+        throw BoardInCheckException();
+    }
+
     move(board, piece, previous, position);
 }
 
