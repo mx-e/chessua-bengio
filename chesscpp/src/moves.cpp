@@ -39,6 +39,13 @@ void DirectionalMove::update(Board &board, BoardState boardState, Piece &piece)
     move(board, piece, previous, position);
 }
 
+void EnPassantCapture::update(Board &board, BoardState boardState, Piece &piece)
+{
+    captured = true;
+    move(board, piece, previous, position);
+    board[position.first].at(position.second - boardState.color) = 0;
+}
+
 Castle::Castle(CastleSide side, Position position)
 {
     this->side = side;

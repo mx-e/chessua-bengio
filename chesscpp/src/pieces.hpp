@@ -4,6 +4,7 @@
 #include "moves.hpp"
 #include <memory>
 #include <map>
+#include <algorithm>
 
 class Move;
 

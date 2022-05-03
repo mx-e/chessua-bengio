@@ -41,7 +41,7 @@ struct BoardState
     Board board;
     int color;
     CastlingRights castlingRights;
-    EnPassants enpassant;
+    std::optional<EnPassants> enpassant;
     int halfMove;
     int fullMove;
     std::optional<Window> window;

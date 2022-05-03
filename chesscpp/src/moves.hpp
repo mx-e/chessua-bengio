@@ -23,9 +23,16 @@ public:
     virtual void step();
     virtual void update(Board &board, BoardState boardState, Piece &piece);
 
-private:
+protected:
     Direction direction;
     Position previous;
+};
+
+class EnPassantCapture : public DirectionalMove
+{
+public:
+    using DirectionalMove::DirectionalMove;
+    virtual void update(Board &board, BoardState boardState, Piece &piece);
 };
 
 enum CastleSide { KingSide, QueenSide };

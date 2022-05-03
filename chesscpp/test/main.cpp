@@ -95,7 +95,7 @@ TEST(PossibleBoards, KingSideCastleBlack)
 
     ColorCastlingRights kingSide{false, true};
     CastlingRights rights{.black = kingSide};
-    
+
     BoardState boardState{.board = board, .color = COLOR_BLACK, .castlingRights = rights, .window = window};
     Boards boards = get_possible_boards(boardState);
 
@@ -148,7 +148,7 @@ TEST(PossibleBoards, QueenCapture)
     board[0].at(0) = 2;
     board[0].at(3) = -6;
 
-    BoardState boardState{.board = board, .color = 1, .window = window};
+    BoardState boardState{.board = board, .color = COLOR_WHITE, .window = window};
     Boards boards = get_possible_boards(boardState);
 
     EXPECT_EQ(boards.size(), 3);
@@ -157,9 +157,44 @@ TEST(PossibleBoards, QueenCapture)
                   { return board[0][3] == 2; });
 }
 
+TEST(PossibleBoards, EnPassantWhite)
+{
+    Board board = get_board();
+    board[0].at(0) = 6;
+    board[1].at(0) = -6;
+
+    std::optional<EnPassants> enPassants = EnPassants{ {1, 1} };
+    BoardState boardState{.board = board, .enpassant = enPassants, .color = COLOR_WHITE};
+    Boards boards = get_possible_boards(boardState);
+
+    EXPECT_EQ(boards.size(), 2);
+
+    EXPECT_EXISTS(boards, [](Board board)
+                  { return board[1][1] == 6 && board[1][0] == 0; });
+    EXPECT_EXISTS(boards, [](Board board)
+                  { return board[0][1] == 6 && board[1][0] == -6; });
+}
+
+TEST(PossibleBoards, EnPassantBlack)
+{
+    Board board = get_board();
+    board[0].at(3) = 6;
+    board[1].at(3) = -6;
+
+    std::optional<EnPassants> enPassants = EnPassants{ {0, 2} };
+    BoardState boardState{.board = board, .enpassant = enPassants, .color = COLOR_BLACK};
+    Boards boards = get_possible_boards(boardState);
+
+    EXPECT_EQ(boards.size(), 2);
+
+    EXPECT_EXISTS(boards, [](Board board)
+                  { return board[0][2] == -6 && board[0][3] == 0; });
+    EXPECT_EXISTS(boards, [](Board board)
+                  { return board[1][2] == -6 && board[0][3] == 6; });
+}
+
 /**
  * @brief TODOS
  * Implement check-check
- * Implement enpassant
  * Document and Test everything
  */

@@ -74,14 +74,32 @@ Moves Rook::get_moves(BoardState boardState, Position position)
 int Rook::get_steps() { return 8; }
 int Rook::get_id() { return color * 5; }
 
-void add_diagonal_captures(Directions &directions, BoardState boardState, Position position)
+bool captures_enpassant(BoardState boardState, Position diagonal)
+{
+    if (boardState.enpassant)
+    {
+        auto position = std::find(boardState.enpassant->begin(), boardState.enpassant->end(), diagonal);
+        return position != boardState.enpassant->end();
+    }
+    return false;
+}
+
+void add_diagonal_captures(Moves &moves, BoardState boardState, Position position)
 {
     for (Direction direction : Directions{{1, boardState.color * 1}, {-1, boardState.color * 1}})
     {
         Position diagonal = position + direction;
+
         if (boardState.color * boardState.board[diagonal.first][diagonal.second] < 0)
         {
-            directions.push_back(direction);
+            std::shared_ptr<Move> move = std::make_shared<DirectionalMove>(direction, position);
+            moves.push_back(move);
+        }
+
+        if (captures_enpassant(boardState, diagonal))
+        {
+            std::shared_ptr<Move> move = std::make_shared<EnPassantCapture>(direction, position);
+            moves.push_back(move);
         }
     }
 }
@@ -94,9 +112,10 @@ Moves Pawn::get_moves(BoardState boardState, Position position)
         directions.push_back({0, boardState.color * 2});
     }
 
-    add_diagonal_captures(directions, boardState, position);
+    Moves moves = from_directions(directions, position);
+    add_diagonal_captures(moves, boardState, position);
 
-    return from_directions(directions, position);
+    return moves;
 }
 
 int Pawn::get_steps() { return 1; }
