@@ -16,26 +16,26 @@ void fill_row_with_pawns(Board &board, int row, int color)
     }
 }
 
-bool has_castle(Boards boards, CastleSide side, int color)
+bool has_castle(BoardStates boardStates, CastleSide side, int color)
 {
     bool exists;
     int col = color == COLOR_WHITE ? 0 : 7;
     int kingPosition = side == KingSide ? 6 : 2;
     int rookPosition = side == KingSide ? 5 : 3;
 
-    for (auto board : boards)
+    for (auto boardState : boardStates)
     {
-        exists = exists || (board[kingPosition][col] == color * 1 && board[rookPosition][col] == color * 5);
+        exists = exists || (boardState.board[kingPosition][col] == color * 1 && boardState.board[rookPosition][col] == color * 5);
     }
     return exists;
 }
 
-bool exists(Boards boards, std::function<bool(Board)> boardCondition)
+bool exists(BoardStates boardStates, std::function<bool(BoardState)> boardStateCondition)
 {
     bool found;
-    for (auto board : boards)
+    for (auto boardState : boardStates)
     {
-        found = found || boardCondition(board);
+        found = found || boardStateCondition(boardState);
     }
     return found;
 }

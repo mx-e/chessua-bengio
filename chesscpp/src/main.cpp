@@ -10,7 +10,7 @@ class BoardHead
 {
 public:
     BoardHead(BoardState boardState, Piece &piece, Move &move);
-    Board do_move();
+    BoardState do_move();
     bool is_done();
 
 private:
@@ -36,13 +36,15 @@ bool BoardHead::is_done()
     return !move.is_possible(boardState) || steps <= 0;
 }
 
-Board BoardHead::do_move()
+BoardState BoardHead::do_move()
 {
     move.update(boardState.board, boardState, piece);
     step();
 
-    Board board_copy = boardState.board;
-    return board_copy;
+    BoardState newState{.board = boardState.board, .color = -boardState.color, .fullMove = boardState.fullMove + 1};
+
+    move.transfer(newState, boardState);
+    return newState;
 }
 
 void BoardHead::step()
@@ -51,23 +53,23 @@ void BoardHead::step()
     steps--;
 }
 
-void add_boards_along(Boards &boards, BoardState boardState, Move &move, Piece &piece)
+void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &move, Piece &piece)
 {
     BoardHead head{boardState, piece, move};
 
     while (!head.is_done())
     {
-        boards.push_back(head.do_move());
+        boardStates.push_back(head.do_move());
     }
 }
 
-void add_boards_for_piece(Boards &boards, BoardState boardState, Piece &piece, int x, int y)
+void add_boards_for_piece(BoardStates &boardStates, BoardState boardState, Piece &piece, int x, int y)
 {
     Position position(x, y);
 
     for (auto move : piece.get_moves(boardState, position))
     {
-        add_boards_along(boards, boardState, *move, piece);
+        add_boards_along(boardStates, boardState, *move, piece);
     }
 }
 
@@ -93,16 +95,16 @@ AvailablePieces get_available_pieces()
     return pieces;
 }
 
-Boards get_possible_boards(BoardState boardState)
+BoardStates get_possible_boards(BoardState boardState)
 {
     AvailablePieces pieces = get_available_pieces();
-    Boards boards;
+    BoardStates boardStates;
     Board board = boardState.board;
     int color = boardState.color;
 
-    if(!boardState.window)
+    if (!boardState.window)
     {
-        boardState.window = Window{ 0, 0, 8, 8 };
+        boardState.window = Window{0, 0, 8, 8};
     }
 
     for (int x = boardState.window->x; x < boardState.window->x_; x++)
@@ -112,9 +114,9 @@ Boards get_possible_boards(BoardState boardState)
             if (color * board[x][y] > 0)
             {
                 Piece &piece = *pieces[board[x][y]];
-                add_boards_for_piece(boards, boardState, piece, x, y);
+                add_boards_for_piece(boardStates, boardState, piece, x, y);
             }
         }
     }
-    return boards;
+    return boardStates;
 }

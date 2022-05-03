@@ -5,7 +5,7 @@
 
 Board get_board();
 
-Boards get_possible_boards(BoardState boardState);
+BoardStates get_possible_boards(BoardState boardState);
 
 #endif
 

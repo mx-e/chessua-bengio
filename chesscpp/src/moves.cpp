@@ -21,6 +21,11 @@ bool Move::is_possible(BoardState boardState)
     return on_board(position, *boardState.window) && is_free(position, boardState) && !captured;
 }
 
+void Move::transfer(BoardState &boardState, BoardState oldState)
+{
+    boardState.halfMove = captured ? 0 : oldState.halfMove + 1;
+}
+
 DirectionalMove::DirectionalMove(Direction direction, Position position)
 {
     this->direction = direction;
@@ -43,6 +48,18 @@ void DirectionalMove::update(Board &board, BoardState boardState, Piece &piece)
     }
 
     move(board, piece, previous, position);
+}
+
+bool PawnMove::is_possible(BoardState boardState)
+{
+    return Move::is_possible(boardState) && boardState.board[position.first][position.second] == 0;
+}
+
+void PawnOpeningMove::transfer(BoardState &boardState, BoardState oldState)
+{
+    int previous_color = -boardState.color;
+    boardState.enpassant = EnPassants{ {previous.first, previous.second - previous_color * 1} };
+    Move::transfer(boardState, oldState);
 }
 
 void EnPassantCapture::update(Board &board, BoardState boardState, Piece &piece)

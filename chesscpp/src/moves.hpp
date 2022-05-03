@@ -9,9 +9,10 @@ class Piece;
 class Move
 {
 public:
-    virtual void step() = 0;
     virtual bool is_possible(BoardState boardState);
+    virtual void step() = 0;
     virtual void update(Board &board, BoardState boardState, Piece &piece) = 0;
+    virtual void transfer(BoardState &boardState, BoardState oldState);
 
 protected:
     Position position;
@@ -28,6 +29,20 @@ public:
 protected:
     Direction direction;
     Position previous;
+};
+
+class PawnMove : public DirectionalMove
+{
+public:
+    using DirectionalMove::DirectionalMove;
+    virtual bool is_possible(BoardState boardState);
+};
+
+class PawnOpeningMove : public PawnMove
+{
+public:
+    using PawnMove::PawnMove;
+    virtual void transfer(BoardState &boardState, BoardState oldState);
 };
 
 class EnPassantCapture : public DirectionalMove

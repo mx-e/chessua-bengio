@@ -46,3 +46,5 @@ struct BoardState
     int fullMove;
     std::optional<Window> window;
 };
+
+typedef std::vector<BoardState> BoardStates;

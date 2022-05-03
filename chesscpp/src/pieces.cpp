@@ -104,17 +104,27 @@ void add_diagonal_captures(Moves &moves, BoardState boardState, Position positio
     }
 }
 
-Moves Pawn::get_moves(BoardState boardState, Position position)
+void add_opening_move(Moves &moves, BoardState boardState, Position position)
 {
-    Directions directions = {{0, boardState.color * 1}};
     if (position.second == (boardState.color == COLOR_WHITE ? 1 : 6))
     {
-        directions.push_back({0, boardState.color * 2});
+        std::shared_ptr<Move> move = std::make_shared<PawnOpeningMove>( Direction{0, boardState.color * 2}, position);
+        moves.push_back(move);
     }
+}
 
-    Moves moves = from_directions(directions, position);
+void add_standard_move(Moves &moves, BoardState boardState, Position position)
+{
+    std::shared_ptr<Move> move = std::make_shared<PawnMove>( Direction{0, boardState.color}, position);
+    moves.push_back(move);
+}
+
+Moves Pawn::get_moves(BoardState boardState, Position position)
+{
+    Moves moves;
+    add_standard_move(moves, boardState, position);
+    add_opening_move(moves, boardState, position);
     add_diagonal_captures(moves, boardState, position);
-
     return moves;
 }
 
