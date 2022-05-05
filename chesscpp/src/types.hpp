@@ -36,8 +36,13 @@ struct Window
     int y_;
 };
 
-struct BoardState
+
+class BoardState
 {
+public:
+    BoardState(Board board, int color);
+
+private:
     Board board;
     int color;
     CastlingRights castlingRights;
@@ -45,6 +50,7 @@ struct BoardState
     int halfMove;
     int fullMove;
     std::optional<Window> window;
+    BoardState &dependentState;
 };
 
 typedef std::vector<BoardState> BoardStates;

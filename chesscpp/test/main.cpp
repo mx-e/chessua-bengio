@@ -265,7 +265,88 @@ TEST(PossibleBoards, PlayerChange)
     EXPECT_EQ(anotherBoardStates[0].color, COLOR_WHITE);
 }
 
-TEST(PossibleBoards, HalfAndFullMoves)
+TEST(PossibleBoards, RecomputeCastlingRightsWhiteQueenSide)
+{
+    Board board = get_board();
+    board[0].at(0) = 5;
+    board[4].at(0) = 1;
+    BoardState boardState{.board = board};
+    CastlingRights rights = compute_castling_rights(boardState);
+    
+    EXPECT_TRUE(rights.white.queenSide);
+    EXPECT_FALSE(rights.white.kingSide);
+    EXPECT_FALSE(rights.black.kingSide);
+    EXPECT_FALSE(rights.black.queenSide);
+}
+
+TEST(PossibleBoards, RecomputeCastlingRightsBlackQueenSide)
+{
+    Board board = get_board();
+    board[0].at(7) = -5;
+    board[4].at(7) = -1;
+    BoardState boardState{.board = board};
+    CastlingRights rights = compute_castling_rights(boardState);
+    
+    EXPECT_FALSE(rights.white.queenSide);
+    EXPECT_FALSE(rights.white.kingSide);
+    EXPECT_FALSE(rights.black.kingSide);
+    EXPECT_TRUE(rights.black.queenSide);
+}
+
+TEST(PossibleBoards, RecomputeCastlingRightsWhiteKingSide)
+{
+    Board board = get_board();
+    board[7].at(0) = 5;
+    board[4].at(0) = 1;
+    BoardState boardState{.board = board};
+    CastlingRights rights = compute_castling_rights(boardState);
+    
+    EXPECT_FALSE(rights.white.queenSide);
+    EXPECT_TRUE(rights.white.kingSide);
+    EXPECT_FALSE(rights.black.kingSide);
+    EXPECT_FALSE(rights.black.queenSide);
+}
+
+TEST(PossibleBoards, RecomputeCastlingRightsBlackKingSide)
+{
+    Board board = get_board();
+    board[7].at(7) = -5;
+    board[4].at(7) = -1;
+    BoardState boardState{.board = board};
+    CastlingRights rights = compute_castling_rights(boardState);
+    
+    EXPECT_FALSE(rights.white.queenSide);
+    EXPECT_FALSE(rights.white.kingSide);
+    EXPECT_TRUE(rights.black.kingSide);
+    EXPECT_FALSE(rights.black.queenSide);
+}
+
+TEST(PossibleBoards, RecomputeCastlingRightsNoRights)
+{
+    Board board = get_board();
+    board[0].at(0) = 5;
+    board[4].at(0) = 1;
+    board[0].at(7) = -5;
+    board[4].at(7) = -1;
+    board[7].at(0) = 5;
+    board[4].at(0) = 1;
+    board[7].at(7) = -5;
+    board[4].at(7) = -1;
+
+    board[2].at(0) = 4;
+    board[6].at(0) = 4;
+    board[2].at(7) = -4;
+    board[6].at(7) = -4;
+    BoardState boardState{.board = board};
+    CastlingRights rights = compute_castling_rights(boardState);
+    
+    EXPECT_FALSE(rights.white.queenSide);
+    EXPECT_FALSE(rights.white.kingSide);
+    EXPECT_FALSE(rights.black.kingSide);
+    EXPECT_FALSE(rights.black.queenSide);
+}
+
+TEST(PossibleBoards, RecomputeHalfAndFullMoves)
 {
     Board board = get_board();
     board[0].at(0) = 6;

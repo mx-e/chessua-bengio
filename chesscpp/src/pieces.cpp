@@ -23,17 +23,33 @@ Moves from_directions(Directions directions, Position position)
 
 Moves King::get_moves(BoardState boardState, Position position)
 {
-    Moves moves = from_directions({{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}}, position);
+    Moves moves;
+    Directions base_directions = {{0, -1}, {0, 1}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}};
 
     ColorCastlingRights castlingRights = boardState.color == COLOR_BLACK ? boardState.castlingRights.black : boardState.castlingRights.white;
     if (castlingRights.kingSide)
     {
-        moves.push_back(std::make_shared<Castle>(KingSide, position));
+        std::shared_ptr<Move> kingSideTransit = std::make_shared<CastleTransitMove>(Direction{1, 0}, position, KingSide);
+        moves.push_back(kingSideTransit);
+    }
+    else
+    {
+        base_directions.push_back(Direction{1, 0});
     }
 
     if (castlingRights.queenSide)
     {
-        moves.push_back(std::make_shared<Castle>(QueenSide, position));
+        std::shared_ptr<Move> queenSideTransit = std::make_shared<CastleTransitMove>(Direction{-1, 0}, position, QueenSide);
+        moves.push_back(queenSideTransit);
+    }
+    else
+    {
+        base_directions.push_back(Direction{-1, 0});
+    }
+
+    for (auto move : from_directions(base_directions, position))
+    {
+        moves.push_back(move);
     }
 
     return moves;
@@ -108,14 +124,14 @@ void add_opening_move(Moves &moves, BoardState boardState, Position position)
 {
     if (position.second == (boardState.color == COLOR_WHITE ? 1 : 6))
     {
-        std::shared_ptr<Move> move = std::make_shared<PawnOpeningMove>( Direction{0, boardState.color * 2}, position);
+        std::shared_ptr<Move> move = std::make_shared<PawnOpeningMove>(Direction{0, boardState.color * 2}, position);
         moves.push_back(move);
     }
 }
 
 void add_standard_move(Moves &moves, BoardState boardState, Position position)
 {
-    std::shared_ptr<Move> move = std::make_shared<PawnMove>( Direction{0, boardState.color}, position);
+    std::shared_ptr<Move> move = std::make_shared<PawnMove>(Direction{0, boardState.color}, position);
     moves.push_back(move);
 }
 
