@@ -6,7 +6,16 @@ Board get_board()
     return m;
 }
 
-void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &move, Piece &piece)
+std::map<int, std::string> LETTERS = { {0, "a"}, {1, "b"}, {2, "c"}, {3, "d"}, {4, "e"}, {5, "f"}, {6, "g"}, {7, "h"} };
+
+std::string uci_part(Position position)
+{
+    return LETTERS[position.first] + std::to_string(position.second + 1);
+}
+
+
+
+void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &move, Piece &piece, Position position)
 {
     int steps = piece.get_steps();
     move.step();
@@ -14,12 +23,17 @@ void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &mov
     while (move.is_possible(boardState) && steps > 0)
     {
         move.update(boardState.board, boardState, piece);
-        move.step();
+        
         steps--;
 
         BoardState newState = prepare_board_state(boardState);
+
+        newState.uci = uci_part(position) + uci_part(move.get_position());
+
         move.transfer(newState, boardState);
         boardStates.push_back(newState);
+
+        move.step();
     }
 }
 
@@ -27,7 +41,7 @@ void add_boards_for_piece(BoardStates &boardStates, BoardState boardState, Piece
 {
     for (auto move : piece.get_moves(boardState, position))
     {
-        add_boards_along(boardStates, boardState, *move, piece);
+        add_boards_along(boardStates, boardState, *move, piece, position);
     }
 }
 

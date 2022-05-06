@@ -13,9 +13,10 @@ public:
     virtual void step() = 0;
     virtual void update(Board &board, BoardState boardState, Piece &piece) = 0;
     virtual void transfer(BoardState &newState, BoardState oldState);
-
+    virtual Position get_position();
 protected:
     Position position;
+    Position previous;
     bool captured = false;
 };
 
@@ -28,7 +29,6 @@ public:
 
 protected:
     Direction direction;
-    Position previous;
 };
 
 class PawnMove : public DirectionalMove
@@ -50,6 +50,7 @@ class PawnSwapMove : public PawnMove
 public:
     PawnSwapMove(Direction direction, Position position, std::shared_ptr<Piece> swapPiece);
     virtual void update(Board &board, BoardState boardState, Piece &piece);
+    virtual void transfer(BoardState &newState, BoardState oldState);
 
 private:
     std::shared_ptr<Piece> swapPiece;
@@ -74,7 +75,6 @@ public:
 
 private:
     CastleSide side;
-    Position previous;
 };
 
 class CastleTransitMove : public DirectionalMove

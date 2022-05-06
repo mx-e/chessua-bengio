@@ -10,6 +10,11 @@ int Piece::get_color()
     return color;
 }
 
+int Piece::get_character()
+{
+    return '-';
+}
+
 Moves from_directions(Directions directions, Position position)
 {
     Moves moves;
@@ -49,6 +54,7 @@ Moves Queen::get_moves(BoardState boardState, Position position)
 
 int Queen::get_steps() { return 8; }
 int Queen::get_id() { return color * 2; }
+int Queen::get_character() { return 'q'; }
 
 Moves Bishop::get_moves(BoardState boardState, Position position)
 {
@@ -57,6 +63,7 @@ Moves Bishop::get_moves(BoardState boardState, Position position)
 
 int Bishop::get_steps() { return 8; }
 int Bishop::get_id() { return color * 3; }
+int Bishop::get_character() { return 'b'; }
 
 Moves Knight::get_moves(BoardState boardState, Position position)
 {
@@ -65,6 +72,7 @@ Moves Knight::get_moves(BoardState boardState, Position position)
 
 int Knight::get_steps() { return 1; }
 int Knight::get_id() { return color * 4; }
+int Knight::get_character() { return 'n'; }
 
 Moves Rook::get_moves(BoardState boardState, Position position)
 {
@@ -73,6 +81,7 @@ Moves Rook::get_moves(BoardState boardState, Position position)
 
 int Rook::get_steps() { return 8; }
 int Rook::get_id() { return color * Rook::ID; }
+int Rook::get_character() { return 'r'; }
 
 bool captures_enpassant(BoardState boardState, Position diagonal)
 {

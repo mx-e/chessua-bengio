@@ -2,6 +2,7 @@
 #include <vector>
 #include <tuple>
 #include <optional>
+#include <string>
 
 typedef std::array<std::array<int, 8>,8> Board;
 typedef std::vector<Board> Boards;
@@ -48,6 +49,7 @@ public:
     CastlingRights castlingRights;
     EnPassants enpassant;
     Window window;
+    std::string uci;
     BoardState* previousState;
 };
 
