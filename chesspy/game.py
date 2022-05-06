@@ -24,7 +24,8 @@ class GameState:
 
     def __repr__(self):
         repr = ""
-        for row in self.board_state:
+        board = np.flip(self.board_state.T)
+        for row in board:
             repr += board_row_to_repr_str(row) + "\n"
         return repr
 
@@ -49,7 +50,7 @@ def import_fen(fen_str: str):
     arr_can_castle = can_castle_string_to_arr(can_castle)
     coord_en_passant = extract_en_passant_tile(en_passant_tile)
     return GameState(
-        int_board_state,
+        np.flip(int_board_state, axis=0).T,
         int_to_move,
         arr_can_castle,
         coord_en_passant,
@@ -60,7 +61,8 @@ def import_fen(fen_str: str):
 
 def export_fen(game_state: GameState):
     fen_str = ""
-    for i, row in enumerate(game_state.board_state):
+    board = np.flip(game_state.board_state.T, axis=0)
+    for i, row in enumerate(board):
         fen_str += board_row_to_row_str(row)
         if i != 7:
             fen_str += "/"

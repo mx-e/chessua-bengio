@@ -14,12 +14,12 @@ from chesspy.utils import (
 
 class TestUtils(unittest.TestCase):
     def test_get_char_to_int_tile_state(self):
-        pairs = [["K", 6], [22, 0], ["g", 0], ["p", -1]]
+        pairs = [["P", 6], [22, 0], ["g", 0], ["k", -1]]
         for input, output in pairs:
             self.assertEqual(get_char_to_int_tile_state(input), output)
 
     def test_get_int_to_char_tile_state(self):
-        pairs = [[5, "Q"], [1, "P"], [22, " "], ["fhh", " "]]
+        pairs = [[5, "R"], [1, "K"], [22, " "], ["fhh", " "]]
         for input, output in pairs:
             self.assertEqual(get_int_to_char_tile_state(input), output)
 
@@ -34,9 +34,9 @@ class TestUtils(unittest.TestCase):
             self.assertEqual(num_to_abc(input), output)
 
     def test_board_row_to_x_and_back(self):
-        row1 = np.array([-1, -1, -5, 0, 0, 6, 0, 2])
+        row1 = np.array([-6, -6, -2, 0, 0, 1, 0, 5])
         row2 = np.array([3, -3, 6, 6, 0, 4, 0, 0])
-        row3 = np.array([1, -1, -2, -4, 5, -6, 0, 0])
+        row3 = np.array([6, -6, -5, -3, 2, -1, 0, 0])
 
         self.assertEqual(board_row_to_repr_str(row1), "ppq◇◇K◇R")
         self.assertEqual(board_row_to_repr_str(row2), "NnKK◇B◇◇")
@@ -64,6 +64,6 @@ class TestUtils(unittest.TestCase):
             self.assertListEqual(list(can_castle_string_to_arr(input)), output)
 
     def test_extract_en_passant_tile(self):
-        pairs = [["-", [-1, -1]], ["e5", [4, 4]], ["c8", [7, 2]]]
+        pairs = [["-", [-1, -1]], ["e5", [4, 4]], ["c8", [2, 7]]]
         for input, output in pairs:
             self.assertListEqual(list(extract_en_passant_tile(input)), output)

@@ -28,10 +28,9 @@ class TestBenchmarks(unittest.TestCase):
 
             mean_time_million_runs = np.array(times).mean() * (1e6 / n_runs)
             log.debug(
-                f"Average speed is {mean_time_million_runs:.4f}s per million boards."
+                f"Average speed is {mean_time_million_runs:.4f}s/million boards."
             )
-            self.assertAlmostEqual(True, True)
-
+        
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr)

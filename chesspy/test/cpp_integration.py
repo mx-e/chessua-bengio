@@ -1,5 +1,4 @@
 import unittest, json, pathlib, logging, sys
-
 from chesscpp import generate_moves
 from chesspy.game import import_fen
 
@@ -23,12 +22,10 @@ class CPPIntegration(unittest.TestCase):
             board = import_fen(fen)
             # TODO: CALL backend here
 
-            print(-board.board_state.T, 2 * int(board.to_move) -1, [], *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
-            #print(solution["legal_moves"])
-            uci_moves = generate_moves(board.board_state.T, 2 * int(board.to_move) -1, [], *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
-            print(uci_moves)
+            enpassant = [tuple(board.en_passant_tile)] if not (board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
+            uci_moves = generate_moves(board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
             
-            uci_moves_list = sorted([])
+            uci_moves_list = sorted(uci_moves)
             n_moves = len(uci_moves_list)
 
             true_n_legal_moves = solution["n_legal_moves"]
