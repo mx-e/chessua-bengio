@@ -1,0 +1,25 @@
+{
+    "move_generator": {
+        "early_game": {
+            "states": [
+                "rnbqkbnr/1pppppp1/p6p/8/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+                "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+            ],
+            "n_runs": 10000
+        },
+        "mid_game": {
+            "states": [
+                "1r6/8/2pbk1p1/p4p2/2KPnP2/4P3/PB4PP/5R2 w - - 0 1",
+                "2R5/2r2bkp/2n4p/1p6/4p2N/2K1n3/7B/8 w - - 0 1"
+            ],
+            "n_runs": 10000
+        },
+        "end_game": {
+            "states": [
+                "6k1/B5q1/KR6/8/8/8/6p1/8 b - - 0 1",
+                "5k1r/8/4B3/8/8/8/P7/KQ1N4 w - - 3 40"
+            ],
+            "n_runs": 10000
+        }
+    }
+}
