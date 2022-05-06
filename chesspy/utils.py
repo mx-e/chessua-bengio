@@ -3,28 +3,28 @@ import numpy as np
 reverse_map = lambda map_: {v: k for k, v in map_.items()}
 
 board_state_char_to_int_map = {
-    "p": -1,
-    "P": 1,
-    "r": -2,
-    "R": 2,
-    "n": -3,
-    "N": 3,
-    "b": -4,
-    "B": 4,
-    "q": -5,
-    "Q": 5,
-    "k": -6,
-    "K": 6,
+    "p": -6,
+    "P": 6,
+    "r": -5,
+    "R": 5,
+    "n": -4,
+    "N": 4,
+    "b": -3,
+    "B": 3,
+    "q": -2,
+    "Q": 2,
+    "k": -1,
+    "K": 1,
 }
 board_state_int_to_char_map = reverse_map(board_state_char_to_int_map)
 
 get_char_to_int_tile_state = lambda char: board_state_char_to_int_map.get(char, 0)
 get_int_to_char_tile_state = lambda int: board_state_int_to_char_map.get(int, " ")
 
-to_move_char_to_int_map = {"w": 0, "b": 1}
+to_move_char_to_int_map = {"w": 1, "b": -1}
 to_move_int_to_char_map = reverse_map(to_move_char_to_int_map)
 
-get_char_to_int_to_move = lambda char: to_move_char_to_int_map.get(char, -1)
+get_char_to_int_to_move = lambda char: to_move_char_to_int_map.get(char, 0)
 get_int_to_char_to_move = lambda int: to_move_int_to_char_map.get(int, "-")
 
 can_castle_char_to_idx_map = {"K": 0, "Q": 1, "k": 2, "q": 3}
@@ -110,14 +110,14 @@ def extract_en_passant_tile(ep_str: str) -> np.array:
     col, row = ep_str
     return np.array(
         [
-            int(row) - 1,
             abc_to_num(col) - 1,
+            int(row) - 1,
         ]
     )
 
 
 def export_en_passant_tile(ep_arr: np.array) -> str:
-    row, col = list(ep_arr)
+    col, row = list(ep_arr)
     if col == -1:
         return "-"
     ep_str = num_to_abc(col + 1) + str(row + 1)

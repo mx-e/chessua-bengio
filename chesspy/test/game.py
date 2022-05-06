@@ -13,8 +13,10 @@ class TestGame(unittest.TestCase):
         for fen, _ in test_cases.items():
             log.debug(f"Testing FEN: {fen}")
             board = import_fen(fen)
+            log.debug(board)
             rt_fen = export_fen(board)
             self.assertEqual(fen, rt_fen)
+            assert(rt_fen == fen)
 
 
 if __name__ == "__main__":
