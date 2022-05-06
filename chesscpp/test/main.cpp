@@ -49,16 +49,29 @@ TEST(PossibleBoards, BlockedRook)
     EXPECT_EQ(boardStates.size(), 4);
 }
 
+BoardStates get_castling_scenario_black(Board board, ColorCastlingRights rights)
+{
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.castlingRights = CastlingRights{.black = rights};
+    boardState.window = rights.queenSide ? Window{0, 7, 5, 8} : Window{4, 7, 8, 8};
+    return get_possible_boards(boardState);
+}
+
+BoardStates get_castling_scenario_white(Board board, ColorCastlingRights rights)
+{
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.castlingRights = CastlingRights{.white = rights};
+    boardState.window = rights.queenSide ? Window{0, 0, 5, 1} : Window{4, 0, 8, 1};
+    return get_possible_boards(boardState);
+}
+
 TEST(PossibleBoards, KingSideCastleWhite)
 {
     Board board = get_board();
     board[4].at(0) = 1;
     board[7].at(0) = 5;
 
-    BoardState boardState{board, COLOR_WHITE};
-    boardState.castlingRights = CastlingRights{.white = ColorCastlingRights{false, true}};
-    boardState.window = Window{4, 0, 8, 1};
-    BoardStates boardStates = get_possible_boards(boardState);
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{false, true});
 
     EXPECT_EQ(boardStates.size(), 4);
     EXPECT_CASTLE_EXISTS(boardStates, KingSide, 1);
@@ -70,10 +83,7 @@ TEST(PossibleBoards, QueenSideCastleWhite)
     board[4].at(0) = 1;
     board[0].at(0) = 5;
 
-    BoardState boardState{board, COLOR_WHITE};
-    boardState.castlingRights = CastlingRights{.white = ColorCastlingRights{true, false}};
-    boardState.window = Window{0, 0, 5, 1};
-    BoardStates boardStates = get_possible_boards(boardState);
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{true, false});
 
     EXPECT_EQ(boardStates.size(), 5);
     EXPECT_CASTLE_EXISTS(boardStates, QueenSide, 1);
@@ -85,10 +95,7 @@ TEST(PossibleBoards, KingSideCastleBlack)
     board[4].at(7) = -1;
     board[7].at(7) = -5;
 
-    BoardState boardState{board, COLOR_BLACK};
-    boardState.castlingRights = CastlingRights{.black = ColorCastlingRights{false, true}};
-    boardState.window = Window{4, 7, 8, 8};
-    BoardStates boardStates = get_possible_boards(boardState);
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{false, true});
 
     EXPECT_EQ(boardStates.size(), 4);
     EXPECT_CASTLE_EXISTS(boardStates, KingSide, COLOR_BLACK);
@@ -100,13 +107,57 @@ TEST(PossibleBoards, QueenSideCastleBlack)
     board[4].at(7) = -1;
     board[0].at(7) = -5;
 
-    BoardState boardState{board, COLOR_BLACK};
-    boardState.castlingRights = CastlingRights{.black = ColorCastlingRights{true, false}};
-    boardState.window = Window{0, 7, 5, 8};
-    BoardStates boardStates = get_possible_boards(boardState);
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{true, false});
 
     EXPECT_EQ(boardStates.size(), 5);
     EXPECT_CASTLE_EXISTS(boardStates, QueenSide, COLOR_BLACK);
+}
+
+TEST(PossibleBoards, KingSideCastleWhiteBlocked)
+{
+    Board board = get_board();
+    board[4].at(0) = 1;
+    board[7].at(0) = 5;
+    board[6].at(0) = -4;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 2);
+}
+
+TEST(PossibleBoards, QueenSideCastleWhiteBlocked)
+{
+    Board board = get_board();
+    board[4].at(0) = 1;
+    board[0].at(0) = 5;
+    board[3].at(0) = -4;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{true, false});
+
+    EXPECT_EQ(boardStates.size(), 4);
+}
+
+TEST(PossibleBoards, KingSideCastleBlackBlocked)
+{
+    Board board = get_board();
+    board[4].at(7) = -1;
+    board[7].at(7) = -5;
+    board[5].at(7) = 4;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 3);
+}
+
+TEST(PossibleBoards, QueenSideCastleBlackBlocked)
+{
+    Board board = get_board();
+    board[4].at(7) = -1;
+    board[0].at(7) = -5;
+    board[3].at(7) = 4;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{true, false});
+    EXPECT_EQ(boardStates.size(), 4);
 }
 
 TEST(PossibleBoards, PawnCaptures)

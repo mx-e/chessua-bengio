@@ -74,6 +74,19 @@ Castle::Castle(CastleSide side, Position position)
     this->position = position;
 }
 
+bool castle_path_free(BoardState boardState, int side)
+{
+    int start = side == KingSide ? 5 : 1;
+    int end = side == KingSide ? 7 : 4;
+    int col = boardState.color == COLOR_WHITE ? 0 : 7;
+    for (int i = start; i < end; i++)
+    {
+        if (boardState.board[i][col] != 0)
+            return false;
+    }
+    return true;
+}
+
 bool Castle::is_possible(BoardState boardState)
 {
     // return Move::is_possible(boardState);
@@ -81,10 +94,17 @@ bool Castle::is_possible(BoardState boardState)
     DirectionalMove transitMove = DirectionalMove(Direction{(side == KingSide ? 1 : -1), 0}, previous);
     King king{boardState.color};
     transitMove.step();
+
+    if (!castle_path_free(boardState, side))
+        return false;
+
     transitMove.update(boardState.board, boardState, king);
 
     BoardState transitState = prepare_board_state(boardState);
     transitMove.transfer(transitState, boardState);
+
+    // to avoid infinite recursion
+    transitState.castlingRights = CastlingRights{};
     try
     {
         get_possible_boards(transitState);
