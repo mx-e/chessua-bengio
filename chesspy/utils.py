@@ -37,7 +37,7 @@ abc_to_num = lambda char: ord(char.lower()) - 96 if ord(char.lower()) > 96 and o
 num_to_abc = lambda i: chr(int(i) + 96) if int(i) > 0 and int(i) < 27 else " "
 
 
-def board_row_to_repr_str(board_row: np.array):
+def board_row_to_repr_str(board_row: np.array) -> str:
     row_str = ""
     for tile in board_row:
         assert(tile >= -6 and tile <=6)
@@ -47,7 +47,7 @@ def board_row_to_repr_str(board_row: np.array):
     return row_str
 
 
-def board_row_to_row_str(board_row: np.array):
+def board_row_to_row_str(board_row: np.array) -> str:
     row_str = ""
     consec_empty = 0
     for tile in board_row:
@@ -64,7 +64,7 @@ def board_row_to_row_str(board_row: np.array):
     return row_str
 
 
-def row_str_to_board_row(row_str: str):
+def row_str_to_board_row(row_str: str) -> np.array:
     int_board_row = []
     for char in row_str:
         int_tile_state = get_char_to_int_tile_state(char)
@@ -77,7 +77,7 @@ def row_str_to_board_row(row_str: str):
     return np.array(int_board_row)
 
 
-def can_castle_string_to_arr(castle_str: str):
+def can_castle_string_to_arr(castle_str: str) -> np.array:
     can_castle = np.array([False, False, False, False])
     for char in castle_str:
         idx_castle = get_char_to_idx_can_castle(char)
@@ -86,10 +86,26 @@ def can_castle_string_to_arr(castle_str: str):
         can_castle[idx_castle] = True
     return can_castle
 
+def can_castle_arr_to_string(castle_arr: np.array) -> str:
+    if(np.all(castle_arr == False)):
+        return '-'
+    castle_str = ''
+    for i, val in enumerate(castle_arr):
+        if(not val): continue
+        castle_str += get_idx_to_char_can_castle(i)
+    return castle_str
 
-def extract_en_passant_tile(ep_str: str):
+#note col and row get swapped to match board indexing in GameState
+def extract_en_passant_tile(ep_str: str) -> np.array:
     if ep_str == "-":
         return np.array([-1, -1])
     assert len(ep_str) == 2
     col, row = ep_str
-    return np.array([abc_to_num(col) - 1, int(row) - 1])
+    return np.array([int(row) - 1, abc_to_num(col) - 1,])
+
+def export_en_passant_tile(ep_arr: np.array) -> str:
+    row, col = list(ep_arr)
+    if(col == -1):
+        return '-'
+    ep_str = num_to_abc(col + 1) + str(row + 1)
+    return ep_str
