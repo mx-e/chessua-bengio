@@ -1,6 +1,6 @@
 from tkinter import N
 import unittest, logging, sys, pathlib, json, numpy as np, time
-
+from chesscpp import runtime_benchmark
 from chesspy.game import import_fen, export_fen
 
 
@@ -19,7 +19,10 @@ class TestBenchmarks(unittest.TestCase):
             for state in states:
                 board = import_fen(state)
                 start = time.time()
-                ## TODO: replace with backend call
+
+                enpassant = [tuple(board.en_passant_tile)] if not (board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
+                runtime_benchmark(board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves, n_runs)
+            
                 for _ in range(n_runs):
                     export_fen(board)
                 ##
