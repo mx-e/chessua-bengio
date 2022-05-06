@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(chesscpp)
 
 # GoogleTest requires at least C++11
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -23,9 +23,15 @@ enable_testing()
 add_executable(
     chesscpp 
     main.cpp
+    custom.hpp
+    custom.cpp
+    ../src/types.cpp
+    ../src/moves.hpp
     ../src/main.hpp
     ../src/pieces.hpp
+    ../src/types.hpp
     ../src/pieces.cpp
+    ../src/moves.cpp
     ../src/main.cpp
 )
 

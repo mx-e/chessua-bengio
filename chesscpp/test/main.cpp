@@ -1,11 +1,402 @@
 #include "../src/main.hpp"
+#include "custom.hpp"
 #include <gtest/gtest.h>
 
-TEST(HelloTest, BasicAssertions) {
+TEST(PossibleBoards, PawnOpeningWhite)
+{
+    Board board = get_board();
+    board[0].at(1) = 6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][2] == 6; });
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][3] == 6; });
+}
+
+TEST(PossibleBoards, PawnOpeningBlack)
+{
+    Board board = get_board();
+    board[0].at(6) = -6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][5] == -6; });
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][4] == -6; });
+}
+
+TEST(PossibleBoards, BlockedRook)
+{
+    Board board = get_board();
+    board[0].at(0) = 5;
+    board[1].at(0) = 6;
+    board[0].at(3) = 6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 4);
+}
+
+BoardStates get_castling_scenario_black(Board board, ColorCastlingRights rights)
+{
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.castlingRights = CastlingRights{.black = rights};
+    boardState.window = rights.queenSide ? Window{0, 7, 5, 8} : Window{4, 7, 8, 8};
+    return get_possible_boards(boardState);
+}
+
+BoardStates get_castling_scenario_white(Board board, ColorCastlingRights rights)
+{
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.castlingRights = CastlingRights{.white = rights};
+    boardState.window = rights.queenSide ? Window{0, 0, 5, 1} : Window{4, 0, 8, 1};
+    return get_possible_boards(boardState);
+}
+
+TEST(PossibleBoards, KingSideCastleWhite)
+{
+    Board board = get_board();
+    board[4].at(0) = 1;
+    board[7].at(0) = 5;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 4);
+    EXPECT_CASTLE_EXISTS(boardStates, KingSide, 1);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.white.kingSide; });
+}
+
+TEST(PossibleBoards, QueenSideCastleWhite)
+{
+    Board board = get_board();
+    board[4].at(0) = 1;
+    board[0].at(0) = 5;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{true, false});
+
+    EXPECT_EQ(boardStates.size(), 5);
+    EXPECT_CASTLE_EXISTS(boardStates, QueenSide, 1);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.white.queenSide; });
+}
+
+TEST(PossibleBoards, KingSideCastleBlack)
+{
+    Board board = get_board();
+    board[4].at(7) = -1;
+    board[7].at(7) = -5;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 4);
+    EXPECT_CASTLE_EXISTS(boardStates, KingSide, COLOR_BLACK);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.black.kingSide; });
+}
+
+TEST(PossibleBoards, QueenSideCastleBlack)
+{
+    Board board = get_board();
+    board[4].at(7) = -1;
+    board[0].at(7) = -5;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{true, false});
+
+    EXPECT_EQ(boardStates.size(), 5);
+    EXPECT_CASTLE_EXISTS(boardStates, QueenSide, COLOR_BLACK);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.black.queenSide; });
+}
+
+TEST(PossibleBoards, KingSideCastleWhiteBlocked)
+{
+    Board board = get_board();
+    board[4].at(0) = 1;
+    board[7].at(0) = 5;
+    board[6].at(0) = -4;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 2);
+}
+
+TEST(PossibleBoards, QueenSideCastleWhiteBlocked)
+{
+    Board board = get_board();
+    board[4].at(0) = 1;
+    board[0].at(0) = 5;
+    board[3].at(0) = -4;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{true, false});
+
+    EXPECT_EQ(boardStates.size(), 4);
+}
+
+TEST(PossibleBoards, KingSideCastleBlackBlocked)
+{
+    Board board = get_board();
+    board[4].at(7) = -1;
+    board[7].at(7) = -5;
+    board[5].at(7) = 4;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 3);
+}
+
+TEST(PossibleBoards, QueenSideCastleBlackBlocked)
+{
+    Board board = get_board();
+    board[4].at(7) = -1;
+    board[0].at(7) = -5;
+    board[3].at(7) = 4;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{true, false});
+    EXPECT_EQ(boardStates.size(), 4);
+}
+
+TEST(PossibleBoards, PawnCaptures)
+{
+    Board board = get_board();
+    board[4].at(1) = 6;
+
+    board[3].at(2) = -6;
+    board[5].at(2) = -6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 4);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[3][2] == 6 && boardState.board[4][1] == 0; });
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[5][2] == 6 && boardState.board[4][1] == 0; });
+}
+
+TEST(PossibleBoards, QueenCapture)
+{
     Board board = get_board();
     board[0].at(0) = 2;
+    board[0].at(3) = -6;
 
-    Boards boards = get_possible_boards(board, 1);
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.window = Window{0, 0, 1, 8};
+    BoardStates boardStates = get_possible_boards(boardState);
 
-    EXPECT_GE(boards.size(), 2);
+    EXPECT_EQ(boardStates.size(), 3);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][3] == 2; });
+}
+
+TEST(PossibleBoards, PawnNoStraightCaptureWhite)
+{
+    Board board = get_board();
+    board[0].at(1) = 6;
+    board[1].at(1) = 6;
+
+    board[0].at(2) = -6;
+    board[1].at(3) = -6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 3);
+}
+
+TEST(PossibleBoards, PawnNoStraightCaptureBlack)
+{
+    Board board = get_board();
+    board[0].at(6) = -6;
+    board[1].at(6) = -6;
+
+    board[0].at(5) = 6;
+    board[1].at(4) = 6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 3);
+}
+
+TEST(PossibleBoards, EnPassantWhite)
+{
+    Board board = get_board();
+    board[0].at(0) = 6;
+    board[1].at(0) = -6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.enpassant = EnPassants{{1, 1}};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[1][1] == 6 && boardState.board[1][0] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][1] == 6 && boardState.board[1][0] == -6; });
+}
+
+TEST(PossibleBoards, EnPassantBlack)
+{
+    Board board = get_board();
+    board[0].at(3) = 6;
+    board[1].at(3) = -6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.enpassant = EnPassants{{0, 2}};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][2] == -6 && boardState.board[0][3] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[1][2] == -6 && boardState.board[0][3] == 6; });
+}
+
+TEST(PossibleBoards, EnPassantSetCorrectlyWhite)
+{
+    Board board = get_board();
+    board[0].at(1) = 6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.enpassant.size() > 0 && boardState.enpassant[0].first == 0 && boardState.enpassant[0].second == 2; });
+}
+
+TEST(PossibleBoards, EnPassantSetCorrectlyBlack)
+{
+    Board board = get_board();
+    board[0].at(6) = -6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.enpassant.size() > 0 && boardState.enpassant[0].first == 0 && boardState.enpassant[0].second == 5; });
+}
+
+TEST(PossibleBoards, PlayerChange)
+{
+    Board board = get_board();
+    board[0].at(1) = 1;
+    board[0].at(6) = -1;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+    EXPECT_EQ(boardStates[0].color, COLOR_BLACK);
+
+    BoardStates anotherBoardStates = get_possible_boards(boardStates[0]);
+    EXPECT_EQ(anotherBoardStates[0].color, COLOR_WHITE);
+}
+
+TEST(PossibleBoards, RecomputeHalfAndFullMoves)
+{
+    Board board = get_board();
+    board[0].at(0) = 6;
+    board[1].at(3) = -6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.window = Window{0, 0, 2, 4};
+    BoardStates boardStates = get_possible_boards(boardState);
+    EXPECT_EQ(boardStates[0].halfMove, 1);
+    EXPECT_EQ(boardStates[0].fullMove, 1);
+
+    boardStates = get_possible_boards(boardStates[0]);
+    EXPECT_EQ(boardStates[0].halfMove, 2);
+    EXPECT_EQ(boardStates[0].fullMove, 2);
+
+    boardStates = get_possible_boards(boardStates[0]);
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.halfMove == 0; });
+    EXPECT_EQ(boardStates[0].fullMove, 3);
+    EXPECT_EQ(boardStates.size(), 3);
+}
+
+TEST(PossibleBoards, CheckBlack)
+{
+    Board board = get_board();
+    board[0].at(0) = 1;
+    board[0].at(2) = -2;
+
+    BoardState boardState{board, COLOR_BLACK};
+
+    EXPECT_THROW(get_possible_boards(boardState), BoardInCheckException);
+}
+
+TEST(PossibleBoards, CheckWhite)
+{
+    Board board = get_board();
+    board[0].at(0) = -1;
+    board[0].at(2) = 2;
+
+    BoardState boardState{board, COLOR_WHITE};
+
+    EXPECT_THROW(get_possible_boards(boardState), BoardInCheckException);
+}
+
+TEST(PossibleBoards, PawnSwapWhite)
+{
+    Board board = get_board();
+    board[0].at(6) = 6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 4);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][7] == 2 && boardState.board[0][6] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][7] == 3 && boardState.board[0][6] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][7] == 4 && boardState.board[0][6] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][7] == 5 && boardState.board[0][6] == 0; });
+}
+
+TEST(PossibleBoards, PawnSwapBlack)
+{
+    Board board = get_board();
+    board[0].at(1) = -6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 4);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][0] == -2 && boardState.board[0][1] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][0] == -3 && boardState.board[0][1] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][0] == -4 && boardState.board[0][1] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][0] == -5 && boardState.board[0][1] == 0; });
 }

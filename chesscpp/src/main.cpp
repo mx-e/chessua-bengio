@@ -1,10 +1,4 @@
-#include <array>
-#include <vector>
-#include <map>
-#include <memory>
 #include "main.hpp"
-#include "pieces.hpp"
-#include <iostream>
 
 Board get_board()
 {
@@ -12,113 +6,87 @@ Board get_board()
     return m;
 }
 
-Position operator+(const Position &x, const Position &y)
+void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &move, Piece &piece)
 {
-    return std::make_pair(x.first + y.first, x.first + y.first);
-}
-
-class Pawn : public Piece
-{
-    using Piece::Piece;
-
-public:
-    virtual Directions get_directions(Position position)
-    {
-        Directions directions = {{0, 1}};
-        return directions;
-
-        if (position.first == 0 && position.second == 1)
-        {
-            directions.push_back({0, 2});
-        }
-        return directions;
-    }
-
-    virtual int get_steps()
-    {
-        return 1;
-    }
-};
-
-class King : public Piece
-{
-    using Piece::Piece;
-
-public:
-    virtual Directions get_directions(Position position)
-    {
-        Directions directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {1, 1}, {-1, -1}};
-        return directions;
-    }
-
-    virtual int get_steps()
-    {
-        return 1;
-    }
-};
-
-bool on_board(Position position)
-{
-    return position.first >= 0 && position.first < 8 && position.second >= 0 && position.second < 8;
-}
-
-bool is_free(Position position, Board board)
-{
-    return board[position.first][position.second] == 0;
-}
-
-void add_boards_along(Boards &boards, Board board, Direction direction, Position position, Piece &piece)
-{
-    position = position + direction;
     int steps = piece.get_steps();
+    move.step();
 
-    while (on_board(position) && is_free(position, board) && steps > 0)
+    while (move.is_possible(boardState) && steps > 0)
     {
-        Board new_board = board;
-        new_board[position.first].at(position.second) = piece.get_id();
-        boards.push_back(new_board);
+        move.update(boardState.board, boardState, piece);
+        move.step();
+        steps--;
 
-        position = position + direction;
-        steps -= 1;
+        BoardState newState = prepare_board_state(boardState);
+        move.transfer(newState, boardState);
+        boardStates.push_back(newState);
     }
 }
 
-void add_boards_for_piece(Boards &boards, Board board, Piece &piece, int x, int y)
+void add_boards_for_piece(BoardStates &boardStates, BoardState boardState, Piece &piece, Position position)
 {
-    Position position(x, y);
-    board[x].at(y) = 0;
-
-    Directions dirs2 = piece.get_directions(position);
-
-    Directions dirs = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
-
-    for (auto direction : piece.get_directions(position))
+    for (auto move : piece.get_moves(boardState, position))
     {
-        add_boards_along(boards, board, direction, position, piece);
+        add_boards_along(boardStates, boardState, *move, piece);
     }
 }
 
-Boards get_possible_boards(Board board, int color)
+template <class T>
+void add(AvailablePieces &pieces, int color)
 {
-    std::map<int, std::shared_ptr<Piece> > p = {
-        {-2, std::make_shared<King>(-2)},
-        {-1, std::make_shared<Pawn>(-1)},
-        {1, std::make_shared<Pawn>(1)},
-        {2, std::make_shared<King>(2)},
-    };
+    std::shared_ptr<Piece> piece = std::make_shared<T>(color);
+    pieces[piece->get_id()] = piece;
+}
 
-    Boards boards;
-
-    for (int x = 0; x < 8; x++)
+AvailablePieces get_available_pieces()
+{
+    AvailablePieces pieces;
+    for (auto color : {COLOR_BLACK, COLOR_WHITE})
     {
-        for (int y = 0; y < 8; y++)
+        add<King>(pieces, color);
+        add<Queen>(pieces, color);
+        add<Bishop>(pieces, color);
+        add<Knight>(pieces, color);
+        add<Rook>(pieces, color);
+        add<Pawn>(pieces, color);
+    }
+    return pieces;
+}
+
+BoardStates get_possible_boards(BoardState boardState)
+{
+    AvailablePieces pieces = get_available_pieces();
+    BoardStates boardStates;
+    Board board = boardState.board;
+    int color = boardState.color;
+
+    for (int x = boardState.window.x; x < boardState.window.x_; x++)
+    {
+        for (int y = boardState.window.y; y < boardState.window.y_; y++)
         {
             if (color * board[x][y] > 0)
             {
-                Piece &piece = *p[board[x][y]];
-                add_boards_for_piece(boards, board, piece, x, y);
+                Piece &piece = *pieces[board[x][y]];
+                add_boards_for_piece(boardStates, boardState, piece, Position(x, y));
             }
         }
     }
-    return boards;
+    return boardStates;
+}
+
+UCIStrings generate_moves(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
+{
+
+    CastlingRights castlingRights{
+        .white = ColorCastlingRights{queenSideWhite, kingSideWhite},
+        .black = ColorCastlingRights{queenSideBlack, kingSideBlack}
+    };
+
+    BoardState boardState{board, color, halfMove, fullMove};
+    boardState.enpassant = enpassant;
+    boardState.castlingRights = castlingRights;
+
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    return UCIStrings{ "a", "b" };
 }
