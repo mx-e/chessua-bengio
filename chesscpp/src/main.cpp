@@ -73,3 +73,20 @@ BoardStates get_possible_boards(BoardState boardState)
     }
     return boardStates;
 }
+
+UCIStrings generate_moves(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
+{
+
+    CastlingRights castlingRights{
+        .white = ColorCastlingRights{queenSideWhite, kingSideWhite},
+        .black = ColorCastlingRights{queenSideBlack, kingSideBlack}
+    };
+
+    BoardState boardState{board, color, halfMove, fullMove};
+    boardState.enpassant = enpassant;
+    boardState.castlingRights = castlingRights;
+
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    return UCIStrings{ "a", "b" };
+}
