@@ -12,7 +12,7 @@ public:
     virtual bool is_possible(BoardState boardState);
     virtual void step() = 0;
     virtual void update(Board &board, BoardState boardState, Piece &piece) = 0;
-    virtual void transfer(BoardStates &boardStates, BoardState newState, BoardState oldState);
+    virtual void transfer(BoardState &newState, BoardState oldState);
 
 protected:
     Position position;
@@ -42,7 +42,7 @@ class PawnOpeningMove : public PawnMove
 {
 public:
     using PawnMove::PawnMove;
-    virtual void transfer(BoardStates &boardStates, BoardState newState, BoardState oldState);
+    virtual void transfer(BoardState &newState, BoardState oldState);
 };
 
 class EnPassantCapture : public DirectionalMove
@@ -59,6 +59,7 @@ class Castle : public Move
 public:
     Castle(CastleSide side, Position position);
     virtual void step();
+    virtual bool is_possible(BoardState boardState);
     virtual void update(Board &board, BoardState boardState, Piece &piece);
 
 private:
@@ -69,8 +70,8 @@ private:
 class CastleTransitMove : public DirectionalMove
 {
 public:
-    CastleTransitMove(Direction direction, Position position, CastleSide side);
-    virtual void transfer(BoardStates &boardStates, BoardState newState, BoardState oldState);
+    CastleTransitMove(Direction direction, Position position, CastleSide side = KingSide);
+    virtual void transfer(BoardStates &boardStates, BoardState oldState);
 private:
     CastleSide side;
 };

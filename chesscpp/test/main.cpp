@@ -7,7 +7,7 @@ TEST(PossibleBoards, PawnOpeningWhite)
     Board board = get_board();
     board[0].at(1) = 6;
 
-    BoardState boardState{.board = board, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 2);
@@ -24,7 +24,7 @@ TEST(PossibleBoards, PawnOpeningBlack)
     Board board = get_board();
     board[0].at(6) = -6;
 
-    BoardState boardState{.board = board, .color = COLOR_BLACK};
+    BoardState boardState{board, COLOR_BLACK};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 2);
@@ -43,7 +43,7 @@ TEST(PossibleBoards, BlockedRook)
     board[1].at(0) = 6;
     board[0].at(3) = 6;
 
-    BoardState boardState{board, 1, NULL, NULL, 0, 0};
+    BoardState boardState{board, COLOR_WHITE};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 4);
@@ -51,16 +51,13 @@ TEST(PossibleBoards, BlockedRook)
 
 TEST(PossibleBoards, KingSideCastleWhite)
 {
-    std::optional<Window> window = Window{4, 0, 8, 1};
-
     Board board = get_board();
     board[4].at(0) = 1;
     board[7].at(0) = 5;
 
-    ColorCastlingRights kingSide{false, true};
-    CastlingRights rights{.white = kingSide};
-
-    BoardState boardState{.board = board, .color = 1, .castlingRights = rights, .window = window};
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.castlingRights = CastlingRights{.white = ColorCastlingRights{false, true}};
+    boardState.window = Window{4, 0, 8, 1};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 4);
@@ -69,16 +66,13 @@ TEST(PossibleBoards, KingSideCastleWhite)
 
 TEST(PossibleBoards, QueenSideCastleWhite)
 {
-    std::optional<Window> window = Window{0, 0, 5, 1};
-
     Board board = get_board();
     board[4].at(0) = 1;
     board[0].at(0) = 5;
 
-    ColorCastlingRights queenSide{true, false};
-    CastlingRights rights{.white = queenSide};
-
-    BoardState boardState{.board = board, .color = 1, .castlingRights = rights, .window = window};
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.castlingRights = CastlingRights{.white = ColorCastlingRights{true, false}};
+    boardState.window = Window{0, 0, 5, 1};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 5);
@@ -87,16 +81,13 @@ TEST(PossibleBoards, QueenSideCastleWhite)
 
 TEST(PossibleBoards, KingSideCastleBlack)
 {
-    std::optional<Window> window = Window{4, 7, 8, 8};
-
     Board board = get_board();
     board[4].at(7) = -1;
     board[7].at(7) = -5;
 
-    ColorCastlingRights kingSide{false, true};
-    CastlingRights rights{.black = kingSide};
-
-    BoardState boardState{.board = board, .color = COLOR_BLACK, .castlingRights = rights, .window = window};
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.castlingRights = CastlingRights{.black = ColorCastlingRights{false, true}};
+    boardState.window = Window{4, 7, 8, 8};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 4);
@@ -105,16 +96,13 @@ TEST(PossibleBoards, KingSideCastleBlack)
 
 TEST(PossibleBoards, QueenSideCastleBlack)
 {
-    std::optional<Window> window = Window{0, 7, 5, 8};
-
     Board board = get_board();
     board[4].at(7) = -1;
     board[0].at(7) = -5;
 
-    ColorCastlingRights queenSide{true, false};
-    CastlingRights rights{.black = queenSide};
-
-    BoardState boardState{.board = board, .color = COLOR_BLACK, .castlingRights = rights, .window = window};
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.castlingRights = CastlingRights{.black = ColorCastlingRights{true, false}};
+    boardState.window = Window{0, 7, 5, 8};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 5);
@@ -129,7 +117,7 @@ TEST(PossibleBoards, PawnCaptures)
     board[3].at(2) = -6;
     board[5].at(2) = -6;
 
-    BoardState boardState{.board = board, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 4);
@@ -143,12 +131,12 @@ TEST(PossibleBoards, PawnCaptures)
 
 TEST(PossibleBoards, QueenCapture)
 {
-    std::optional<Window> window = Window{0, 0, 1, 8};
     Board board = get_board();
     board[0].at(0) = 2;
     board[0].at(3) = -6;
 
-    BoardState boardState{.board = board, .color = COLOR_WHITE, .window = window};
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.window = Window{0, 0, 1, 8};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 3);
@@ -166,7 +154,7 @@ TEST(PossibleBoards, PawnNoStraightCaptureWhite)
     board[0].at(2) = -6;
     board[1].at(3) = -6;
 
-    BoardState boardState{.board = board, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 3);
@@ -181,7 +169,7 @@ TEST(PossibleBoards, PawnNoStraightCaptureBlack)
     board[0].at(5) = 6;
     board[1].at(4) = 6;
 
-    BoardState boardState{.board = board, .color = COLOR_BLACK};
+    BoardState boardState{board, COLOR_BLACK};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 3);
@@ -193,8 +181,8 @@ TEST(PossibleBoards, EnPassantWhite)
     board[0].at(0) = 6;
     board[1].at(0) = -6;
 
-    std::optional<EnPassants> enPassants = EnPassants{{1, 1}};
-    BoardState boardState{.board = board, .enpassant = enPassants, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.enpassant = EnPassants{{1, 1}};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 2);
@@ -211,8 +199,8 @@ TEST(PossibleBoards, EnPassantBlack)
     board[0].at(3) = 6;
     board[1].at(3) = -6;
 
-    std::optional<EnPassants> enPassants = EnPassants{{0, 2}};
-    BoardState boardState{.board = board, .enpassant = enPassants, .color = COLOR_BLACK};
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.enpassant = EnPassants{{0, 2}};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 2);
@@ -228,13 +216,13 @@ TEST(PossibleBoards, EnPassantSetCorrectlyWhite)
     Board board = get_board();
     board[0].at(1) = 6;
 
-    BoardState boardState{.board = board, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 2);
 
     EXPECT_EXISTS(boardStates, [](BoardState boardState)
-                  { return boardState.enpassant && (*boardState.enpassant)[0].first == 0 && (*boardState.enpassant)[0].second == 2; });
+                  { return boardState.enpassant.size() > 0 && boardState.enpassant[0].first == 0 && boardState.enpassant[0].second == 2; });
 }
 
 TEST(PossibleBoards, EnPassantSetCorrectlyBlack)
@@ -242,13 +230,13 @@ TEST(PossibleBoards, EnPassantSetCorrectlyBlack)
     Board board = get_board();
     board[0].at(6) = -6;
 
-    BoardState boardState{.board = board, .color = COLOR_BLACK};
+    BoardState boardState{board, COLOR_BLACK};
     BoardStates boardStates = get_possible_boards(boardState);
 
     EXPECT_EQ(boardStates.size(), 2);
 
     EXPECT_EXISTS(boardStates, [](BoardState boardState)
-                  { return boardState.enpassant && (*boardState.enpassant)[0].first == 0 && (*boardState.enpassant)[0].second == 5; });
+                  { return boardState.enpassant.size() > 0 && boardState.enpassant[0].first == 0 && boardState.enpassant[0].second == 5; });
 }
 
 TEST(PossibleBoards, PlayerChange)
@@ -257,93 +245,12 @@ TEST(PossibleBoards, PlayerChange)
     board[0].at(1) = 1;
     board[0].at(6) = -1;
 
-    BoardState boardState{.board = board, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
     BoardStates boardStates = get_possible_boards(boardState);
     EXPECT_EQ(boardStates[0].color, COLOR_BLACK);
 
     BoardStates anotherBoardStates = get_possible_boards(boardStates[0]);
     EXPECT_EQ(anotherBoardStates[0].color, COLOR_WHITE);
-}
-
-TEST(PossibleBoards, RecomputeCastlingRightsWhiteQueenSide)
-{
-    Board board = get_board();
-    board[0].at(0) = 5;
-    board[4].at(0) = 1;
-    BoardState boardState{.board = board};
-    CastlingRights rights = compute_castling_rights(boardState);
-    
-    EXPECT_TRUE(rights.white.queenSide);
-    EXPECT_FALSE(rights.white.kingSide);
-    EXPECT_FALSE(rights.black.kingSide);
-    EXPECT_FALSE(rights.black.queenSide);
-}
-
-TEST(PossibleBoards, RecomputeCastlingRightsBlackQueenSide)
-{
-    Board board = get_board();
-    board[0].at(7) = -5;
-    board[4].at(7) = -1;
-    BoardState boardState{.board = board};
-    CastlingRights rights = compute_castling_rights(boardState);
-    
-    EXPECT_FALSE(rights.white.queenSide);
-    EXPECT_FALSE(rights.white.kingSide);
-    EXPECT_FALSE(rights.black.kingSide);
-    EXPECT_TRUE(rights.black.queenSide);
-}
-
-TEST(PossibleBoards, RecomputeCastlingRightsWhiteKingSide)
-{
-    Board board = get_board();
-    board[7].at(0) = 5;
-    board[4].at(0) = 1;
-    BoardState boardState{.board = board};
-    CastlingRights rights = compute_castling_rights(boardState);
-    
-    EXPECT_FALSE(rights.white.queenSide);
-    EXPECT_TRUE(rights.white.kingSide);
-    EXPECT_FALSE(rights.black.kingSide);
-    EXPECT_FALSE(rights.black.queenSide);
-}
-
-TEST(PossibleBoards, RecomputeCastlingRightsBlackKingSide)
-{
-    Board board = get_board();
-    board[7].at(7) = -5;
-    board[4].at(7) = -1;
-    BoardState boardState{.board = board};
-    CastlingRights rights = compute_castling_rights(boardState);
-    
-    EXPECT_FALSE(rights.white.queenSide);
-    EXPECT_FALSE(rights.white.kingSide);
-    EXPECT_TRUE(rights.black.kingSide);
-    EXPECT_FALSE(rights.black.queenSide);
-}
-
-TEST(PossibleBoards, RecomputeCastlingRightsNoRights)
-{
-    Board board = get_board();
-    board[0].at(0) = 5;
-    board[4].at(0) = 1;
-    board[0].at(7) = -5;
-    board[4].at(7) = -1;
-    board[7].at(0) = 5;
-    board[4].at(0) = 1;
-    board[7].at(7) = -5;
-    board[4].at(7) = -1;
-
-    board[2].at(0) = 4;
-    board[6].at(0) = 4;
-    board[2].at(7) = -4;
-    board[6].at(7) = -4;
-    BoardState boardState{.board = board};
-    CastlingRights rights = compute_castling_rights(boardState);
-    
-    EXPECT_FALSE(rights.white.queenSide);
-    EXPECT_FALSE(rights.white.kingSide);
-    EXPECT_FALSE(rights.black.kingSide);
-    EXPECT_FALSE(rights.black.queenSide);
 }
 
 TEST(PossibleBoards, RecomputeHalfAndFullMoves)
@@ -352,8 +259,8 @@ TEST(PossibleBoards, RecomputeHalfAndFullMoves)
     board[0].at(0) = 6;
     board[1].at(3) = -6;
 
-    std::optional<Window> window = Window{0, 0, 2, 4};
-    BoardState boardState{.board = board, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.window = Window{0, 0, 2, 4};
     BoardStates boardStates = get_possible_boards(boardState);
     EXPECT_EQ(boardStates[0].halfMove, 1);
     EXPECT_EQ(boardStates[0].fullMove, 1);
@@ -375,7 +282,7 @@ TEST(PossibleBoards, CheckBlack)
     board[0].at(0) = 1;
     board[0].at(2) = -2;
 
-    BoardState boardState{.board = board, .color = COLOR_BLACK};
+    BoardState boardState{board, COLOR_BLACK};
 
     EXPECT_THROW(get_possible_boards(boardState), BoardInCheckException);
 }
@@ -386,7 +293,7 @@ TEST(PossibleBoards, CheckWhite)
     board[0].at(0) = -1;
     board[0].at(2) = 2;
 
-    BoardState boardState{.board = board, .color = COLOR_WHITE};
+    BoardState boardState{board, COLOR_WHITE};
 
     EXPECT_THROW(get_possible_boards(boardState), BoardInCheckException);
 }

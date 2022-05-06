@@ -36,21 +36,23 @@ struct Window
     int y_;
 };
 
-
 class BoardState
 {
 public:
-    BoardState(Board board, int color);
+    BoardState(Board board, int color, int halfMove = 0, int fullMove = 0);
 
-private:
     Board board;
     int color;
-    CastlingRights castlingRights;
-    std::optional<EnPassants> enpassant;
     int halfMove;
     int fullMove;
-    std::optional<Window> window;
-    BoardState &dependentState;
+    CastlingRights castlingRights;
+    EnPassants enpassant;
+    Window window;
+    BoardState* previousState;
 };
 
 typedef std::vector<BoardState> BoardStates;
+
+BoardState prepare_board_state(BoardState boardState);
+
+BoardStates get_possible_boards(BoardState boardState);

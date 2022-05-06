@@ -23,33 +23,17 @@ Moves from_directions(Directions directions, Position position)
 
 Moves King::get_moves(BoardState boardState, Position position)
 {
-    Moves moves;
-    Directions base_directions = {{0, -1}, {0, 1}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}};
+    Moves moves = from_directions({{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}}, position);
 
     ColorCastlingRights castlingRights = boardState.color == COLOR_BLACK ? boardState.castlingRights.black : boardState.castlingRights.white;
     if (castlingRights.kingSide)
     {
-        std::shared_ptr<Move> kingSideTransit = std::make_shared<CastleTransitMove>(Direction{1, 0}, position, KingSide);
-        moves.push_back(kingSideTransit);
-    }
-    else
-    {
-        base_directions.push_back(Direction{1, 0});
+        moves.push_back(std::make_shared<Castle>(KingSide, position));
     }
 
     if (castlingRights.queenSide)
     {
-        std::shared_ptr<Move> queenSideTransit = std::make_shared<CastleTransitMove>(Direction{-1, 0}, position, QueenSide);
-        moves.push_back(queenSideTransit);
-    }
-    else
-    {
-        base_directions.push_back(Direction{-1, 0});
-    }
-
-    for (auto move : from_directions(base_directions, position))
-    {
-        moves.push_back(move);
+        moves.push_back(std::make_shared<Castle>(QueenSide, position));
     }
 
     return moves;
@@ -92,10 +76,10 @@ int Rook::get_id() { return color * 5; }
 
 bool captures_enpassant(BoardState boardState, Position diagonal)
 {
-    if (boardState.enpassant)
+    if (boardState.enpassant.size() > 0)
     {
-        auto position = std::find(boardState.enpassant->begin(), boardState.enpassant->end(), diagonal);
-        return position != boardState.enpassant->end();
+        auto position = std::find(boardState.enpassant.begin(), boardState.enpassant.end(), diagonal);
+        return position != boardState.enpassant.end();
     }
     return false;
 }
