@@ -14,18 +14,11 @@ class Piece
 {
 public:
     Piece(int color);
-
-    /**
-     * @brief Provides the immediate directions a piece can move, given the current position.
-     * Note that the method should return also directions that are invalid given the
-     * game state or board limits. In a sense, this method returns all conceivable moves.
-     * @param position
-     * @return Moves
-     */
     virtual Moves get_moves(BoardState boardState, Position position) = 0;
     virtual int get_steps() = 0;
     virtual int get_id() = 0;
     virtual int get_color();
+    virtual int get_character();
 
 protected:
     int color;
@@ -57,6 +50,7 @@ class Queen : public Piece
     virtual Moves get_moves(BoardState boardState, Position position);
     virtual int get_steps();
     virtual int get_id();
+    virtual int get_character();
 };
 
 class Bishop : public Piece
@@ -65,6 +59,7 @@ class Bishop : public Piece
     virtual Moves get_moves(BoardState boardState, Position position);
     virtual int get_steps();
     virtual int get_id();
+    virtual int get_character();
 };
 
 class Knight : public Piece
@@ -73,6 +68,7 @@ class Knight : public Piece
     virtual Moves get_moves(BoardState boardState, Position position);
     virtual int get_steps();
     virtual int get_id();
+    virtual int get_character();
 };
 
 class Rook : public Piece
@@ -82,6 +78,7 @@ public:
     virtual Moves get_moves(BoardState boardState, Position position);
     virtual int get_steps();
     virtual int get_id();
+    virtual int get_character();
 
     static const int ID = 5;
 };

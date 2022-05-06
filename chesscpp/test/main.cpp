@@ -400,3 +400,48 @@ TEST(PossibleBoards, PawnSwapBlack)
     EXPECT_EXISTS(boardStates, [](BoardState boardState)
                   { return boardState.board[0][0] == -5 && boardState.board[0][1] == 0; });
 }
+
+TEST(PossibleBoards, UCIStringPawnMove)
+{
+    Board board = get_board();
+    board[3].at(2) = 6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.uci == "d3d4"; });
+}
+
+TEST(PossibleBoards, UCIStringQueenMove)
+{
+    Board board = get_board();
+    board[3].at(2) = 2;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.uci == "d3g6"; });
+}
+
+TEST(PossibleBoards, UCIStringSwap)
+{
+    Board board = get_board();
+    board[3].at(6) = 6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.uci == "d7d8q"; });
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.uci == "d7d8b"; });
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.uci == "d7d8n"; });
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.uci == "d7d8r"; });
+}

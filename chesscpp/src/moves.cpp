@@ -19,11 +19,17 @@ void move(Board &board, Piece &piece, Position previous, Position position)
 void Move::transfer(BoardState &newState, BoardState oldState)
 {
     newState.halfMove = captured ? 0 : oldState.halfMove + 1;
+    
 }
 
 bool Move::is_possible(BoardState boardState)
 {
     return on_board(position, boardState.window) && is_free(position, boardState) && !captured;
+}
+
+Position Move::get_position()
+{
+    return position;
 }
 
 DirectionalMove::DirectionalMove(Direction direction, Position position)
@@ -57,7 +63,7 @@ bool PawnMove::is_possible(BoardState boardState)
 
 void PawnOpeningMove::transfer(BoardState &newState, BoardState oldState)
 {
-    newState.enpassant = EnPassants{{previous.first, previous.second - oldState.color}};
+    newState.enpassant = EnPassants{{position.first, position.second - oldState.color}};
     Move::transfer(newState, oldState);
 }
 
@@ -70,6 +76,12 @@ void PawnSwapMove::update(Board &board, BoardState boardState, Piece &piece)
 {
     PawnMove::update(board, boardState, piece);
     board[position.first].at(position.second) = swapPiece->get_id();
+}
+
+void PawnSwapMove::transfer(BoardState &newState, BoardState oldState)
+{
+    PawnMove::transfer(newState, oldState);
+    newState.uci += swapPiece->get_character();
 }
 
 void EnPassantCapture::update(Board &board, BoardState boardState, Piece &piece)
