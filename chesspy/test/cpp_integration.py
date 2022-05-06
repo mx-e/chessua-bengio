@@ -21,8 +21,8 @@ class CPPIntegration(unittest.TestCase):
             log.debug(f"Testing Case {i+1}/{n_test_cases}: {fen}")
             board = import_fen(fen)
             # TODO: CALL backend here
-            test = generate_moves(board)
-            print(test)
+            #test = generate_moves(board)
+            #print(test)
             uci_moves_list = sorted([])
             n_moves = len(uci_moves_list)
 

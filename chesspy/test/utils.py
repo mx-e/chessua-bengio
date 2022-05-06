@@ -35,7 +35,7 @@ class TestUtils(unittest.TestCase):
 
     def test_board_row_to_x_and_back(self):
         row1 = np.array([-6, -6, -2, 0, 0, 1, 0, 5])
-        row2 = np.array([3, -3, 6, 6, 0, 4, 0, 0])
+        row2 = np.array([4, -4, 1, 1, 0, 3, 0, 0])
         row3 = np.array([6, -6, -5, -3, 2, -1, 0, 0])
 
         self.assertEqual(board_row_to_repr_str(row1), "ppq◇◇K◇R")
