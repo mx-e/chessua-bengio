@@ -1,6 +1,6 @@
 import unittest, json, pathlib, logging, sys
 
-# from chesscpp import get_board, get_possible_boards
+from chesscpp import generate_moves
 from chesspy.game import import_fen
 
 
@@ -22,6 +22,12 @@ class CPPIntegration(unittest.TestCase):
             log.debug(f"Testing Case {i+1}/{n_test_cases}: {fen}")
             board = import_fen(fen)
             # TODO: CALL backend here
+
+            print(-board.board_state.T, 2 * int(board.to_move) -1, [], *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+            #print(solution["legal_moves"])
+            uci_moves = generate_moves(board.board_state.T, 2 * int(board.to_move) -1, [], *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+            print(uci_moves)
+            
             uci_moves_list = sorted([])
             n_moves = len(uci_moves_list)
 

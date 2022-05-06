@@ -86,7 +86,7 @@ bool captures_enpassant(BoardState boardState, Position diagonal)
 
 void add_diagonal_captures(Moves &moves, BoardState boardState, Position position)
 {
-    for (Direction direction : Directions{{1, boardState.color * 1}, {-1, boardState.color * 1}})
+    for (Direction direction : Directions{{1, boardState.color}, {-1, boardState.color}})
     {
         Position diagonal = position + direction;
 
