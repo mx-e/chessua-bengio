@@ -45,6 +45,16 @@ public:
     virtual void transfer(BoardState &newState, BoardState oldState);
 };
 
+class PawnSwapMove : public PawnMove
+{
+public:
+    PawnSwapMove(Direction direction, Position position, std::shared_ptr<Piece> swapPiece);
+    virtual void update(Board &board, BoardState boardState, Piece &piece);
+
+private:
+    std::shared_ptr<Piece> swapPiece;
+};
+
 class EnPassantCapture : public DirectionalMove
 {
 public:

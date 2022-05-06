@@ -61,6 +61,17 @@ void PawnOpeningMove::transfer(BoardState &newState, BoardState oldState)
     Move::transfer(newState, oldState);
 }
 
+PawnSwapMove::PawnSwapMove(Direction direction, Position position, std::shared_ptr<Piece> swapPiece) : PawnMove(direction, position)
+{
+    this->swapPiece = swapPiece;
+}
+
+void PawnSwapMove::update(Board &board, BoardState boardState, Piece &piece)
+{
+    PawnMove::update(board, boardState, piece);
+    board[position.first].at(position.second) = swapPiece->get_id();
+}
+
 void EnPassantCapture::update(Board &board, BoardState boardState, Piece &piece)
 {
     captured = true;
@@ -89,7 +100,6 @@ bool castle_path_free(BoardState boardState, int side)
 
 bool Castle::is_possible(BoardState boardState)
 {
-    // return Move::is_possible(boardState);
     //  TODO: Buffer transit state before and possible boards for transit after
     DirectionalMove transitMove = DirectionalMove(Direction{(side == KingSide ? 1 : -1), 0}, previous);
     King king{boardState.color};

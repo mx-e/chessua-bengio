@@ -115,8 +115,30 @@ void add_opening_move(Moves &moves, BoardState boardState, Position position)
 
 void add_standard_move(Moves &moves, BoardState boardState, Position position)
 {
-    std::shared_ptr<Move> move = std::make_shared<PawnMove>(Direction{0, boardState.color}, position);
+    if (position.second != (boardState.color == COLOR_WHITE ? 6 : 1))
+    {
+        std::shared_ptr<Move> move = std::make_shared<PawnMove>(Direction{0, boardState.color}, position);
+        moves.push_back(move);
+    }
+}
+
+template <class T>
+void add_swap_piece(Moves &moves, BoardState boardState, Position position)
+{
+    std::shared_ptr<Piece> piece = std::make_shared<T>(boardState.color);
+    std::shared_ptr<Move> move = std::make_shared<PawnSwapMove>(Direction{0, boardState.color}, position, piece);
     moves.push_back(move);
+}
+
+void add_swap_moves(Moves &moves, BoardState boardState, Position position)
+{
+    if (position.second == (boardState.color == COLOR_WHITE ? 6 : 1))
+    {
+        add_swap_piece<Queen>(moves, boardState, position);
+        add_swap_piece<Knight>(moves, boardState, position);
+        add_swap_piece<Bishop>(moves, boardState, position);
+        add_swap_piece<Rook>(moves, boardState, position);
+    }
 }
 
 Moves Pawn::get_moves(BoardState boardState, Position position)
@@ -125,6 +147,7 @@ Moves Pawn::get_moves(BoardState boardState, Position position)
     add_standard_move(moves, boardState, position);
     add_opening_move(moves, boardState, position);
     add_diagonal_captures(moves, boardState, position);
+    add_swap_moves(moves, boardState, position);
     return moves;
 }
 
@@ -133,15 +156,11 @@ int Pawn::get_id() { return color * 6; }
 
 BoardState prepare_board_state(BoardState boardState)
 {
-    CastlingRights rights{ 
+    CastlingRights rights{
         .white = ColorCastlingRights{
             .queenSide = boardState.castlingRights.white.queenSide && boardState.board[4][0] == King::ID && boardState.board[0][0] == Rook::ID,
-            .kingSide = boardState.castlingRights.white.kingSide && boardState.board[4][0] == King::ID && boardState.board[7][0] == Rook::ID
-        },
-        .black = ColorCastlingRights{
-            .queenSide = boardState.castlingRights.black.queenSide && boardState.board[4][0] == -King::ID && boardState.board[0][0] == -Rook::ID,
-            .kingSide = boardState.castlingRights.black.kingSide && boardState.board[4][0] == -King::ID && boardState.board[7][0] == -Rook::ID
-        },
+            .kingSide = boardState.castlingRights.white.kingSide && boardState.board[4][0] == King::ID && boardState.board[7][0] == Rook::ID},
+        .black = ColorCastlingRights{.queenSide = boardState.castlingRights.black.queenSide && boardState.board[4][0] == -King::ID && boardState.board[0][0] == -Rook::ID, .kingSide = boardState.castlingRights.black.kingSide && boardState.board[4][0] == -King::ID && boardState.board[7][0] == -Rook::ID},
     };
     BoardState newState{boardState.board, -boardState.color, boardState.halfMove, boardState.fullMove + 1};
     newState.castlingRights = rights;
