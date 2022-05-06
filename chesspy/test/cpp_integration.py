@@ -20,9 +20,6 @@ class CPPIntegration(unittest.TestCase):
         for fen, solution in test_cases.items():
             log.debug(f"Testing Case {i+1}/{n_test_cases}: {fen}")
             board = import_fen(fen)
-            # TODO: CALL backend here
-
-
             enpassant = [tuple(board.en_passant_tile)] if not (board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
             uci_moves = generate_moves(board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
             
@@ -33,11 +30,11 @@ class CPPIntegration(unittest.TestCase):
             true_moves_list = sorted(solution["legal_moves"])
 
             self.assertEqual(
-                true_n_legal_moves, true_n_legal_moves
-            )  # TODO: insert n generated moves here
+                true_n_legal_moves, n_moves
+            )
             self.assertListEqual(
-                true_moves_list, true_moves_list
-            )  # TODO: insert generated moves here
+                true_moves_list, uci_moves_list
+            )
             i += 1
 
 

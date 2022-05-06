@@ -6,14 +6,12 @@ Board get_board()
     return m;
 }
 
-std::map<int, std::string> LETTERS = { {0, "a"}, {1, "b"}, {2, "c"}, {3, "d"}, {4, "e"}, {5, "f"}, {6, "g"}, {7, "h"} };
+std::map<int, std::string> LETTERS = {{0, "a"}, {1, "b"}, {2, "c"}, {3, "d"}, {4, "e"}, {5, "f"}, {6, "g"}, {7, "h"}};
 
 std::string uci_part(Position position)
 {
     return LETTERS[position.first] + std::to_string(position.second + 1);
 }
-
-
 
 void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &move, Piece &piece, Position position)
 {
@@ -23,7 +21,7 @@ void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &mov
     while (move.is_possible(boardState) && steps > 0)
     {
         move.update(boardState.board, boardState, piece);
-        
+
         steps--;
 
         BoardState newState = prepare_board_state(boardState);
@@ -93,20 +91,33 @@ UCIStrings generate_moves(Board board, int color, EnPassants enpassant, bool kin
 
     CastlingRights castlingRights{
         .white = ColorCastlingRights{queenSideWhite, kingSideWhite},
-        .black = ColorCastlingRights{queenSideBlack, kingSideBlack}
-    };
+        .black = ColorCastlingRights{queenSideBlack, kingSideBlack}};
 
     BoardState boardState{board, color, halfMove, fullMove};
     boardState.enpassant = enpassant;
     boardState.castlingRights = castlingRights;
 
-    try {
+    try
+    {
         BoardStates boardStates = get_possible_boards(boardState);
+        UCIStrings strings;
+        for (BoardState boardState : boardStates)
+        {
+            try {
+                get_possible_boards(boardState);
+                strings.push_back(boardState.uci);
+            }
+            catch (const BoardInCheckException &e)
+            {
+                // ignore
+            }
+            
+        }
+        return strings;
     }
-    catch(const BoardInCheckException &e) {
-        return UCIStrings{ "checko" } ;
+    catch (const BoardInCheckException &e)
+    {
+        UCIStrings empty;
+        return empty;
     }
-    
-
-    return UCIStrings{ "a", "b" };
 }

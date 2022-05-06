@@ -58,7 +58,7 @@ int Queen::get_character() { return 'q'; }
 
 Moves Bishop::get_moves(BoardState boardState, Position position)
 {
-    return from_directions({{-1, 0}, {1, -1}, {-1, 1}, {1, 1}}, position);
+    return from_directions({{-1, -1}, {1, -1}, {-1, 1}, {1, 1}}, position);
 }
 
 int Bishop::get_steps() { return 8; }
@@ -67,7 +67,7 @@ int Bishop::get_character() { return 'b'; }
 
 Moves Knight::get_moves(BoardState boardState, Position position)
 {
-    return from_directions({{2, 1}, {1, 2}, {-2, 1}, {-1, 2}}, position);
+    return from_directions({{2, 1}, {1, 2}, {-2, 1}, {-1, 2}, {1, -2}, {2, -1}, {-1, -2}, {-2, -1}}, position);
 }
 
 int Knight::get_steps() { return 1; }

@@ -61,6 +61,12 @@ bool PawnMove::is_possible(BoardState boardState)
     return Move::is_possible(boardState) && boardState.board[position.first][position.second] == 0;
 }
 
+bool PawnOpeningMove::is_possible(BoardState boardState)
+{
+    int one_back = boardState.color == COLOR_WHITE ? -1 : 1;
+    return PawnMove::is_possible(boardState) && boardState.board[position.first][position.second + one_back] == 0;
+}
+
 void PawnOpeningMove::transfer(BoardState &newState, BoardState oldState)
 {
     newState.enpassant = EnPassants{{position.first, position.second - oldState.color}};

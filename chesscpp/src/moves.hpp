@@ -43,6 +43,7 @@ class PawnOpeningMove : public PawnMove
 public:
     using PawnMove::PawnMove;
     virtual void transfer(BoardState &newState, BoardState oldState);
+    virtual bool is_possible(BoardState boardState);
 };
 
 class PawnSwapMove : public PawnMove

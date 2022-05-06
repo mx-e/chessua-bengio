@@ -19,6 +19,18 @@ TEST(PossibleBoards, PawnOpeningWhite)
                   { return boardState.board[0][3] == 6; });
 }
 
+TEST(PossibleBoards, PawnOpeningWhiteBlocked)
+{
+    Board board = get_board();
+    board[0].at(1) = 6;
+    board[0].at(2) = -6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 0);
+}
+
 TEST(PossibleBoards, PawnOpeningBlack)
 {
     Board board = get_board();
@@ -34,6 +46,18 @@ TEST(PossibleBoards, PawnOpeningBlack)
 
     EXPECT_EXISTS(boardStates, [](BoardState boardState)
                   { return boardState.board[0][4] == -6; });
+}
+
+TEST(PossibleBoards, PawnOpeningBlackBlocked)
+{
+    Board board = get_board();
+    board[0].at(6) = -6;
+    board[0].at(5) = 6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 0);
 }
 
 TEST(PossibleBoards, BlockedRook)
@@ -220,7 +244,7 @@ TEST(PossibleBoards, PawnNoStraightCaptureWhite)
     BoardState boardState{board, COLOR_WHITE};
     BoardStates boardStates = get_possible_boards(boardState);
 
-    EXPECT_EQ(boardStates.size(), 3);
+    EXPECT_EQ(boardStates.size(), 2);
 }
 
 TEST(PossibleBoards, PawnNoStraightCaptureBlack)
@@ -235,7 +259,7 @@ TEST(PossibleBoards, PawnNoStraightCaptureBlack)
     BoardState boardState{board, COLOR_BLACK};
     BoardStates boardStates = get_possible_boards(boardState);
 
-    EXPECT_EQ(boardStates.size(), 3);
+    EXPECT_EQ(boardStates.size(), 2);
 }
 
 TEST(PossibleBoards, EnPassantWhite)
