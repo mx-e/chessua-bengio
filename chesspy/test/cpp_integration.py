@@ -1,6 +1,8 @@
 import unittest, json, pathlib, logging, sys
-#from chesscpp import get_board, get_possible_boards
+
+# from chesscpp import get_board, get_possible_boards
 from chesspy.game import import_fen
+
 
 class CPPIntegration(unittest.TestCase):
     # def test_possible_boards(self):
@@ -19,19 +21,24 @@ class CPPIntegration(unittest.TestCase):
         for fen, solution in test_cases.items():
             log.debug(f"Testing Case {i+1}/{n_test_cases}: {fen}")
             board = import_fen(fen)
-            # TODO: CALL backend here 
+            # TODO: CALL backend here
             uci_moves_list = sorted([])
             n_moves = len(uci_moves_list)
 
-            true_n_legal_moves = solution['n_legal_moves']
-            true_moves_list = sorted(solution['legal_moves'])
+            true_n_legal_moves = solution["n_legal_moves"]
+            true_moves_list = sorted(solution["legal_moves"])
 
-            self.assertEqual(true_n_legal_moves, true_n_legal_moves)# TODO: insert n generated moves here
-            self.assertListEqual(true_moves_list, true_moves_list) # TODO: insert generated moves here
+            self.assertEqual(
+                true_n_legal_moves, true_n_legal_moves
+            )  # TODO: insert n generated moves here
+            self.assertListEqual(
+                true_moves_list, true_moves_list
+            )  # TODO: insert generated moves here
             i += 1
 
+
 if __name__ == "__main__":
-    logging.basicConfig( stream=sys.stderr )
-    # uncomment for debugging 
-    #logging.getLogger( "tests.testMoveGenerator" ).setLevel( logging.DEBUG )
+    logging.basicConfig(stream=sys.stderr)
+    # uncomment for debugging
+    # logging.getLogger( "tests.testMoveGenerator" ).setLevel( logging.DEBUG )
     unittest.main()

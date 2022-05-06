@@ -2,8 +2,8 @@ import unittest, logging, sys, pathlib, json
 
 from chesspy.game import import_fen, export_fen
 
+
 class TestGame(unittest.TestCase):
-    
     def test_fen_to_game_state_to_fen(self):
         log = logging.getLogger("tests.testFenRoundTrip")
         test_dir = pathlib.Path(__file__).parent.resolve()
@@ -16,10 +16,8 @@ class TestGame(unittest.TestCase):
             rt_fen = export_fen(board)
             self.assertEqual(fen, rt_fen)
 
-    
-
 
 if __name__ == "__main__":
-    logging.basicConfig( stream=sys.stderr )
-    logging.getLogger( "tests.testFenRoundTrip" ).setLevel( logging.DEBUG )
+    logging.basicConfig(stream=sys.stderr)
+    logging.getLogger("tests.testFenRoundTrip").setLevel(logging.DEBUG)
     unittest.main()

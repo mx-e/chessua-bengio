@@ -33,14 +33,18 @@ can_castle_idx_to_char_map = reverse_map(can_castle_char_to_idx_map)
 get_char_to_idx_can_castle = lambda char: can_castle_char_to_idx_map.get(char, -1)
 get_idx_to_char_can_castle = lambda int: can_castle_idx_to_char_map.get(int, "-")
 
-abc_to_num = lambda char: ord(char.lower()) - 96 if ord(char.lower()) > 96 and ord(char.lower()) < 123 else -1
+abc_to_num = (
+    lambda char: ord(char.lower()) - 96
+    if ord(char.lower()) > 96 and ord(char.lower()) < 123
+    else -1
+)
 num_to_abc = lambda i: chr(int(i) + 96) if int(i) > 0 and int(i) < 27 else " "
 
 
 def board_row_to_repr_str(board_row: np.array) -> str:
     row_str = ""
     for tile in board_row:
-        assert(tile >= -6 and tile <=6)
+        assert tile >= -6 and tile <= 6
         char_tile_state = get_int_to_char_tile_state(tile)
         row_str += "◇" if char_tile_state == " " else char_tile_state
 
@@ -86,26 +90,35 @@ def can_castle_string_to_arr(castle_str: str) -> np.array:
         can_castle[idx_castle] = True
     return can_castle
 
+
 def can_castle_arr_to_string(castle_arr: np.array) -> str:
-    if(np.all(castle_arr == False)):
-        return '-'
-    castle_str = ''
+    if np.all(castle_arr == False):
+        return "-"
+    castle_str = ""
     for i, val in enumerate(castle_arr):
-        if(not val): continue
+        if not val:
+            continue
         castle_str += get_idx_to_char_can_castle(i)
     return castle_str
 
-#note col and row get swapped to match board indexing in GameState
+
+# note col and row get swapped to match board indexing in GameState
 def extract_en_passant_tile(ep_str: str) -> np.array:
     if ep_str == "-":
         return np.array([-1, -1])
     assert len(ep_str) == 2
     col, row = ep_str
-    return np.array([int(row) - 1, abc_to_num(col) - 1,])
+    return np.array(
+        [
+            int(row) - 1,
+            abc_to_num(col) - 1,
+        ]
+    )
+
 
 def export_en_passant_tile(ep_arr: np.array) -> str:
     row, col = list(ep_arr)
-    if(col == -1):
-        return '-'
+    if col == -1:
+        return "-"
     ep_str = num_to_abc(col + 1) + str(row + 1)
     return ep_str

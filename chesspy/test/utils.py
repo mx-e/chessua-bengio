@@ -8,12 +8,11 @@ from chesspy.utils import (
     board_row_to_row_str,
     row_str_to_board_row,
     can_castle_string_to_arr,
-    extract_en_passant_tile
+    extract_en_passant_tile,
 )
 
 
 class TestUtils(unittest.TestCase):
-
     def test_get_char_to_int_tile_state(self):
         pairs = [["K", 6], [22, 0], ["g", 0], ["p", -1]]
         for input, output in pairs:
@@ -35,12 +34,11 @@ class TestUtils(unittest.TestCase):
             self.assertEqual(num_to_abc(input), output)
 
     def test_board_row_to_x_and_back(self):
-        row1 = np.array([-1, -1 ,-5 ,0 ,0 ,6 ,0, 2])
+        row1 = np.array([-1, -1, -5, 0, 0, 6, 0, 2])
         row2 = np.array([3, -3, 6, 6, 0, 4, 0, 0])
         row3 = np.array([1, -1, -2, -4, 5, -6, 0, 0])
 
-        
-        self.assertEqual(board_row_to_repr_str(row1), "ppq◇◇K◇R" )
+        self.assertEqual(board_row_to_repr_str(row1), "ppq◇◇K◇R")
         self.assertEqual(board_row_to_repr_str(row2), "NnKK◇B◇◇")
         self.assertEqual(board_row_to_repr_str(row3), "PprbQk◇◇")
 
@@ -57,9 +55,13 @@ class TestUtils(unittest.TestCase):
         self.assertListEqual(list(row3), list(row_str_to_board_row(row_string3)))
 
     def test_can_castle_string_to_arr(self):
-        pairs= [["-", [False, False, False, False]], ['Kq', [True, False, False, True]], ["qk", [False, False, True, True]]]
+        pairs = [
+            ["-", [False, False, False, False]],
+            ["Kq", [True, False, False, True]],
+            ["qk", [False, False, True, True]],
+        ]
         for input, output in pairs:
-            self.assertListEqual(list(can_castle_string_to_arr(input)),output)
+            self.assertListEqual(list(can_castle_string_to_arr(input)), output)
 
     def test_extract_en_passant_tile(self):
         pairs = [["-", [-1, -1]], ["e5", [4, 4]], ["c8", [7, 2]]]
