@@ -86,7 +86,13 @@ UCIStrings generate_moves(Board board, int color, EnPassants enpassant, bool kin
     boardState.enpassant = enpassant;
     boardState.castlingRights = castlingRights;
 
-    BoardStates boardStates = get_possible_boards(boardState);
+    try {
+        BoardStates boardStates = get_possible_boards(boardState);
+    }
+    catch(const BoardInCheckException &e) {
+        return UCIStrings{ "checko" } ;
+    }
+    
 
     return UCIStrings{ "a", "b" };
 }
