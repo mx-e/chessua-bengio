@@ -40,7 +40,7 @@ Moves King::get_moves(BoardState boardState, Position position)
 }
 
 int King::get_steps() { return 1; }
-int King::get_id() { return color * 1; }
+int King::get_id() { return color * King::ID; }
 
 Moves Queen::get_moves(BoardState boardState, Position position)
 {
@@ -72,7 +72,7 @@ Moves Rook::get_moves(BoardState boardState, Position position)
 }
 
 int Rook::get_steps() { return 8; }
-int Rook::get_id() { return color * 5; }
+int Rook::get_id() { return color * Rook::ID; }
 
 bool captures_enpassant(BoardState boardState, Position diagonal)
 {
@@ -130,3 +130,21 @@ Moves Pawn::get_moves(BoardState boardState, Position position)
 
 int Pawn::get_steps() { return 1; }
 int Pawn::get_id() { return color * 6; }
+
+BoardState prepare_board_state(BoardState boardState)
+{
+    CastlingRights rights{ 
+        .white = ColorCastlingRights{
+            .queenSide = boardState.castlingRights.white.queenSide && boardState.board[4][0] == King::ID && boardState.board[0][0] == Rook::ID,
+            .kingSide = boardState.castlingRights.white.kingSide && boardState.board[4][0] == King::ID && boardState.board[7][0] == Rook::ID
+        },
+        .black = ColorCastlingRights{
+            .queenSide = boardState.castlingRights.black.queenSide && boardState.board[4][0] == -King::ID && boardState.board[0][0] == -Rook::ID,
+            .kingSide = boardState.castlingRights.black.kingSide && boardState.board[4][0] == -King::ID && boardState.board[7][0] == -Rook::ID
+        },
+    };
+    BoardState newState{boardState.board, -boardState.color, boardState.halfMove, boardState.fullMove + 1};
+    newState.castlingRights = rights;
+
+    return newState;
+}

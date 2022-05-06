@@ -43,10 +43,12 @@ class Pawn : public Piece
 
 class King : public Piece
 {
+public:
     using Piece::Piece;
     virtual Moves get_moves(BoardState boardState, Position position);
     virtual int get_steps();
     virtual int get_id();
+    static const int ID = 1;
 };
 
 class Queen : public Piece
@@ -60,22 +62,16 @@ class Queen : public Piece
 class Bishop : public Piece
 {
     using Piece::Piece;
-
     virtual Moves get_moves(BoardState boardState, Position position);
-
     virtual int get_steps();
-
     virtual int get_id();
 };
 
 class Knight : public Piece
 {
     using Piece::Piece;
-
     virtual Moves get_moves(BoardState boardState, Position position);
-
     virtual int get_steps();
-
     virtual int get_id();
 };
 
@@ -83,12 +79,13 @@ class Rook : public Piece
 {
 public:
     using Piece::Piece;
-
     virtual Moves get_moves(BoardState boardState, Position position);
-
     virtual int get_steps();
-
     virtual int get_id();
+
+    static const int ID = 5;
 };
+
+BoardState prepare_board_state(BoardState boardState);
 
 #endif

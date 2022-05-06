@@ -53,6 +53,4 @@ public:
 
 typedef std::vector<BoardState> BoardStates;
 
-BoardState prepare_board_state(BoardState boardState);
-
 BoardStates get_possible_boards(BoardState boardState);

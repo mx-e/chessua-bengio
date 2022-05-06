@@ -39,3 +39,13 @@ bool exists(BoardStates boardStates, std::function<bool(BoardState)> boardStateC
     }
     return found;
 }
+
+bool forall(BoardStates boardStates, std::function<bool(BoardState)> boardStateCondition)
+{
+    for (auto boardState : boardStates)
+    {
+        if(!boardStateCondition(boardState)) return false;
+    }
+    return true;
+}
+

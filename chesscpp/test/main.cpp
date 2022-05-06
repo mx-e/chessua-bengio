@@ -75,6 +75,9 @@ TEST(PossibleBoards, KingSideCastleWhite)
 
     EXPECT_EQ(boardStates.size(), 4);
     EXPECT_CASTLE_EXISTS(boardStates, KingSide, 1);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.white.kingSide; });
 }
 
 TEST(PossibleBoards, QueenSideCastleWhite)
@@ -87,6 +90,9 @@ TEST(PossibleBoards, QueenSideCastleWhite)
 
     EXPECT_EQ(boardStates.size(), 5);
     EXPECT_CASTLE_EXISTS(boardStates, QueenSide, 1);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.white.queenSide; });
 }
 
 TEST(PossibleBoards, KingSideCastleBlack)
@@ -99,6 +105,9 @@ TEST(PossibleBoards, KingSideCastleBlack)
 
     EXPECT_EQ(boardStates.size(), 4);
     EXPECT_CASTLE_EXISTS(boardStates, KingSide, COLOR_BLACK);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.black.kingSide; });
 }
 
 TEST(PossibleBoards, QueenSideCastleBlack)
@@ -111,6 +120,9 @@ TEST(PossibleBoards, QueenSideCastleBlack)
 
     EXPECT_EQ(boardStates.size(), 5);
     EXPECT_CASTLE_EXISTS(boardStates, QueenSide, COLOR_BLACK);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.black.queenSide; });
 }
 
 TEST(PossibleBoards, KingSideCastleWhiteBlocked)
