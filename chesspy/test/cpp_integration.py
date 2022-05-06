@@ -1,6 +1,4 @@
 import unittest, json, pathlib, logging, sys
-
-from anyio import TypedAttributeLookupError
 #from chesscpp import get_board, get_possible_boards
 from chesspy.game import import_fen
 
