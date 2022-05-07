@@ -121,3 +121,11 @@ UCIStrings generate_moves(Board board, int color, EnPassants enpassant, bool kin
         return empty;
     }
 }
+
+void runtime_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
+{
+    for(int _ = 0; _ < runs; _++)
+    {
+        generate_moves(board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
+    }
+}
