@@ -1,4 +1,4 @@
-#include "moves.hpp"
+#include "../include/moves.hpp"
 
 bool on_board(Position position, Window window)
 {

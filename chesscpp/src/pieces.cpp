@@ -1,4 +1,4 @@
-#include "pieces.hpp"
+#include "../include/pieces.hpp"
 
 Piece::Piece(int color)
 {

@@ -1,4 +1,3 @@
-#include "../src/main.hpp"
 #include "custom.hpp"
 #include <gtest/gtest.h>
 
