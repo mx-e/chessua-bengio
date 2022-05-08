@@ -1,4 +1,4 @@
-<map id="PawnSwapMove" name="PawnSwapMove">
+<map id="PawnPromotion" name="PawnPromotion">
 <area shape="rect" id="node1" title=" " alt="" coords="5,513,145,620"/>
 <area shape="rect" id="node2" href="$class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo..." alt="" coords="7,373,143,465"/>
 <area shape="rect" id="node3" href="$class_directional_move.html" title="A DirectionaMove is performed along a given direction for up to any number of steps...." alt="" coords="7,219,143,325"/>

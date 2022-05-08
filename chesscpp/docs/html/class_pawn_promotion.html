@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Chess-AI C++ Backend: PawnOpeningMove Class Reference</title>
+<title>Chess-AI C++ Backend: PawnPromotion Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,32 +64,32 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="class_pawn_opening_move-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">PawnOpeningMove Class Reference</div></div>
+<a href="class_pawn_promotion-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">PawnPromotion Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>A <a class="el" href="class_pawn_opening_move.html" title="A PawnOpeningMove is a PawnMove that can be performed only once before the Pawn has moved initially....">PawnOpeningMove</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that can be performed only once before the <a class="el" href="class_pawn.html">Pawn</a> has moved initially. In this case the <a class="el" href="class_pawn.html">Pawn</a> can be moved two fields.  
- <a href="class_pawn_opening_move.html#details">More...</a></p>
+<p>A <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that moves to the opposite end of the Board and is thus subject to a promotion.  
+ <a href="class_pawn_promotion.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="moves_8hpp_source.html">moves.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for PawnOpeningMove:</div>
+Inheritance diagram for PawnPromotion:</div>
 <div class="dyncontent">
-<div class="center"><img src="class_pawn_opening_move__inherit__graph.png" border="0" usemap="#a_pawn_opening_move_inherit__map" alt="Inheritance graph"/></div>
-<map name="a_pawn_opening_move_inherit__map" id="a_pawn_opening_move_inherit__map">
-<area shape="rect" title="A PawnOpeningMove is a PawnMove that can be performed only once before the Pawn has moved initially...." alt="" coords="6,513,141,605"/>
+<div class="center"><img src="class_pawn_promotion__inherit__graph.png" border="0" usemap="#a_pawn_promotion_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_pawn_promotion_inherit__map" id="a_pawn_promotion_inherit__map">
+<area shape="rect" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr..." alt="" coords="6,513,141,620"/>
 <area shape="rect" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo..." alt="" coords="5,373,141,465"/>
 <area shape="rect" href="class_directional_move.html" title="A DirectionaMove is performed along a given direction for up to any number of steps...." alt="" coords="5,219,141,325"/>
 <area shape="rect" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="17,5,129,171"/>
 </map>
 </div>
 <div class="dynheader">
-Collaboration diagram for PawnOpeningMove:</div>
+Collaboration diagram for PawnPromotion:</div>
 <div class="dyncontent">
-<div class="center"><img src="class_pawn_opening_move__coll__graph.png" border="0" usemap="#a_pawn_opening_move_coll__map" alt="Collaboration graph"/></div>
-<map name="a_pawn_opening_move_coll__map" id="a_pawn_opening_move_coll__map">
-<area shape="rect" title="A PawnOpeningMove is a PawnMove that can be performed only once before the Pawn has moved initially...." alt="" coords="6,513,141,605"/>
+<div class="center"><img src="class_pawn_promotion__coll__graph.png" border="0" usemap="#a_pawn_promotion_coll__map" alt="Collaboration graph"/></div>
+<map name="a_pawn_promotion_coll__map" id="a_pawn_promotion_coll__map">
+<area shape="rect" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr..." alt="" coords="6,513,141,620"/>
 <area shape="rect" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo..." alt="" coords="5,373,141,465"/>
 <area shape="rect" href="class_directional_move.html" title="A DirectionaMove is performed along a given direction for up to any number of steps...." alt="" coords="5,219,141,325"/>
 <area shape="rect" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="17,5,129,171"/>
@@ -98,12 +98,15 @@ Collaboration diagram for PawnOpeningMove:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af5386d7f4fd54720eea708825d2e2b9b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_opening_move.html#af5386d7f4fd54720eea708825d2e2b9b">transfer</a> (<a class="el" href="class_board_state.html">BoardState</a> &amp;newState, <a class="el" href="class_board_state.html">BoardState</a> oldState)</td></tr>
-<tr class="memdesc:af5386d7f4fd54720eea708825d2e2b9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the en-passant position behind the opening <a class="el" href="class_pawn.html">Pawn</a> to the follow-up state.  <a href="class_pawn_opening_move.html#af5386d7f4fd54720eea708825d2e2b9b">More...</a><br /></td></tr>
-<tr class="separator:af5386d7f4fd54720eea708825d2e2b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67e976721445f2765dc6b62dadd34060"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_opening_move.html#a67e976721445f2765dc6b62dadd34060">is_possible</a> (<a class="el" href="class_board_state.html">BoardState</a> boardState)</td></tr>
-<tr class="memdesc:a67e976721445f2765dc6b62dadd34060"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the current <a class="el" href="class_board_state.html">BoardState</a> and determines whether the given <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> is legal according to chess rules.  <a href="class_pawn_opening_move.html#a67e976721445f2765dc6b62dadd34060">More...</a><br /></td></tr>
-<tr class="separator:a67e976721445f2765dc6b62dadd34060"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a092f059cb69552d6fd81ed207e24f0e3"><td class="memItemLeft" align="right" valign="top"><a id="a092f059cb69552d6fd81ed207e24f0e3" name="a092f059cb69552d6fd81ed207e24f0e3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PawnPromotion</b> (Direction <a class="el" href="class_directional_move.html#ade24ab2d628b76c1a32a5f3b9e27ed39">direction</a>, Position <a class="el" href="class_move.html#abc108a3891bc1697232c48d1b0274fb4">position</a>, std::shared_ptr&lt; <a class="el" href="class_piece.html">Piece</a> &gt; swapPiece)</td></tr>
+<tr class="separator:a092f059cb69552d6fd81ed207e24f0e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a066338a251444583978b63e24e354637"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_promotion.html#a066338a251444583978b63e24e354637">update</a> (Board &amp;board, <a class="el" href="class_board_state.html">BoardState</a> boardState, <a class="el" href="class_piece.html">Piece</a> &amp;piece)</td></tr>
+<tr class="memdesc:a066338a251444583978b63e24e354637"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates a Board reference given the current <a class="el" href="class_board_state.html">BoardState</a>. At this point the <a class="el" href="class_piece.html">Piece</a> that is to be moved is finally exposed to the <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> instance. This step ensures that a new Board can be computed given the current <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>.  <a href="class_pawn_promotion.html#a066338a251444583978b63e24e354637">More...</a><br /></td></tr>
+<tr class="separator:a066338a251444583978b63e24e354637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab600c47b4d4c6e16e39f0f192c5afb91"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_promotion.html#ab600c47b4d4c6e16e39f0f192c5afb91">transfer</a> (<a class="el" href="class_board_state.html">BoardState</a> &amp;newState, <a class="el" href="class_board_state.html">BoardState</a> oldState)</td></tr>
+<tr class="memdesc:ab600c47b4d4c6e16e39f0f192c5afb91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Models the implications that a <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> can have on the follow-up <a class="el" href="class_board_state.html">BoardState</a>.  <a href="class_pawn_promotion.html#ab600c47b4d4c6e16e39f0f192c5afb91">More...</a><br /></td></tr>
+<tr class="separator:ab600c47b4d4c6e16e39f0f192c5afb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_pawn_move"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_pawn_move')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_pawn_move.html">PawnMove</a></td></tr>
 <tr class="memitem:a043f8f08762941c5a6b39d5eb291215b inherit pub_methods_class_pawn_move"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_move.html#a043f8f08762941c5a6b39d5eb291215b">is_possible</a> (<a class="el" href="class_board_state.html">BoardState</a> boardState)</td></tr>
 <tr class="memdesc:a043f8f08762941c5a6b39d5eb291215b inherit pub_methods_class_pawn_move"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the current <a class="el" href="class_board_state.html">BoardState</a> and determines whether the given <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> is legal according to chess rules.  <a href="class_pawn_move.html#a043f8f08762941c5a6b39d5eb291215b">More...</a><br /></td></tr>
@@ -160,10 +163,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>captured</b> = false<
 <tr class="separator:a795f8e7ef108420e10ea5ec9c1b0667f inherit pro_attribs_class_move"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >A <a class="el" href="class_pawn_opening_move.html" title="A PawnOpeningMove is a PawnMove that can be performed only once before the Pawn has moved initially....">PawnOpeningMove</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that can be performed only once before the <a class="el" href="class_pawn.html">Pawn</a> has moved initially. In this case the <a class="el" href="class_pawn.html">Pawn</a> can be moved two fields. </p>
+<div class="textblock"><p >A <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that moves to the opposite end of the Board and is thus subject to a promotion. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a67e976721445f2765dc6b62dadd34060" name="a67e976721445f2765dc6b62dadd34060"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67e976721445f2765dc6b62dadd34060">&#9670;&nbsp;</a></span>is_possible()</h2>
+<a id="ab600c47b4d4c6e16e39f0f192c5afb91" name="ab600c47b4d4c6e16e39f0f192c5afb91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab600c47b4d4c6e16e39f0f192c5afb91">&#9670;&nbsp;</a></span>transfer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,44 +175,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>captured</b> = false<
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool PawnOpeningMove::is_possible </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_board_state.html">BoardState</a>&#160;</td>
-          <td class="paramname"><em>boardState</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Validates the current <a class="el" href="class_board_state.html">BoardState</a> and determines whether the given <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> is legal according to chess rules. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">boardState</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the <a class="el" href="class_move.html#a23e211e28d9d563c6f03d2d374d302ec" title="Validates the current BoardState and determines whether the given Move is legal according to chess ru...">DirectionalMove::is_possible</a> and the <a class="el" href="class_pawn.html">Pawn</a> is not blocked by an opponent straight ahead. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="class_pawn_move.html#a043f8f08762941c5a6b39d5eb291215b">PawnMove</a>.</p>
-
-</div>
-</div>
-<a id="af5386d7f4fd54720eea708825d2e2b9b" name="af5386d7f4fd54720eea708825d2e2b9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5386d7f4fd54720eea708825d2e2b9b">&#9670;&nbsp;</a></span>transfer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PawnOpeningMove::transfer </td>
+          <td class="memname">void PawnPromotion::transfer </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_board_state.html">BoardState</a> &amp;&#160;</td>
           <td class="paramname"><em>newState</em>, </td>
@@ -233,7 +199,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>captured</b> = false<
 </table>
 </div><div class="memdoc">
 
-<p>Adds the en-passant position behind the opening <a class="el" href="class_pawn.html">Pawn</a> to the follow-up state. </p>
+<p>Models the implications that a <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> can have on the follow-up <a class="el" href="class_board_state.html">BoardState</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">newState</td><td>Reference to the new <a class="el" href="class_board_state.html">BoardState</a> that resulted from the current <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>. </td></tr>
@@ -243,6 +209,60 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>captured</b> = false<
 </dl>
 
 <p>Reimplemented from <a class="el" href="class_move.html#a5a1e7da13d4d8b27e6cf41f51edc5cd0">Move</a>.</p>
+
+</div>
+</div>
+<a id="a066338a251444583978b63e24e354637" name="a066338a251444583978b63e24e354637"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a066338a251444583978b63e24e354637">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PawnPromotion::update </td>
+          <td>(</td>
+          <td class="paramtype">Board &amp;&#160;</td>
+          <td class="paramname"><em>board</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_board_state.html">BoardState</a>&#160;</td>
+          <td class="paramname"><em>boardState</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_piece.html">Piece</a> &amp;&#160;</td>
+          <td class="paramname"><em>piece</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates a Board reference given the current <a class="el" href="class_board_state.html">BoardState</a>. At this point the <a class="el" href="class_piece.html">Piece</a> that is to be moved is finally exposed to the <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> instance. This step ensures that a new Board can be computed given the current <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">board</td><td>Board that is subject to change under the current <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>. </td></tr>
+    <tr><td class="paramname">boardState</td><td>Current <a class="el" href="class_board_state.html">BoardState</a>. </td></tr>
+    <tr><td class="paramname">piece</td><td>Current <a class="el" href="class_piece.html">Piece</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_directional_move.html#a8dcbb9c48c65c4c28b86b0504dd30b57">DirectionalMove</a>.</p>
 
 </div>
 </div>

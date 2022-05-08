@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Chess-AI C++ Backend: PawnSwapMove Class Reference</title>
+<title>Chess-AI C++ Backend: PawnPromotion Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -65,11 +65,11 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_pawn_swap_move-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">PawnSwapMove Class Reference</div></div>
+  <div class="headertitle"><div class="title">PawnPromotion Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
-Inheritance diagram for PawnSwapMove:</div>
+Inheritance diagram for PawnPromotion:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_pawn_swap_move__inherit__graph.png" border="0" usemap="#a_pawn_swap_move_inherit__map" alt="Inheritance graph"/></div>
 <map name="a_pawn_swap_move_inherit__map" id="a_pawn_swap_move_inherit__map">
@@ -80,7 +80,7 @@ Inheritance diagram for PawnSwapMove:</div>
 </map>
 </div>
 <div class="dynheader">
-Collaboration diagram for PawnSwapMove:</div>
+Collaboration diagram for PawnPromotion:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_pawn_swap_move__coll__graph.png" border="0" usemap="#a_pawn_swap_move_coll__map" alt="Collaboration graph"/></div>
 <map name="a_pawn_swap_move_coll__map" id="a_pawn_swap_move_coll__map">
@@ -94,7 +94,7 @@ Collaboration diagram for PawnSwapMove:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a30388aba2d9b966f415132337d18d775"><td class="memItemLeft" align="right" valign="top"><a id="a30388aba2d9b966f415132337d18d775" name="a30388aba2d9b966f415132337d18d775"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PawnSwapMove</b> (Direction <a class="el" href="class_directional_move.html#ade24ab2d628b76c1a32a5f3b9e27ed39">direction</a>, Position <a class="el" href="class_move.html#abc108a3891bc1697232c48d1b0274fb4">position</a>, std::shared_ptr&lt; <a class="el" href="class_piece.html">Piece</a> &gt; swapPiece)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PawnPromotion</b> (Direction <a class="el" href="class_directional_move.html#ade24ab2d628b76c1a32a5f3b9e27ed39">direction</a>, Position <a class="el" href="class_move.html#abc108a3891bc1697232c48d1b0274fb4">position</a>, std::shared_ptr&lt; <a class="el" href="class_piece.html">Piece</a> &gt; swapPiece)</td></tr>
 <tr class="separator:a30388aba2d9b966f415132337d18d775"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a3fc415a4561c2a3d341bfefbe126d7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_swap_move.html#a8a3fc415a4561c2a3d341bfefbe126d7">update</a> (Board &amp;board, <a class="el" href="class_board_state.html">BoardState</a> boardState, <a class="el" href="class_piece.html">Piece</a> &amp;piece)</td></tr>
 <tr class="memdesc:a8a3fc415a4561c2a3d341bfefbe126d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates a Board reference given the current <a class="el" href="class_board_state.html">BoardState</a>. At this point the <a class="el" href="class_piece.html">Piece</a> that is to be moved is finally exposed to the <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> instance. This step ensures that a new Board can be computed given the current <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>.  <a href="class_pawn_swap_move.html#a8a3fc415a4561c2a3d341bfefbe126d7">More...</a><br /></td></tr>
@@ -168,7 +168,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>captured</b> = false<
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void PawnSwapMove::transfer </td>
+          <td class="memname">void PawnPromotion::transfer </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_board_state.html">BoardState</a> &amp;&#160;</td>
           <td class="paramname"><em>newState</em>, </td>
@@ -215,7 +215,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>captured</b> = false<
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void PawnSwapMove::update </td>
+          <td class="memname">void PawnPromotion::update </td>
           <td>(</td>
           <td class="paramtype">Board &amp;&#160;</td>
           <td class="paramname"><em>board</em>, </td>

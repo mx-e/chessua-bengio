@@ -73,18 +73,18 @@ void PawnOpeningMove::transfer(BoardState &newState, BoardState oldState)
     Move::transfer(newState, oldState);
 }
 
-PawnSwapMove::PawnSwapMove(Direction direction, Position position, std::shared_ptr<Piece> swapPiece) : PawnMove(direction, position)
+PawnPromotion::PawnPromotion(Direction direction, Position position, std::shared_ptr<Piece> swapPiece) : PawnMove(direction, position)
 {
     this->swapPiece = swapPiece;
 }
 
-void PawnSwapMove::update(Board &board, BoardState boardState, Piece &piece)
+void PawnPromotion::update(Board &board, BoardState boardState, Piece &piece)
 {
     PawnMove::update(board, boardState, piece);
     board[position.first].at(position.second) = swapPiece->get_id();
 }
 
-void PawnSwapMove::transfer(BoardState &newState, BoardState oldState)
+void PawnPromotion::transfer(BoardState &newState, BoardState oldState)
 {
     PawnMove::transfer(newState, oldState);
     newState.uci += swapPiece->get_character();

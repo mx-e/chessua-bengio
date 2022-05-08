@@ -149,14 +149,14 @@ public:
 };
 
 /**
- * @brief A PawnSwapMove is a PawnMove that moves to the opposite end of the Board and is thus
+ * @brief A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus
  * subject to a promotion
  * 
  */
-class PawnSwapMove : public PawnMove
+class PawnPromotion : public PawnMove
 {
 public:
-    PawnSwapMove(Direction direction, Position position, std::shared_ptr<Piece> swapPiece);
+    PawnPromotion(Direction direction, Position position, std::shared_ptr<Piece> swapPiece);
     virtual void update(Board &board, BoardState boardState, Piece &piece);
     virtual void transfer(BoardState &newState, BoardState oldState);
 
