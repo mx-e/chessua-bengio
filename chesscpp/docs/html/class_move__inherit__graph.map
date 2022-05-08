@@ -1,10 +1,9 @@
 <map id="Move" name="Move">
-<area shape="rect" id="node1" title=" " alt="" coords="120,5,232,171"/>
-<area shape="rect" id="node2" href="$class_castle.html" title=" " alt="" coords="51,219,157,340"/>
-<area shape="rect" id="node3" href="$class_directional_move.html" title=" " alt="" coords="181,226,317,333"/>
-<area shape="rect" id="node4" href="$class_castle_transit_move.html" title=" " alt="" coords="5,388,157,480"/>
-<area shape="rect" id="node5" href="$class_en_passant_capture.html" title=" " alt="" coords="181,388,317,480"/>
-<area shape="rect" id="node6" href="$class_pawn_move.html" title=" " alt="" coords="341,388,477,480"/>
-<area shape="rect" id="node7" href="$class_pawn_opening_move.html" title=" " alt="" coords="261,535,395,627"/>
-<area shape="rect" id="node8" href="$class_pawn_swap_move.html" title=" " alt="" coords="419,528,559,635"/>
+<area shape="rect" id="node1" title=" " alt="" coords="75,5,187,171"/>
+<area shape="rect" id="node2" href="$class_castle.html" title=" " alt="" coords="5,219,112,340"/>
+<area shape="rect" id="node3" href="$class_directional_move.html" title=" " alt="" coords="136,226,272,333"/>
+<area shape="rect" id="node4" href="$class_en_passant_capture.html" title=" " alt="" coords="56,388,192,480"/>
+<area shape="rect" id="node5" href="$class_pawn_move.html" title=" " alt="" coords="216,388,352,480"/>
+<area shape="rect" id="node6" href="$class_pawn_opening_move.html" title=" " alt="" coords="135,535,270,627"/>
+<area shape="rect" id="node7" href="$class_pawn_swap_move.html" title=" " alt="" coords="294,528,434,635"/>
 </map>
