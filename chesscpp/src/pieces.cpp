@@ -1,4 +1,4 @@
-#include "pieces.hpp"
+#include "../include/pieces.hpp"
 
 Piece::Piece(int color)
 {
@@ -135,7 +135,7 @@ template <class T>
 void add_swap_piece(Moves &moves, BoardState boardState, Position position)
 {
     std::shared_ptr<Piece> piece = std::make_shared<T>(boardState.color);
-    std::shared_ptr<Move> move = std::make_shared<PawnSwapMove>(Direction{0, boardState.color}, position, piece);
+    std::shared_ptr<Move> move = std::make_shared<PawnPromotion>(Direction{0, boardState.color}, position, piece);
     moves.push_back(move);
 }
 

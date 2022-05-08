@@ -1,0 +1,5 @@
+<map id="CastleTransitMove" name="CastleTransitMove">
+<area shape="rect" id="node1" title=" " alt="" coords="5,373,157,465"/>
+<area shape="rect" id="node2" href="$class_directional_move.html" title=" " alt="" coords="13,219,149,325"/>
+<area shape="rect" id="node3" href="$class_move.html" title=" " alt="" coords="25,5,137,171"/>
+</map>

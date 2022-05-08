@@ -1,10 +1,9 @@
-#include "../src/main.hpp"
 #include "custom.hpp"
 #include <gtest/gtest.h>
 
 TEST(PossibleBoards, PawnOpeningWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(1) = 6;
 
     BoardState boardState{board, COLOR_WHITE};
@@ -21,7 +20,7 @@ TEST(PossibleBoards, PawnOpeningWhite)
 
 TEST(PossibleBoards, PawnOpeningWhiteBlocked)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(1) = 6;
     board[0].at(2) = -6;
 
@@ -33,7 +32,7 @@ TEST(PossibleBoards, PawnOpeningWhiteBlocked)
 
 TEST(PossibleBoards, PawnOpeningBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(6) = -6;
 
     BoardState boardState{board, COLOR_BLACK};
@@ -50,7 +49,7 @@ TEST(PossibleBoards, PawnOpeningBlack)
 
 TEST(PossibleBoards, PawnOpeningBlackBlocked)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(6) = -6;
     board[0].at(5) = 6;
 
@@ -62,7 +61,7 @@ TEST(PossibleBoards, PawnOpeningBlackBlocked)
 
 TEST(PossibleBoards, BlockedRook)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(0) = 5;
     board[1].at(0) = 6;
     board[0].at(3) = 6;
@@ -91,7 +90,7 @@ BoardStates get_castling_scenario_white(Board board, ColorCastlingRights rights)
 
 TEST(PossibleBoards, KingSideCastleWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(0) = 1;
     board[7].at(0) = 5;
 
@@ -106,7 +105,7 @@ TEST(PossibleBoards, KingSideCastleWhite)
 
 TEST(PossibleBoards, QueenSideCastleWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(0) = 1;
     board[0].at(0) = 5;
 
@@ -121,7 +120,7 @@ TEST(PossibleBoards, QueenSideCastleWhite)
 
 TEST(PossibleBoards, KingSideCastleBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(7) = -1;
     board[7].at(7) = -5;
 
@@ -136,7 +135,7 @@ TEST(PossibleBoards, KingSideCastleBlack)
 
 TEST(PossibleBoards, QueenSideCastleBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(7) = -1;
     board[0].at(7) = -5;
 
@@ -151,7 +150,7 @@ TEST(PossibleBoards, QueenSideCastleBlack)
 
 TEST(PossibleBoards, KingSideCastleWhiteBlocked)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(0) = 1;
     board[7].at(0) = 5;
     board[6].at(0) = -4;
@@ -163,7 +162,7 @@ TEST(PossibleBoards, KingSideCastleWhiteBlocked)
 
 TEST(PossibleBoards, QueenSideCastleWhiteBlocked)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(0) = 1;
     board[0].at(0) = 5;
     board[3].at(0) = -4;
@@ -175,7 +174,7 @@ TEST(PossibleBoards, QueenSideCastleWhiteBlocked)
 
 TEST(PossibleBoards, KingSideCastleBlackBlocked)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(7) = -1;
     board[7].at(7) = -5;
     board[5].at(7) = 4;
@@ -187,7 +186,7 @@ TEST(PossibleBoards, KingSideCastleBlackBlocked)
 
 TEST(PossibleBoards, QueenSideCastleBlackBlocked)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(7) = -1;
     board[0].at(7) = -5;
     board[3].at(7) = 4;
@@ -198,7 +197,7 @@ TEST(PossibleBoards, QueenSideCastleBlackBlocked)
 
 TEST(PossibleBoards, PawnCaptures)
 {
-    Board board = get_board();
+    Board board{};
     board[4].at(1) = 6;
 
     board[3].at(2) = -6;
@@ -218,7 +217,7 @@ TEST(PossibleBoards, PawnCaptures)
 
 TEST(PossibleBoards, QueenCapture)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(0) = 2;
     board[0].at(3) = -6;
 
@@ -234,7 +233,7 @@ TEST(PossibleBoards, QueenCapture)
 
 TEST(PossibleBoards, PawnNoStraightCaptureWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(1) = 6;
     board[1].at(1) = 6;
 
@@ -249,7 +248,7 @@ TEST(PossibleBoards, PawnNoStraightCaptureWhite)
 
 TEST(PossibleBoards, PawnNoStraightCaptureBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(6) = -6;
     board[1].at(6) = -6;
 
@@ -264,7 +263,7 @@ TEST(PossibleBoards, PawnNoStraightCaptureBlack)
 
 TEST(PossibleBoards, EnPassantWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(0) = 6;
     board[1].at(0) = -6;
 
@@ -282,7 +281,7 @@ TEST(PossibleBoards, EnPassantWhite)
 
 TEST(PossibleBoards, EnPassantBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(3) = 6;
     board[1].at(3) = -6;
 
@@ -300,7 +299,7 @@ TEST(PossibleBoards, EnPassantBlack)
 
 TEST(PossibleBoards, EnPassantSetCorrectlyWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(1) = 6;
 
     BoardState boardState{board, COLOR_WHITE};
@@ -314,7 +313,7 @@ TEST(PossibleBoards, EnPassantSetCorrectlyWhite)
 
 TEST(PossibleBoards, EnPassantSetCorrectlyBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(6) = -6;
 
     BoardState boardState{board, COLOR_BLACK};
@@ -328,7 +327,7 @@ TEST(PossibleBoards, EnPassantSetCorrectlyBlack)
 
 TEST(PossibleBoards, PlayerChange)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(1) = 1;
     board[0].at(6) = -1;
 
@@ -342,7 +341,7 @@ TEST(PossibleBoards, PlayerChange)
 
 TEST(PossibleBoards, RecomputeHalfAndFullMoves)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(0) = 6;
     board[1].at(3) = -6;
 
@@ -365,7 +364,7 @@ TEST(PossibleBoards, RecomputeHalfAndFullMoves)
 
 TEST(PossibleBoards, CheckBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(0) = 1;
     board[0].at(2) = -2;
 
@@ -376,7 +375,7 @@ TEST(PossibleBoards, CheckBlack)
 
 TEST(PossibleBoards, CheckWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(0) = -1;
     board[0].at(2) = 2;
 
@@ -387,7 +386,7 @@ TEST(PossibleBoards, CheckWhite)
 
 TEST(PossibleBoards, PawnSwapWhite)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(6) = 6;
 
     BoardState boardState{board, COLOR_WHITE};
@@ -407,7 +406,7 @@ TEST(PossibleBoards, PawnSwapWhite)
 
 TEST(PossibleBoards, PawnSwapBlack)
 {
-    Board board = get_board();
+    Board board{};
     board[0].at(1) = -6;
 
     BoardState boardState{board, COLOR_BLACK};
@@ -427,7 +426,7 @@ TEST(PossibleBoards, PawnSwapBlack)
 
 TEST(PossibleBoards, UCIStringPawnMove)
 {
-    Board board = get_board();
+    Board board{};
     board[3].at(2) = 6;
 
     BoardState boardState{board, COLOR_WHITE};
@@ -439,7 +438,7 @@ TEST(PossibleBoards, UCIStringPawnMove)
 
 TEST(PossibleBoards, UCIStringQueenMove)
 {
-    Board board = get_board();
+    Board board{};
     board[3].at(2) = 2;
 
     BoardState boardState{board, COLOR_WHITE};
@@ -451,7 +450,7 @@ TEST(PossibleBoards, UCIStringQueenMove)
 
 TEST(PossibleBoards, UCIStringSwap)
 {
-    Board board = get_board();
+    Board board{};
     board[3].at(6) = 6;
 
     BoardState boardState{board, COLOR_WHITE};

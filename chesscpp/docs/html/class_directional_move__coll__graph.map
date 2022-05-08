@@ -1,0 +1,4 @@
+<map id="DirectionalMove" name="DirectionalMove">
+<area shape="rect" id="node1" title="A DirectionaMove is performed along a given direction for up to any number of steps...." alt="" coords="5,219,141,325"/>
+<area shape="rect" id="node2" href="$class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="17,5,129,171"/>
+</map>

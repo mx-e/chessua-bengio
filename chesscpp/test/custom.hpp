@@ -1,6 +1,6 @@
 #ifndef CUSTOM_H
 #define CUSTOM_H
-#include "../src/main.hpp"
+#include "../include/main.hpp"
 #include <gtest/gtest.h>
 
 bool has_castle(BoardStates boardStates, CastleSide side, int color);

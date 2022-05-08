@@ -1,0 +1,4 @@
+<map id="BoardInCheckException" name="BoardInCheckException">
+<area shape="rect" id="node1" title="Special exception thrown if a Move would capture the opponent&#39;s King." alt="" coords="5,131,168,208"/>
+<area shape="rect" id="node2" title=" " alt="" coords="35,5,139,83"/>
+</map>
