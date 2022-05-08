@@ -69,7 +69,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>A <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that moves to the opposite end of the Board and is thus subject to a promotion.  
+<p>A <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that moves to the opposite end of the Board and is thus subject to a promotion (swapped out for a captured <a class="el" href="class_queen.html">Queen</a>, <a class="el" href="class_bishop.html">Bishop</a>, <a class="el" href="class_knight.html">Knight</a> or <a class="el" href="class_rook.html">Rook</a>).  
  <a href="class_pawn_promotion.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="moves_8hpp_source.html">moves.hpp</a>&gt;</code></p>
@@ -98,8 +98,8 @@ Collaboration diagram for PawnPromotion:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a092f059cb69552d6fd81ed207e24f0e3"><td class="memItemLeft" align="right" valign="top"><a id="a092f059cb69552d6fd81ed207e24f0e3" name="a092f059cb69552d6fd81ed207e24f0e3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PawnPromotion</b> (Direction <a class="el" href="class_directional_move.html#ade24ab2d628b76c1a32a5f3b9e27ed39">direction</a>, Position <a class="el" href="class_move.html#abc108a3891bc1697232c48d1b0274fb4">position</a>, std::shared_ptr&lt; <a class="el" href="class_piece.html">Piece</a> &gt; swapPiece)</td></tr>
+<tr class="memitem:a092f059cb69552d6fd81ed207e24f0e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_promotion.html#a092f059cb69552d6fd81ed207e24f0e3">PawnPromotion</a> (Direction <a class="el" href="class_directional_move.html#ade24ab2d628b76c1a32a5f3b9e27ed39">direction</a>, Position <a class="el" href="class_move.html#abc108a3891bc1697232c48d1b0274fb4">position</a>, std::shared_ptr&lt; <a class="el" href="class_piece.html">Piece</a> &gt; swapPiece)</td></tr>
+<tr class="memdesc:a092f059cb69552d6fd81ed207e24f0e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> instance as a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> with the additional swapPiece, a reference to a <a class="el" href="class_piece.html">Piece</a> of <a class="el" href="class_queen.html">Queen</a>, <a class="el" href="class_bishop.html">Bishop</a>, <a class="el" href="class_knight.html">Knight</a> or <a class="el" href="class_rook.html">Rook</a>, which the <a class="el" href="class_pawn.html">Pawn</a> gets promoted to when performing this <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>.  <a href="class_pawn_promotion.html#a092f059cb69552d6fd81ed207e24f0e3">More...</a><br /></td></tr>
 <tr class="separator:a092f059cb69552d6fd81ed207e24f0e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a066338a251444583978b63e24e354637"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pawn_promotion.html#a066338a251444583978b63e24e354637">update</a> (Board &amp;board, <a class="el" href="class_board_state.html">BoardState</a> boardState, <a class="el" href="class_piece.html">Piece</a> &amp;piece)</td></tr>
 <tr class="memdesc:a066338a251444583978b63e24e354637"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates a Board reference given the current <a class="el" href="class_board_state.html">BoardState</a>. At this point the <a class="el" href="class_piece.html">Piece</a> that is to be moved is finally exposed to the <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a> instance. This step ensures that a new Board can be computed given the current <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>.  <a href="class_pawn_promotion.html#a066338a251444583978b63e24e354637">More...</a><br /></td></tr>
@@ -163,8 +163,53 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>captured</b> = false<
 <tr class="separator:a795f8e7ef108420e10ea5ec9c1b0667f inherit pro_attribs_class_move"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >A <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that moves to the opposite end of the Board and is thus subject to a promotion. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<div class="textblock"><p >A <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> is a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> that moves to the opposite end of the Board and is thus subject to a promotion (swapped out for a captured <a class="el" href="class_queen.html">Queen</a>, <a class="el" href="class_bishop.html">Bishop</a>, <a class="el" href="class_knight.html">Knight</a> or <a class="el" href="class_rook.html">Rook</a>). </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a092f059cb69552d6fd81ed207e24f0e3" name="a092f059cb69552d6fd81ed207e24f0e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a092f059cb69552d6fd81ed207e24f0e3">&#9670;&nbsp;</a></span>PawnPromotion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PawnPromotion::PawnPromotion </td>
+          <td>(</td>
+          <td class="paramtype">Direction&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Position&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="class_piece.html">Piece</a> &gt;&#160;</td>
+          <td class="paramname"><em>swapPiece</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr...">PawnPromotion</a> instance as a <a class="el" href="class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo...">PawnMove</a> with the additional swapPiece, a reference to a <a class="el" href="class_piece.html">Piece</a> of <a class="el" href="class_queen.html">Queen</a>, <a class="el" href="class_bishop.html">Bishop</a>, <a class="el" href="class_knight.html">Knight</a> or <a class="el" href="class_rook.html">Rook</a>, which the <a class="el" href="class_pawn.html">Pawn</a> gets promoted to when performing this <a class="el" href="class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS...">Move</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">direction</td><td>Direction of the <a class="el" href="class_directional_move.html" title="A DirectionaMove is performed along a given direction for up to any number of steps....">DirectionalMove</a> </td></tr>
+    <tr><td class="paramname">position</td><td>Position of the current <a class="el" href="class_piece.html">Piece</a>. </td></tr>
+    <tr><td class="paramname">swapPiece</td><td>Reference to either a <a class="el" href="class_queen.html">Queen</a>, <a class="el" href="class_bishop.html">Bishop</a>, <a class="el" href="class_knight.html">Knight</a> or <a class="el" href="class_rook.html">Rook</a> which the current <a class="el" href="class_pawn.html">Pawn</a> gets promoted to. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab600c47b4d4c6e16e39f0f192c5afb91" name="ab600c47b4d4c6e16e39f0f192c5afb91"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab600c47b4d4c6e16e39f0f192c5afb91">&#9670;&nbsp;</a></span>transfer()</h2>
 

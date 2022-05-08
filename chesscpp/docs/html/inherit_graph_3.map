@@ -1,8 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="node1" href="$class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="5,31,60,57"/>
-<area shape="rect" id="node2" href="$class_castle.html" title=" " alt="" coords="136,5,196,32"/>
+<area shape="rect" id="node2" href="$class_castle.html" title="A Castle is a special Move that moves the King by two fields and moves the Rook to the position the K..." alt="" coords="136,5,196,32"/>
 <area shape="rect" id="node3" href="$class_directional_move.html" title="A DirectionaMove is performed along a given direction for up to any number of steps...." alt="" coords="108,56,224,83"/>
-<area shape="rect" id="node4" href="$class_en_passant_capture.html" title=" " alt="" coords="272,31,404,57"/>
+<area shape="rect" id="node4" href="$class_en_passant_capture.html" title="EnPassantCapture is a DirectionalMove that is performed diagonally by a Pawn and the only chess move ..." alt="" coords="272,31,404,57"/>
 <area shape="rect" id="node5" href="$class_pawn_move.html" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo..." alt="" coords="295,81,381,108"/>
 <area shape="rect" id="node6" href="$class_pawn_opening_move.html" title="A PawnOpeningMove is a PawnMove that can be performed only once before the Pawn has moved initially...." alt="" coords="452,56,587,83"/>
 <area shape="rect" id="node7" href="$class_pawn_promotion.html" title="A PawnPromotion is a PawnMove that moves to the opposite end of the Board and is thus subject to a pr..." alt="" coords="462,107,577,133"/>

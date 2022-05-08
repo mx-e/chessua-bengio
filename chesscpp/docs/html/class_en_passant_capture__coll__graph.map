@@ -1,5 +1,5 @@
 <map id="EnPassantCapture" name="EnPassantCapture">
-<area shape="rect" id="node1" title=" " alt="" coords="5,373,141,465"/>
+<area shape="rect" id="node1" title="EnPassantCapture is a DirectionalMove that is performed diagonally by a Pawn and the only chess move ..." alt="" coords="5,373,141,465"/>
 <area shape="rect" id="node2" href="$class_directional_move.html" title="A DirectionaMove is performed along a given direction for up to any number of steps...." alt="" coords="5,219,141,325"/>
 <area shape="rect" id="node3" href="$class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="17,5,129,171"/>
 </map>
