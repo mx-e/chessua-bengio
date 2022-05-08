@@ -1,0 +1,9 @@
+<map id="Piece" name="Piece">
+<area shape="rect" id="node1" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ..." alt="" coords="232,5,353,156"/>
+<area shape="rect" id="node2" href="$class_bishop.html" title="Implements the Bishop Piece." alt="" coords="5,233,68,311"/>
+<area shape="rect" id="node3" href="$class_king.html" title="Implements the King Piece." alt="" coords="93,211,199,333"/>
+<area shape="rect" id="node4" href="$class_knight.html" title="Implements the Knight Piece." alt="" coords="223,233,282,311"/>
+<area shape="rect" id="node5" href="$class_pawn.html" title="Implements the Pawn Piece." alt="" coords="307,233,361,311"/>
+<area shape="rect" id="node6" href="$class_queen.html" title="Implements the Queen Piece." alt="" coords="385,233,445,311"/>
+<area shape="rect" id="node7" href="$class_rook.html" title="Implements the Rook Piece." alt="" coords="469,204,591,340"/>
+</map>

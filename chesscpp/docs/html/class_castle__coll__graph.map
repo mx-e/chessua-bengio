@@ -1,0 +1,4 @@
+<map id="Castle" name="Castle">
+<area shape="rect" id="node1" title="A Castle is a special Move that moves the King by two fields and moves the Rook to the position the K..." alt="" coords="8,219,115,340"/>
+<area shape="rect" id="node2" href="$class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="5,5,117,171"/>
+</map>

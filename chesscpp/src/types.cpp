@@ -1,4 +1,4 @@
-#include "types.hpp"
+#include "../include/types.hpp"
 
 BoardState::BoardState(Board board, int color, int halfMove, int fullMove)
 {

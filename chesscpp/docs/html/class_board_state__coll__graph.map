@@ -1,0 +1,6 @@
+<map id="BoardState" name="BoardState">
+<area shape="rect" id="node1" title="BoardState indicating all stateful information of the current game state. All parameters are availabl..." alt="" coords="84,359,191,509"/>
+<area shape="rect" id="node2" href="$struct_castling_rights.html" title="Indicates the CastlingRights of both the white and black player." alt="" coords="21,197,129,274"/>
+<area shape="rect" id="node3" href="$struct_color_castling_rights.html" title="Indicates the queen&#45; and king&#45;side CastlingRights for a contextually available color." alt="" coords="5,5,144,97"/>
+<area shape="rect" id="node4" href="$struct_window.html" title="Specifies a rectangular Window to the Board that is to be considered for performing checks...." alt="" coords="167,175,236,296"/>
+</map>
