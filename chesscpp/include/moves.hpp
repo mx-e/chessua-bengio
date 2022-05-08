@@ -78,13 +78,4 @@ private:
     CastleSide side;
 };
 
-class CastleTransitMove : public DirectionalMove
-{
-public:
-    CastleTransitMove(Direction direction, Position position, CastleSide side = KingSide);
-    virtual void transfer(BoardStates &boardStates, BoardState oldState);
-private:
-    CastleSide side;
-};
-
 #endif
