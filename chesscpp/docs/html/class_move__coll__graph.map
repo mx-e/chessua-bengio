@@ -1,3 +1,3 @@
 <map id="Move" name="Move">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,117,171"/>
+<area shape="rect" id="node1" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="5,5,117,171"/>
 </map>

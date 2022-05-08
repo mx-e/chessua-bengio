@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['window_0',['Window',['../struct_window.html',1,'']]]
+  ['queen_0',['Queen',['../class_queen.html',1,'']]]
 ];

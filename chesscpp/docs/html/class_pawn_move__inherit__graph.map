@@ -1,7 +1,7 @@
 <map id="PawnMove" name="PawnMove">
-<area shape="rect" id="node1" title=" " alt="" coords="85,373,221,465"/>
-<area shape="rect" id="node4" href="$class_pawn_opening_move.html" title=" " alt="" coords="5,521,140,613"/>
+<area shape="rect" id="node1" title="A PawnMove is a DirectionalMove that cannot capture in a straight line and is thus blocked by an oppo..." alt="" coords="85,373,221,465"/>
+<area shape="rect" id="node4" href="$class_pawn_opening_move.html" title="A PawnOpeningMove is a PawnMove that can be performed only once before the Pawn has moved initially...." alt="" coords="5,521,140,613"/>
 <area shape="rect" id="node5" href="$class_pawn_swap_move.html" title=" " alt="" coords="164,513,304,620"/>
-<area shape="rect" id="node2" href="$class_directional_move.html" title=" " alt="" coords="85,219,221,325"/>
-<area shape="rect" id="node3" href="$class_move.html" title=" " alt="" coords="97,5,209,171"/>
+<area shape="rect" id="node2" href="$class_directional_move.html" title="A DirectionaMove is performed along a given direction for up to any number of steps...." alt="" coords="85,219,221,325"/>
+<area shape="rect" id="node3" href="$class_move.html" title="Base class abstracting moves that can be performed in chess. A Move interacts with the current BoardS..." alt="" coords="97,5,209,171"/>
 </map>
