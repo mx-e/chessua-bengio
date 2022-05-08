@@ -1,4 +1,4 @@
 <map id="CastlingRights" name="CastlingRights">
-<area shape="rect" id="node1" title=" " alt="" coords="21,175,129,252"/>
-<area shape="rect" id="node2" href="$struct_color_castling_rights.html" title=" " alt="" coords="5,5,144,97"/>
+<area shape="rect" id="node1" title="Indicates the CastlingRights of both the white and black player." alt="" coords="21,175,129,252"/>
+<area shape="rect" id="node2" href="$struct_color_castling_rights.html" title="Indicates the queen&#45; and king&#45;side CastlingRights for a contextually available color." alt="" coords="5,5,144,97"/>
 </map>

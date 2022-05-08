@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['castle_0',['Castle',['../class_castle.html#adba71063fa0bbf61d66facb74716e6ec',1,'Castle']]]
+  ['boardstate_0',['BoardState',['../class_board_state.html#aef304be1ff1133234e04effea474879b',1,'BoardState']]]
 ];

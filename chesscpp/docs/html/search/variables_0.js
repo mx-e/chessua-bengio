@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['captured_0',['captured',['../class_move.html#a795f8e7ef108420e10ea5ec9c1b0667f',1,'Move']]]
+  ['board_0',['board',['../class_board_state.html#a5409e83799484739cc9195e4e6975501',1,'BoardState']]]
 ];

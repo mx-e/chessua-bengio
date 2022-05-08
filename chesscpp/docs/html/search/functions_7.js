@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['update_0',['update',['../class_move.html#a93ebdcd803658fc7d57de2651b709908',1,'Move::update()'],['../class_directional_move.html#a8dcbb9c48c65c4c28b86b0504dd30b57',1,'DirectionalMove::update()'],['../class_pawn_promotion.html#a066338a251444583978b63e24e354637',1,'PawnPromotion::update()'],['../class_en_passant_capture.html#a25e0ad3eab497b495722e1a31f7e91bf',1,'EnPassantCapture::update()'],['../class_castle.html#a76f8b9ed7deb25a227cd02b52f4ae9e7',1,'Castle::update()']]]
+  ['transfer_0',['transfer',['../class_move.html#a5a1e7da13d4d8b27e6cf41f51edc5cd0',1,'Move::transfer()'],['../class_pawn_opening_move.html#af5386d7f4fd54720eea708825d2e2b9b',1,'PawnOpeningMove::transfer()'],['../class_pawn_promotion.html#ab600c47b4d4c6e16e39f0f192c5afb91',1,'PawnPromotion::transfer()']]]
 ];

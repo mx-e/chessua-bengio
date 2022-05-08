@@ -2658,3 +2658,8 @@ GENERATE_LEGEND        = YES
 # The default value is: YES.
 
 DOT_CLEANUP            = YES
+
+# Custom
+# https://stackoverflow.com/questions/9502426/how-to-make-an-introduction-page-with-doxygen
+INPUT += README.md
+USE_MDFILE_AS_MAINPAGE = README.md

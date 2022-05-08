@@ -1,4 +1,4 @@
 <map id="Knight" name="Knight">
-<area shape="rect" id="node1" title=" " alt="" coords="37,204,95,281"/>
-<area shape="rect" id="node2" href="$class_piece.html" title=" " alt="" coords="5,5,127,156"/>
+<area shape="rect" id="node1" title="Implements the Knight Piece." alt="" coords="37,204,95,281"/>
+<area shape="rect" id="node2" href="$class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ..." alt="" coords="5,5,127,156"/>
 </map>

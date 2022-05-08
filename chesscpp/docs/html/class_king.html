@@ -69,13 +69,18 @@ $(function() {
   <div class="headertitle"><div class="title">King Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements the <a class="el" href="class_king.html" title="Implements the King Piece.">King</a> <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>.  
+ <a href="class_king.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="pieces_8hpp_source.html">pieces.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for King:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_king__inherit__graph.png" border="0" usemap="#a_king_inherit__map" alt="Inheritance graph"/></div>
 <map name="a_king_inherit__map" id="a_king_inherit__map">
-<area shape="rect" title=" " alt="" coords="13,204,119,325"/>
-<area shape="rect" href="class_piece.html" title=" " alt="" coords="5,5,127,156"/>
+<area shape="rect" title="Implements the King Piece." alt="" coords="13,204,119,325"/>
+<area shape="rect" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ..." alt="" coords="5,5,127,156"/>
 </map>
 </div>
 <div class="dynheader">
@@ -83,40 +88,43 @@ Collaboration diagram for King:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_king__coll__graph.png" border="0" usemap="#a_king_coll__map" alt="Collaboration graph"/></div>
 <map name="a_king_coll__map" id="a_king_coll__map">
-<area shape="rect" title=" " alt="" coords="13,204,119,325"/>
-<area shape="rect" href="class_piece.html" title=" " alt="" coords="5,5,127,156"/>
+<area shape="rect" title="Implements the King Piece." alt="" coords="13,204,119,325"/>
+<area shape="rect" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ..." alt="" coords="5,5,127,156"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac8a62e55aaeccdd9a7003e92dd67fe44"><td class="memItemLeft" align="right" valign="top">virtual Moves&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_king.html#ac8a62e55aaeccdd9a7003e92dd67fe44">get_moves</a> (<a class="el" href="class_board_state.html">BoardState</a> boardState, Position position)</td></tr>
+<tr class="memdesc:ac8a62e55aaeccdd9a7003e92dd67fe44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of Moves given the current <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a> and the Position of <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. Validity checks fit either into this method or in <a class="el" href="class_move.html#a23e211e28d9d563c6f03d2d374d302ec" title="Validates the current BoardState and determines whether the given Move is legal according to chess ru...">Move::is_possible</a> depending on the need.  <a href="class_king.html#ac8a62e55aaeccdd9a7003e92dd67fe44">More...</a><br /></td></tr>
 <tr class="separator:ac8a62e55aaeccdd9a7003e92dd67fe44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a563a7a46dd181bad2e10f46ba0cbec7d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_king.html#a563a7a46dd181bad2e10f46ba0cbec7d">get_steps</a> ()</td></tr>
+<tr class="memdesc:a563a7a46dd181bad2e10f46ba0cbec7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of steps that the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> can perform at most (this does not take into accout the current <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a>).  <a href="class_king.html#a563a7a46dd181bad2e10f46ba0cbec7d">More...</a><br /></td></tr>
 <tr class="separator:a563a7a46dd181bad2e10f46ba0cbec7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adce5572ec3e8c81eb490f91180f177fb"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_king.html#adce5572ec3e8c81eb490f91180f177fb">get_id</a> ()</td></tr>
+<tr class="memdesc:adce5572ec3e8c81eb490f91180f177fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global id of the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> that is used to represent the current Board in the <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a> Use this method when needing the id of an arbitrary <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. Some Pieces expose their ID as a static value to serve as global constants.  <a href="class_king.html#adce5572ec3e8c81eb490f91180f177fb">More...</a><br /></td></tr>
 <tr class="separator:adce5572ec3e8c81eb490f91180f177fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05e3550bf748ab1c82898f8cee0cd690"><td class="memItemLeft" align="right" valign="top"><a id="a05e3550bf748ab1c82898f8cee0cd690" name="a05e3550bf748ab1c82898f8cee0cd690"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Piece</b> (int color)</td></tr>
+<tr class="memitem:a05e3550bf748ab1c82898f8cee0cd690"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_king.html#a05e3550bf748ab1c82898f8cee0cd690">Piece</a> (int color)</td></tr>
+<tr class="memdesc:a05e3550bf748ab1c82898f8cee0cd690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> object and assign it its color.  <a href="class_king.html#a05e3550bf748ab1c82898f8cee0cd690">More...</a><br /></td></tr>
 <tr class="separator:a05e3550bf748ab1c82898f8cee0cd690"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_piece"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_piece')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_piece.html">Piece</a></td></tr>
-<tr class="memitem:a05e3550bf748ab1c82898f8cee0cd690 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top"><a id="a05e3550bf748ab1c82898f8cee0cd690" name="a05e3550bf748ab1c82898f8cee0cd690"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Piece</b> (int color)</td></tr>
+<tr class="memitem:a05e3550bf748ab1c82898f8cee0cd690 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_piece.html#a05e3550bf748ab1c82898f8cee0cd690">Piece</a> (int color)</td></tr>
+<tr class="memdesc:a05e3550bf748ab1c82898f8cee0cd690 inherit pub_methods_class_piece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> object and assign it its color.  <a href="class_piece.html#a05e3550bf748ab1c82898f8cee0cd690">More...</a><br /></td></tr>
 <tr class="separator:a05e3550bf748ab1c82898f8cee0cd690 inherit pub_methods_class_piece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeeec675632f99b666a9bb5c6168926b8 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top"><a id="aeeec675632f99b666a9bb5c6168926b8" name="aeeec675632f99b666a9bb5c6168926b8"></a>
-virtual Moves&#160;</td><td class="memItemRight" valign="bottom"><b>get_moves</b> (<a class="el" href="class_board_state.html">BoardState</a> boardState, Position position)=0</td></tr>
+<tr class="memitem:aeeec675632f99b666a9bb5c6168926b8 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top">virtual Moves&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_piece.html#aeeec675632f99b666a9bb5c6168926b8">get_moves</a> (<a class="el" href="class_board_state.html">BoardState</a> boardState, Position position)=0</td></tr>
+<tr class="memdesc:aeeec675632f99b666a9bb5c6168926b8 inherit pub_methods_class_piece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of Moves given the current <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a> and the Position of <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. Validity checks fit either into this method or in <a class="el" href="class_move.html#a23e211e28d9d563c6f03d2d374d302ec" title="Validates the current BoardState and determines whether the given Move is legal according to chess ru...">Move::is_possible</a> depending on the need.  <a href="class_piece.html#aeeec675632f99b666a9bb5c6168926b8">More...</a><br /></td></tr>
 <tr class="separator:aeeec675632f99b666a9bb5c6168926b8 inherit pub_methods_class_piece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a410d32c6702457672677678d33d2a382 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top"><a id="a410d32c6702457672677678d33d2a382" name="a410d32c6702457672677678d33d2a382"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>get_steps</b> ()=0</td></tr>
+<tr class="memitem:a410d32c6702457672677678d33d2a382 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_piece.html#a410d32c6702457672677678d33d2a382">get_steps</a> ()=0</td></tr>
+<tr class="memdesc:a410d32c6702457672677678d33d2a382 inherit pub_methods_class_piece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of steps that the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> can perform at most (this does not take into accout the current <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a>).  <a href="class_piece.html#a410d32c6702457672677678d33d2a382">More...</a><br /></td></tr>
 <tr class="separator:a410d32c6702457672677678d33d2a382 inherit pub_methods_class_piece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c38f5e331d5efb9c3310353ee7c1413 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top"><a id="a5c38f5e331d5efb9c3310353ee7c1413" name="a5c38f5e331d5efb9c3310353ee7c1413"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>get_id</b> ()=0</td></tr>
+<tr class="memitem:a5c38f5e331d5efb9c3310353ee7c1413 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_piece.html#a5c38f5e331d5efb9c3310353ee7c1413">get_id</a> ()=0</td></tr>
+<tr class="memdesc:a5c38f5e331d5efb9c3310353ee7c1413 inherit pub_methods_class_piece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global id of the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> that is used to represent the current Board in the <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a> Use this method when needing the id of an arbitrary <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. Some Pieces expose their ID as a static value to serve as global constants.  <a href="class_piece.html#a5c38f5e331d5efb9c3310353ee7c1413">More...</a><br /></td></tr>
 <tr class="separator:a5c38f5e331d5efb9c3310353ee7c1413 inherit pub_methods_class_piece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75d5adc2e56f462fcd236a42cfd7a728 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top"><a id="a75d5adc2e56f462fcd236a42cfd7a728" name="a75d5adc2e56f462fcd236a42cfd7a728"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>get_color</b> ()</td></tr>
+<tr class="memitem:a75d5adc2e56f462fcd236a42cfd7a728 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_piece.html#a75d5adc2e56f462fcd236a42cfd7a728">get_color</a> ()</td></tr>
+<tr class="memdesc:a75d5adc2e56f462fcd236a42cfd7a728 inherit pub_methods_class_piece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the color of the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>.  <a href="class_piece.html#a75d5adc2e56f462fcd236a42cfd7a728">More...</a><br /></td></tr>
 <tr class="separator:a75d5adc2e56f462fcd236a42cfd7a728 inherit pub_methods_class_piece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72bae9d2bc94760849acb549b731bde2 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top"><a id="a72bae9d2bc94760849acb549b731bde2" name="a72bae9d2bc94760849acb549b731bde2"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>get_character</b> ()</td></tr>
+<tr class="memitem:a72bae9d2bc94760849acb549b731bde2 inherit pub_methods_class_piece"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_piece.html#a72bae9d2bc94760849acb549b731bde2">get_character</a> ()</td></tr>
+<tr class="memdesc:a72bae9d2bc94760849acb549b731bde2 inherit pub_methods_class_piece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the UCI character associated with this <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>.  <a href="class_piece.html#a72bae9d2bc94760849acb549b731bde2">More...</a><br /></td></tr>
 <tr class="separator:a72bae9d2bc94760849acb549b731bde2 inherit pub_methods_class_piece"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
@@ -132,7 +140,9 @@ Additional Inherited Members</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
 <tr class="separator:a4268f3b047e1ad284882708b85332ef1 inherit pro_attribs_class_piece"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Implements the <a class="el" href="class_king.html" title="Implements the King Piece.">King</a> <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="adce5572ec3e8c81eb490f91180f177fb" name="adce5572ec3e8c81eb490f91180f177fb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adce5572ec3e8c81eb490f91180f177fb">&#9670;&nbsp;</a></span>get_id()</h2>
 
@@ -156,7 +166,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_piece.html">Piece</a>.</p>
+<p>Global id of the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> that is used to represent the current Board in the <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a> Use this method when needing the id of an arbitrary <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. Some Pieces expose their ID as a static value to serve as global constants. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The id of the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. </dd></dl>
+
+<p>Implements <a class="el" href="class_piece.html#a5c38f5e331d5efb9c3310353ee7c1413">Piece</a>.</p>
 
 </div>
 </div>
@@ -194,7 +207,17 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_piece.html">Piece</a>.</p>
+<p>Get the list of Moves given the current <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a> and the Position of <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a>. Validity checks fit either into this method or in <a class="el" href="class_move.html#a23e211e28d9d563c6f03d2d374d302ec" title="Validates the current BoardState and determines whether the given Move is legal according to chess ru...">Move::is_possible</a> depending on the need. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">boardState</td><td>Current <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a> </td></tr>
+    <tr><td class="paramname">position</td><td>Current Position of the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Moves that the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> emits according to the current state. </dd></dl>
+
+<p>Implements <a class="el" href="class_piece.html#aeeec675632f99b666a9bb5c6168926b8">Piece</a>.</p>
 
 </div>
 </div>
@@ -221,7 +244,36 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_piece.html">Piece</a>.</p>
+<p>Returns the number of steps that the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> can perform at most (this does not take into accout the current <a class="el" href="class_board_state.html" title="BoardState indicating all stateful information of the current game state. All parameters are availabl...">BoardState</a>). </p>
+<dl class="section return"><dt>Returns</dt><dd>int The number of steps that the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> can perform. </dd></dl>
+
+<p>Implements <a class="el" href="class_piece.html#a410d32c6702457672677678d33d2a382">Piece</a>.</p>
+
+</div>
+</div>
+<a id="a05e3550bf748ab1c82898f8cee0cd690" name="a05e3550bf748ab1c82898f8cee0cd690"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05e3550bf748ab1c82898f8cee0cd690">&#9670;&nbsp;</a></span>Piece()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Piece::Piece </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>color</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> object and assign it its color. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>Color of the <a class="el" href="class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ...">Piece</a> (-1 for black and 1 for white). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

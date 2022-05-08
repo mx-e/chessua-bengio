@@ -1,9 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_piece.html" title=" " alt="" coords="5,132,60,159"/>
-<area shape="rect" id="node2" href="$class_bishop.html" title=" " alt="" coords="108,5,171,32"/>
-<area shape="rect" id="node3" href="$class_king.html" title=" " alt="" coords="115,56,163,83"/>
-<area shape="rect" id="node4" href="$class_knight.html" title=" " alt="" coords="110,107,169,133"/>
-<area shape="rect" id="node5" href="$class_pawn.html" title=" " alt="" coords="112,157,167,184"/>
-<area shape="rect" id="node6" href="$class_queen.html" title=" " alt="" coords="109,208,169,235"/>
-<area shape="rect" id="node7" href="$class_rook.html" title=" " alt="" coords="113,259,166,285"/>
+<area shape="rect" id="node1" href="$class_piece.html" title="Base class of Pieces of all kinds. A Piece has an id, a color, a UCI character and a number of steps ..." alt="" coords="5,132,60,159"/>
+<area shape="rect" id="node2" href="$class_bishop.html" title="Implements the Bishop Piece." alt="" coords="108,5,171,32"/>
+<area shape="rect" id="node3" href="$class_king.html" title="Implements the King Piece." alt="" coords="115,56,163,83"/>
+<area shape="rect" id="node4" href="$class_knight.html" title="Implements the Knight Piece." alt="" coords="110,107,169,133"/>
+<area shape="rect" id="node5" href="$class_pawn.html" title="Implements the Pawn Piece." alt="" coords="112,157,167,184"/>
+<area shape="rect" id="node6" href="$class_queen.html" title="Implements the Queen Piece." alt="" coords="109,208,169,235"/>
+<area shape="rect" id="node7" href="$class_rook.html" title="Implements the Rook Piece." alt="" coords="113,259,166,285"/>
 </map>
