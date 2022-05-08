@@ -3,8 +3,6 @@
 #include <iostream>
 #include "moves.hpp"
 
-Board get_board();
-
 typedef std::vector<std::string> UCIStrings;
 
 UCIStrings generate_moves(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove);
