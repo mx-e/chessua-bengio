@@ -1,0 +1,25 @@
+#ifndef BB_CONSTANTS
+#define BB_CONSTANTS
+#include <stdint.h>
+
+uint64_t a_col = 0x00000000000000FFLL;
+uint64_t b_col = 0x000000000000FF00LL;
+uint64_t c_col = 0x0000000000FF0000LL;
+uint64_t d_col = 0x00000000FF000000LL;
+uint64_t e_col = 0x000000FF00000000LL;
+uint64_t f_col = 0x0000FF0000000000LL;
+uint64_t g_col = 0x00FF000000000000LL;
+uint64_t h_col = 0xFF00000000000000LL;
+
+uint64_t row_1 = 0x0101010101010101LL;
+uint64_t row_2 = 0x00000000000000LL;
+uint64_t row_3 = 0x00000000000000LL;
+uint64_t row_4 = 0x00000000000000LL;
+uint64_t row_5 = 0x00000000000000LL;
+uint64_t row_6 = 0x00000000000000LL;
+uint64_t row_7 = 0x00000000000000LL;
+uint64_t row_8 = 0x00000000000000LL;
+
+uint64_t white_squares = 0x55AA55AA55AA55AALL;
+uint64_t black_squares = 0xAA55AA55AA55AA55LL;
+#endif
