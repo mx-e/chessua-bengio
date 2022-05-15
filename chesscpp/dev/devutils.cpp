@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include "../include/bitboard_constants.hpp"
-#include "../include/bitboard_types.hpp"
+#include "../include/bitboard.hpp"
 
 void print_bitboard(uint64_t bb)
 {
