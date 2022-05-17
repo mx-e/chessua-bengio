@@ -3,5 +3,6 @@
 
 void print_bitboard(uint64_t bb);
 C_Board get_new_game_board();
+Board get_example_board();
 
 #endif

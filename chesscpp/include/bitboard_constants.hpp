@@ -1,16 +1,38 @@
 #ifndef BB_CONSTANTS
 #define BB_CONSTANTS
+#include <map>
+#include <list>
 #include <stdint.h>
 
-const uint8_t King = 1;
-const uint8_t Queen = 2;
-const uint8_t Bishop = 3;
-const uint8_t Knight = 4;
-const uint8_t Rook = 5;
-const uint8_t Pawn = 6;
+const uint8_t pKing = 1;
+const uint8_t pQueen = 2;
+const uint8_t pBishop = 3;
+const uint8_t pKnight = 4;
+const uint8_t pRook = 5;
+const uint8_t pPawn = 6;
 
 const int Black = -1.;
 const int White = 1.;
+
+enum knight_direction
+{
+    NNE,
+    NEE,
+    SEE,
+    SSE,
+    SSW,
+    SWW,
+    NWW,
+    NNW,
+};
+const std::list<knight_direction> all_knight_directions = {NNE, NEE, SEE, SSE, SSW, SWW, NWW, NNW};
+const std::map<knight_direction, float> knight_bit_offsets =
+    {{NNE, 10.}, {NEE, 17.}, {SEE, 15.}, {SSE, 6.}, {SSW, -10.}, {SWW, -17.}, {NWW, -15.}, {NNW, -6}};
+const std::map<knight_direction, float> knight_idx_offsets =
+    {{NNE, -6.}, {NEE, -15.}, {SEE, -17.}, {SSE, -10.}, {SSW, 6.}, {SWW, 15.}, {NWW, 17.}, {NNW, 10}};
+
+const std::map<int, char>
+    col_int_to_string_map = {{0, 'a'}, {1, 'b'}, {2, 'c'}, {3, 'd'}, {4, 'e'}, {5, 'f'}, {6, 'g'}, {7, 'h'}};
 
 const uint64_t col_a = 0xFF00000000000000LL;
 const uint64_t col_b = 0x00FF000000000000LL;

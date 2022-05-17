@@ -2,47 +2,56 @@
 #define BB
 #include <stdint.h>
 #include <map>
+#include <stack>
+#include <vector>
 #include <iostream>
-#include "bitboard_utils.hpp"
+#include <cmath>
+#include "bitboard_types.hpp"
 #include "bitboard_constants.hpp"
+#include "types.hpp"
+#include "bitboard_utils.hpp"
+enum enumBoards
+{
+    b_black,
+    b_kings,
+    b_queens,
+    b_bishops,
+    b_knights,
+    b_rooks,
+    b_pawns,
+    b_white,
+};
+enum enumCastling
+{
+    w_kingside,
+    w_queenside,
+    b_kingside,
+    b_queenside,
+};
+
+enum enumEnPassant
+{
+    en_passant_col,
+    en_passant_row
+};
 
 class C_Board
 {
 public:
     uint64_t pieces[8];
-    enum enumBoards
-    {
-        b_black,
-        b_kings,
-        b_queens,
-        b_bishops,
-        b_knights,
-        b_rooks,
-        b_pawns,
-        b_white,
-    };
 
     uint8_t castling[4];
-    enum enumCastling
-    {
-        w_kingside,
-        w_queenside,
-        b_kingside,
-        b_queenside,
-    };
 
     uint8_t en_passant[2];
-    enum enumEnPassant
-    {
-        en_passant_col,
-        en_passant_row
-    };
 
-    float turn;
-    float moves;
-    float half_moves;
+    float turn = 1.;
+    float moves = 0.;
+    float half_moves = 0.;
 
-    const std::map<float, int> color_to_BB_index = {{-1., 0}, {1., 7}};
+    std::vector<move> legal_moves = {};
+
+    const std::map<float, int>
+        color_to_BB_index = {{-1., 0}, {1., 7}};
 
     inline uint64_t get_pieces(const float color, const uint8_t type)
     {
@@ -88,6 +97,12 @@ public:
         pieces[color_to_BB_index.at(color)] = all_own_color_pieces_minus_type | new_pieces;
     }
 
+    inline void set_single_piece(const float color, const uint8_t type, const uint8_t position_idx)
+    {
+        pieces[type] |= (most_sig_bit >> position_idx);
+        pieces[color_to_BB_index.at(color)] |= (most_sig_bit >> position_idx);
+    }
+
     inline uint64_t get_all_pieces()
     {
         return pieces[b_white] | pieces[b_black];
@@ -123,33 +138,72 @@ public:
         return shift_by_n(shift, single_moves) & get_empty_fields() & half;
     }
 
-    inline uint64_t get_pawn_attacks(const float color)
+    inline uint64_t get_pawn_attacks_left(const float color)
     {
-        float shift_right_attack = 9. * color;
         float shift_left_attack = -7 * color;
         int color_idx = color_to_BB_index.at(color * -1);
-        uint64_t right_attacks = shift_by_n(shift_right_attack, get_pawns(color)) & pieces[color_idx];
-        uint64_t left_attacks = shift_by_n(shift_left_attack, get_pawns(color)) & pieces[color_idx];
-        return right_attacks | left_attacks;
+        return shift_by_n(shift_left_attack, get_pawns(color)) & pieces[color_idx];
     }
 
-    inline uint64_t get_knight_moves_and_attacks(const float color)
+    inline uint64_t get_pawn_attacks_right(const float color)
+    {
+        float shift_right_attack = 9. * color;
+        int color_idx = color_to_BB_index.at(color * -1);
+        return shift_by_n(shift_right_attack, get_pawns(color)) & pieces[color_idx];
+    }
+    inline void collect_pawn_moves_and_captures();
+
+    inline uint64_t get_knight_moves_and_attacks(const float color, const knight_direction dir)
     {
         uint64_t knights = get_knights(color);
-        uint64_t knight_moves = empty_board;
-        const float knight_shifts[] = {10., 17., 15., 6., -10., -17., -15., -6.};
-        for (int n : knight_shifts)
-        {
-            knight_moves |= mask_and_shift_by_n(n, knights);
-        }
-        return knight_moves & get_empty_or_enemy(color);
+        return mask_and_shift_by_n(knight_bit_offsets.at(dir), knights) & get_empty_or_enemy(color);
     }
+    inline void collect_knight_moves_and_captures();
 
     inline uint64_t get_king_moves_and_attacks(const float color)
     {
         int king_pos = scan_board(get_king(color)).front();
         return king_moves[king_pos] & get_empty_or_enemy(color);
     }
+
+    inline void collect_king_moves_and_captures();
+
+    inline void collect_legal_moves();
 };
+
+inline C_Board mailbox_to_bitboard_representation(Board mailbox)
+{
+    C_Board bitboard = C_Board();
+    for (int col = 0; col < 8; col++)
+    {
+        for (int row = 0; row < 8; row++)
+        {
+            int field_state = mailbox[col][row];
+            if (field_state == 0)
+            {
+                continue;
+            }
+            float color = (float)((0. < field_state) - (field_state < 0.));
+            uint8_t type = abs(field_state);
+            uint8_t position_idx = row_col_idx_to_position_idx(col, row);
+            bitboard.set_single_piece(color, type, position_idx);
+        }
+    }
+    return bitboard;
+}
+
+uint8_t get_piece_type_of_field(const C_Board *board, int position_idx);
+
+void extract_moves_with_offset(uint64_t move_board, const std::vector<move> &move_list, int source_offset);
+
+void extract_captures_with_offset(const C_Board *board, uint64_t move_board, const std::vector<move> &move_list, int source_offset);
+
+void extract_promotions(const C_Board *board, uint64_t move_board, const std::vector<move> &move_list);
+
+void extract_moves_with_explicit_src(uint64_t move_board, const std::vector<move> &move_list, int src_idx);
+
+void extract_captures_with_explicit_src(const C_Board &board, uint64_t move_board, const std::vector<move> &move_list, int src_idx);
+
+UCIStrings get_uci_moves(const C_Board board);
 
 #endif

@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(
     chesscpp 
     ../src/types.cpp
+    ../src/bitboard.cpp
     ../src/pieces.cpp
     ../src/moves.cpp
     ../src/main.cpp

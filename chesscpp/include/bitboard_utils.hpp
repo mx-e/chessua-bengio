@@ -3,10 +3,18 @@
 #include <iostream>
 #include <map>
 #include <bit>
+#include <array>
 #include <list>
 #include <stdint.h>
-#include "bitboard.hpp"
 #include "bitboard_constants.hpp"
+
+inline void print_move_(move m)
+{
+    std::cout << "src: " << (int)m.src << "\n";
+    std::cout << "dest:" << (int)m.dest << "\n";
+    std::cout << "capt:" << (int)m.capture << "\n";
+    std::cout << "flag:" << (int)m.flag << "\n\n";
+}
 
 const std::map<float, uint64_t> shift_mask_map = {
     {10., ~(row_7 | row_8)},
@@ -29,15 +37,27 @@ inline uint64_t mask_and_shift_by_n(const float shift, const uint64_t val)
     return shift_by_n(shift, val & shift_mask);
 }
 
+inline std::array<uint8_t, 2> position_idx_to_col_row_idx(uint8_t position_idx)
+{
+    uint8_t col = (uint8_t)position_idx / 8;
+    uint8_t row = 7 - (position_idx % 8);
+    return {col, row};
+}
+
+inline uint8_t row_col_idx_to_position_idx(uint8_t col_idx, uint8_t row_idx)
+{
+    return col_idx * 8 + (7 - row_idx);
+}
+
 inline int forward_scan(const uint64_t bb)
 {
     uint64_t ls1b = bb & -bb; // isolate LS1B
-    return std::countl_zero(ls1b);
+    return std::__countl_zero(ls1b);
 }
 
 inline int reverse_scan(const uint64_t bb)
 {
-    return std::countl_zero(bb);
+    return std::__countl_zero(bb);
 }
 
 inline std::list<int> scan_board(uint64_t bb)
@@ -46,7 +66,7 @@ inline std::list<int> scan_board(uint64_t bb)
     if (bb)
         do
         {
-            idx_list.push_back(forward_scan(bb));
+            idx_list.push_back((int)(forward_scan(bb)));
         } while (bb &= bb - 1);
     return idx_list;
 }
@@ -62,6 +82,20 @@ inline std::list<int> scan_board_reverse(uint64_t bb)
             idx_list.push_back(reverse_scan_idx);
         } while (bb &= ~(most_sig_bit >> reverse_scan_idx));
     return idx_list;
+}
+
+inline std::string field_id_to_string(uint8_t idx)
+{
+    std::cout << (int)idx << "\n";
+    std::array<uint8_t, 2> col_row = position_idx_to_col_row_idx(idx);
+    return col_int_to_string_map.at(col_row[0]) + std::to_string(col_row[1] + 1);
+}
+
+inline std::string move_to_uci_str(const move m)
+{
+    print_move_(m);
+    char flag = piece_code_to_char.at(m.flag);
+    return field_id_to_string(m.src) + field_id_to_string(m.dest) + flag;
 }
 
 #endif
