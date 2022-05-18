@@ -8,10 +8,34 @@
 
 int main()
 {
-    C_Board other_board = bb_create_board(get_example_board());
-    print_bitboard(other_board.get_king_moves_and_attacks(other_board.turn));
-    print_bitboard(other_board.get_empty_or_enemy(White));
-    print_bitboard(other_board.get_king_moves_and_attacks(White));
+    ///////CONSTANT DEBUG
+    // C_Board other_board = bb_create_board(get_example_board());
+    // for (uint64_t r : rows)
+    // {
+    //     print_bitboard(r);
+    // }
+    // for (uint64_t c : cols)
+    // {
+    //     print_bitboard(c);
+    // }
+    // print_bitboard(white_squares);
+    // print_bitboard(black_squares);
+    // print_bitboard(whole_field);
+    // print_bitboard(white_half);
+    // print_bitboard(black_half);
+    // print_bitboard(center_half);
+    // print_bitboard(edge_half);
+    // print_bitboard(most_sig_bit);
+    // print_bitboard(empty_board);
+
+    // int i = 0;
+    // for (uint64_t m : king_moves)
+    // {
+    //     std::cout << i << "\n";
+    //     print_bitboard(m);
+    //     i++;
+    // }
+
     UCIStrings move_list = bb_generate_moves(get_example_board(), 1, {}, 1, 1, 1, 1, 0, 0);
 
     for (std::string m : move_list)

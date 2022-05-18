@@ -17,6 +17,12 @@ inline void print_move_(move m)
 }
 
 const std::map<float, uint64_t> shift_mask_map = {
+    {1., ~(row_8)},
+    {-1., ~(row_1)},
+    {-7., ~(row_8)},
+    {9., ~(row_8)},
+    {7, ~row_1},
+    {-9, ~row_1},
     {10., ~(row_7 | row_8)},
     {17., ~row_8},
     {15., ~row_1},
@@ -26,11 +32,14 @@ const std::map<float, uint64_t> shift_mask_map = {
     {-15, ~row_8},
     {-6, ~(row_7 | row_8)}};
 
+// shifts are denoted in field index change not left/right bit shift
+// they are the negative of bit shift
 inline uint64_t shift_by_n(const float shift, const uint64_t val)
 {
-    return shift > 0 ? val << (int)shift : val >> (int)(shift * -1.);
+    return shift > 0 ? val >> (int)shift : val << (int)(shift * -1.);
 }
 
+// shifts are denoted in field index change not left/right bit shift
 inline uint64_t mask_and_shift_by_n(const float shift, const uint64_t val)
 {
     uint64_t shift_mask = shift_mask_map.at(shift);

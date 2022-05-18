@@ -13,7 +13,22 @@ uint8_t get_piece_type_of_field(const C_Board *board, int position_idx)
     return piece;
 }
 
-void extract_promotions(const C_Board *board, uint64_t move_board, std::vector<move> &move_list)
+void extract_promotions(uint64_t move_board, std::vector<move> &move_list)
+{
+    if (move_board == 0)
+        return;
+    {
+        for (int m : scan_board(move_board))
+        {
+            for (uint8_t p : {2, 3, 4, 5})
+            {
+                move_list.push_back(create_move((uint8_t)m + 1, (uint8_t)m, 0, p));
+            }
+        }
+    }
+}
+
+void extract_promotion_captures(const C_Board *board, uint64_t move_board, std::vector<move> &move_list)
 {
     if (move_board == 0)
         return;
@@ -85,7 +100,9 @@ UCIStrings get_uci_moves(C_Board board)
 void C_Board::collect_pawn_moves_and_captures()
 {
     extract_moves_with_offset(get_pawn_single_moves(turn), legal_moves, 1);
-    extract_promotions(this, get_pawn_promotions(turn), legal_moves);
+    extract_promotions(get_pawn_promotions(turn), legal_moves);
+    extract_promotion_captures(this, get_pawn_promotion_attacks_left(turn), legal_moves);
+    extract_promotion_captures(this, get_pawn_promotion_attacks_right(turn), legal_moves);
     extract_moves_with_offset(get_pawn_double_moves(turn), legal_moves, 2);
     extract_captures_with_offset(this, get_pawn_attacks_left(turn), legal_moves, -9);
     extract_captures_with_offset(this, get_pawn_attacks_right(turn), legal_moves, 7);
@@ -95,7 +112,7 @@ inline void C_Board::collect_knight_moves_and_captures()
 {
     for (knight_direction dir : all_knight_directions)
     {
-        extract_captures_with_offset(this, get_knight_moves_and_attacks(turn, dir), legal_moves, knight_idx_offsets.at(dir));
+        extract_captures_with_offset(this, get_knight_moves_and_attacks(turn, dir), legal_moves, -1. * turn * knight_idx_offsets.at(dir));
     }
 }
 

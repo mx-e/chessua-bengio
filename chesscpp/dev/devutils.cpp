@@ -7,14 +7,14 @@
 void print_bitboard(uint64_t bb)
 {
     std::string bb_str = "";
-    for (int col = 0; col < 8; col++)
+    for (int row = 0; row < 8; row++)
     {
-        for (int row = 0; row < 8; row++)
+        for (int col = 7; col >= 0; col--)
         {
             uint64_t index = 1;
-            std::string bit = bb & (index << (63 - (row * 8 + col))) ? "1" : "∙";
+            std::string bit = bb & (index << (col * 8 + row)) ? "1" : "∙";
             bb_str += bit;
-            if (row != 7)
+            if (col != 0)
             {
                 bb_str += " ";
             }
