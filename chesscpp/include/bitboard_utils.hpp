@@ -110,14 +110,12 @@ inline std::list<int> scan_board_reverse(uint64_t bb)
 
 inline std::string field_id_to_string(uint8_t idx)
 {
-    std::cout << (int)idx << "\n";
     std::array<uint8_t, 2> col_row = position_idx_to_col_row_idx(idx);
     return col_int_to_string_map.at(col_row[0]) + std::to_string(col_row[1] + 1);
 }
 
 inline std::string move_to_uci_str(const move m)
 {
-    print_move_(m);
     char flag = piece_code_to_char.at(m.flag);
     return field_id_to_string(m.src) + field_id_to_string(m.dest) + flag;
 }

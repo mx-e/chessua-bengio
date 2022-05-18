@@ -65,7 +65,6 @@ void extract_captures_with_offset(const C_Board *board, uint64_t move_board, std
 
 void extract_moves_with_explicit_src(uint64_t move_board, std::vector<move> &move_list, int src_idx)
 {
-    std::cout << move_board << "\n";
     if (move_board == 0)
         return;
     for (int m : scan_board(move_board))
@@ -80,7 +79,6 @@ void extract_captures_with_explicit_src(const C_Board *board, uint64_t move_boar
         return;
     for (int m : scan_board(move_board))
     {
-        std::cout << m << "\n";
         move_list.push_back(create_move((uint8_t)src_idx, (uint8_t)m, get_piece_type_of_field(board, m)));
     }
 }
@@ -125,15 +123,7 @@ inline void C_Board::collect_king_moves_and_captures()
 
 inline void C_Board::collect_legal_moves()
 {
-    std::cout << "collecting pawn moves"
-              << "\n";
     collect_pawn_moves_and_captures();
-    std::cout << "collecting knight moves"
-              << "\n";
     collect_knight_moves_and_captures();
-    std::cout << "collecting king moves"
-              << "\n";
     collect_king_moves_and_captures();
-    std::cout << "done"
-              << "\n";
 }

@@ -5,14 +5,14 @@
 void print_bitboard(uint64_t bb)
 {
     std::string bb_str = "";
-    for (int col = 0; col < 8; col++)
+    for (int row = 0; row < 8; row++)
     {
-        for (int row = 0; row < 8; row++)
+        for (int col = 7; col >= 0; col--)
         {
             uint64_t index = 1;
-            std::string bit = bb & (index << (63 - (row * 8 + col))) ? "1" : "∙";
+            std::string bit = bb & (index << (col * 8 + row)) ? "1" : "∙";
             bb_str += bit;
-            if (row != 7)
+            if (col != 0)
             {
                 bb_str += " ";
             }
@@ -116,16 +116,16 @@ TEST(Bitboards, BoardScan)
     std::list<int> idx_list3 = scan_board(bb3);
     std::list<int> idx_list4 = scan_board(bb4);
 
-    std::list<int> actual1 = {40, 16};
-    std::list<int> actual2 = {63, 7};
-    std::list<int> actual3 = {60,
-                              52,
-                              44,
-                              36,
-                              28,
-                              20,
-                              12,
-                              4};
+    std::list<int> actual1 = {47, 23};
+    std::list<int> actual2 = {56, 0};
+    std::list<int> actual3 = {59,
+                              51,
+                              43,
+                              35,
+                              27,
+                              19,
+                              11,
+                              3};
     std::list<int> actual4 = {};
 
     ASSERT_EQ(idx_list1.size(), actual1.size());
@@ -166,16 +166,16 @@ TEST(Bitboards, BoardScan)
     idx_list2 = scan_board_reverse(bb2);
     idx_list3 = scan_board_reverse(bb3);
     idx_list4 = scan_board_reverse(bb4);
-    actual1 = {40, 16};
-    actual2 = {63, 7};
-    actual3 = {60,
-               52,
-               44,
-               36,
-               28,
-               20,
-               12,
-               4};
+    actual1 = {47, 23};
+    actual2 = {56, 0};
+    actual3 = {59,
+               51,
+               43,
+               35,
+               27,
+               19,
+               11,
+               3};
     actual4 = {};
 
     ASSERT_EQ(idx_list1.size(), actual1.size());
