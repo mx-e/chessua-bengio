@@ -36,17 +36,19 @@ int main()
     //     i++;
     // }
 
-    UCIStrings move_list = bb_generate_moves(get_example_board(), 1, {}, 1, 1, 1, 1, 0, 0);
+    // UCIStrings move_list = bb_generate_moves(get_example_board(), 1, {}, 1, 1, 1, 1, 0, 0);
 
-    C_Board test = get_new_game_board();
-    print_bitboard(test.get_pawn_double_moves(test.turn));
-    print_bitboard(test.get_pawn_single_moves(White));
+    // C_Board test = get_new_game_board();
+    // print_bitboard(test.get_pawn_double_moves(test.turn));
+    // print_bitboard(test.get_pawn_single_moves(White));
 
-    int i = 0;
-    for (uint64_t bb : rays[7])
-    {
-        std::cout << i << "\n";
-        print_bitboard(bb);
-        i++;
-    }
+    // int i = 0;
+    // for (uint64_t bb : rays[7])
+    // {
+    //     std::cout << i << "\n";
+    //     print_bitboard(bb);
+    //     i++;
+    // }
+
+    // print_all_knight_move_boards();
 }

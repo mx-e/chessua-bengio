@@ -113,9 +113,14 @@ public:
         return ~(get_all_pieces());
     }
 
+    inline uint64_t get_enemy_fields(float color)
+    {
+        return pieces[color_to_BB_index.at(color * -1)];
+    }
+
     inline uint64_t get_empty_or_enemy(float color)
     {
-        return get_empty_fields() | pieces[color_to_BB_index.at(color * -1)];
+        return get_empty_fields() | get_enemy_fields(color);
     }
 
     inline uint64_t get_pawn_single_moves(const float color)
@@ -173,10 +178,14 @@ public:
     }
     inline void collect_pawn_moves_and_captures();
 
-    inline uint64_t get_knight_moves_and_attacks(const float color, const knight_direction dir)
+    inline uint64_t get_knight_moves(const float color, const uint64_t field_idx)
     {
-        uint64_t knights = get_knights(color);
-        return mask_and_shift_by_n(knight_idx_offsets.at(dir), knights) & get_empty_or_enemy(color);
+        return knight_moves[field_idx] & get_empty_fields();
+    }
+
+    inline uint64_t get_knight_attacks(const float color, const uint64_t field_idx)
+    {
+        return knight_moves[field_idx] & get_enemy_fields(color);
     }
     inline void collect_knight_moves_and_captures();
 
@@ -187,6 +196,84 @@ public:
     }
 
     inline void collect_king_moves_and_captures();
+
+    inline uint64_t get_bishop_moves_and_attacks(int field_idx, uint64_t blockers)
+    {
+        uint64_t moves = empty_board;
+        // North West
+        moves |= rays[NW][field_idx];
+        if (rays[NW][field_idx] & blockers)
+        {
+            int blockerIndex = forward_scan(rays[NW][field_idx] & blockers);
+            moves &= ~rays[NW][blockerIndex];
+        }
+
+        // North East
+        moves |= rays[NE][field_idx];
+        if (rays[NE][field_idx] & blockers)
+        {
+            int blockerIndex = reverse_scan(rays[NE][field_idx] & blockers);
+            moves &= ~rays[NE][blockerIndex];
+        }
+
+        // South East
+        moves |= rays[SE][field_idx];
+        if (rays[SE][field_idx] & blockers)
+        {
+            int blockerIndex = reverse_scan(rays[SE][field_idx] & blockers);
+            moves &= ~rays[SE][blockerIndex];
+        }
+
+        // South West
+        moves |= rays[SW][field_idx];
+        if (rays[SW][field_idx] & blockers)
+        {
+            int blockerIndex = forward_scan(rays[SW][field_idx] & blockers);
+            moves &= ~rays[SW][blockerIndex];
+        }
+        return moves;
+    }
+
+    inline void collect_bishop_moves_and_captures();
+
+    inline uint64_t get_rook_moves_and_attacks(int field_idx, uint64_t blockers)
+    {
+        uint64_t moves = empty_board;
+        // North
+        moves |= rays[N][field_idx];
+        if (rays[N][field_idx] & blockers)
+        {
+            int blockerIndex = reverse_scan(rays[N][field_idx] & blockers);
+            moves &= ~rays[N][blockerIndex];
+        }
+
+        // East
+        moves |= rays[E][field_idx];
+        if (rays[E][field_idx] & blockers)
+        {
+            int blockerIndex = reverse_scan(rays[E][field_idx] & blockers);
+            moves &= ~rays[E][blockerIndex];
+        }
+
+        // South
+        moves |= rays[S][field_idx];
+        if (rays[S][field_idx] & blockers)
+        {
+            int blockerIndex = forward_scan(rays[S][field_idx] & blockers);
+            moves &= ~rays[S][blockerIndex];
+        }
+
+        // West
+        moves |= rays[W][field_idx];
+        if (rays[W][field_idx] & blockers)
+        {
+            int blockerIndex = forward_scan(rays[W][field_idx] & blockers);
+            moves &= ~rays[W][blockerIndex];
+        }
+        return moves;
+    }
+    inline void collect_rook_moves_and_captures();
+    inline void collect_queen_moves_and_captures();
 
     inline void collect_legal_moves();
 };

@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <string>
 #include <iostream>
+#include <inttypes.h>
 #include "../include/bitboard_constants.hpp"
 #include "../include/bitboard.hpp"
 
@@ -25,6 +26,11 @@ void print_bitboard(uint64_t bb)
     std::cout << bb_str;
 }
 
+void print_bitboard_hex(uint64_t bb)
+{
+    printf("0x%" PRIx64 "LL,\n", bb);
+}
+
 C_Board get_new_game_board()
 {
     C_Board board = C_Board();
@@ -43,6 +49,12 @@ C_Board get_new_game_board()
     return board;
 }
 
+C_Board get_empty_board()
+{
+    C_Board board = C_Board();
+    return board;
+}
+
 Board get_example_board()
 {
     Board board = Board();
@@ -55,4 +67,21 @@ Board get_example_board()
     board[6] = {4, 6, 0, 0, 0, 0, -6, -4};
     board[7] = {5, 6, 0, 0, 0, 0, -6, -5};
     return board;
+}
+
+void print_all_knight_move_boards()
+{
+    C_Board board = get_empty_board();
+    for (int i = 0; i < 64; i++)
+    {
+        board.set_pieces(White, pKnight, set_board_1_at_idx(empty_board, i));
+        uint64_t knight_moves = empty_board;
+        for (knight_direction d : all_knight_directions)
+        {
+            knight_moves |= board.get_knight_moves_and_attacks(White, d);
+        }
+        // std::cout << i << "\n";
+        //  print_bitboard(knight_moves);
+        print_bitboard_hex(knight_moves);
+    }
 }

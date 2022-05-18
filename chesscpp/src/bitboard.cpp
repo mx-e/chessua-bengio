@@ -95,7 +95,7 @@ UCIStrings get_uci_moves(C_Board board)
     return uci_moves;
 }
 
-void C_Board::collect_pawn_moves_and_captures()
+inline void C_Board::collect_pawn_moves_and_captures()
 {
     extract_moves_with_offset(get_pawn_single_moves(turn), legal_moves, -1. * turn);
     extract_promotions(get_pawn_promotions(turn), legal_moves);
@@ -108,9 +108,10 @@ void C_Board::collect_pawn_moves_and_captures()
 
 inline void C_Board::collect_knight_moves_and_captures()
 {
-    for (knight_direction dir : all_knight_directions)
+    for (int knight_idx : scan_board(get_knights(turn)))
     {
-        extract_captures_with_offset(this, get_knight_moves_and_attacks(turn, dir), legal_moves, -1. * turn * knight_idx_offsets.at(dir));
+        extract_moves_with_explicit_src(get_knight_moves(turn, knight_idx), legal_moves, knight_idx);
+        extract_captures_with_explicit_src(this, get_knight_attacks(turn, knight_idx), legal_moves, knight_idx);
     }
 }
 
@@ -121,9 +122,42 @@ inline void C_Board::collect_king_moves_and_captures()
     extract_captures_with_explicit_src(this, moves, legal_moves, king_idx);
 }
 
+inline void C_Board::collect_bishop_moves_and_captures()
+{
+    for (int bishop_idx : scan_board(get_bishops(turn)))
+    {
+        uint64_t bishop_moves = get_bishop_moves_and_attacks(bishop_idx, get_all_pieces());
+        extract_moves_with_explicit_src(bishop_moves & get_empty_fields(), legal_moves, bishop_idx);
+        extract_captures_with_explicit_src(this, bishop_moves & get_enemy_fields(turn), legal_moves, bishop_idx);
+    }
+}
+
+inline void C_Board::collect_rook_moves_and_captures()
+{
+    for (int rook_idx : scan_board(get_rooks(turn)))
+    {
+        uint64_t rook_moves = get_bishop_moves_and_attacks(rook_idx, get_all_pieces());
+        extract_moves_with_explicit_src(rook_moves & get_empty_fields(), legal_moves, rook_idx);
+        extract_captures_with_explicit_src(this, rook_moves & get_enemy_fields(turn), legal_moves, rook_idx);
+    }
+}
+
+inline void C_Board::collect_queen_moves_and_captures()
+{
+    for (int queen_idx : scan_board(get_queen(turn)))
+    {
+        uint64_t queen_moves = get_bishop_moves_and_attacks(queen_idx, get_all_pieces()) & get_rook_moves_and_attacks(queen_idx, get_all_pieces());
+        extract_moves_with_explicit_src(queen_moves & get_empty_fields(), legal_moves, queen_idx);
+        extract_captures_with_explicit_src(this, queen_moves & get_enemy_fields(turn), legal_moves, queen_idx);
+    }
+}
+
 inline void C_Board::collect_legal_moves()
 {
     collect_pawn_moves_and_captures();
     collect_knight_moves_and_captures();
     collect_king_moves_and_captures();
+    collect_bishop_moves_and_captures();
+    collect_queen_moves_and_captures();
+    collect_rook_moves_and_captures();
 }
