@@ -49,13 +49,13 @@ inline uint64_t mask_and_shift_by_n(const float shift, const uint64_t val)
 inline std::array<uint8_t, 2> position_idx_to_col_row_idx(uint8_t position_idx)
 {
     uint8_t col = (uint8_t)position_idx / 8;
-    uint8_t row = 7 - (position_idx % 8);
+    uint8_t row = position_idx % 8;
     return {col, row};
 }
 
 inline uint8_t row_col_idx_to_position_idx(uint8_t col_idx, uint8_t row_idx)
 {
-    return col_idx * 8 + (7 - row_idx);
+    return col_idx * 8 + row_idx;
 }
 
 inline int forward_scan(const uint64_t bb)
@@ -67,6 +67,21 @@ inline int forward_scan(const uint64_t bb)
 inline int reverse_scan(const uint64_t bb)
 {
     return std::__countl_zero(bb);
+}
+
+inline bool get_board_at_idx(uint64_t bb, int idx)
+{
+    return (bool)(bb & (most_sig_bit >> idx));
+}
+
+inline uint64_t set_board_1_at_idx(uint64_t bb, int idx)
+{
+    return bb | (most_sig_bit >> idx);
+}
+
+inline uint64_t set_board_0_at_idx(uint64_t bb, int idx)
+{
+    return bb & ~(most_sig_bit >> idx);
 }
 
 inline std::list<int> scan_board(uint64_t bb)

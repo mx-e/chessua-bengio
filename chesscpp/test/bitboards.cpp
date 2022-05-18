@@ -73,26 +73,34 @@ TEST(Bitboards, FieldIdxToRowColConversion)
     std::array<uint8_t, 2> col_row6 = position_idx_to_col_row_idx(i6);
     std::array<uint8_t, 2> col_row7 = position_idx_to_col_row_idx(i7);
 
-    EXPECT_EQ(col_row1[0], 0);
-    EXPECT_EQ(col_row1[1], 7);
+    EXPECT_EQ((int)col_row1[0], 0);
+    EXPECT_EQ((int)col_row1[1], 0);
 
-    EXPECT_EQ(col_row2[0], 2);
-    EXPECT_EQ(col_row2[1], 0);
+    EXPECT_EQ((int)col_row2[0], 2);
+    EXPECT_EQ((int)col_row2[1], 7);
 
-    EXPECT_EQ(col_row3[0], 2);
-    EXPECT_EQ(col_row3[1], 2);
+    EXPECT_EQ((int)col_row3[0], 2);
+    EXPECT_EQ((int)col_row3[1], 5);
 
-    EXPECT_EQ(col_row4[0], 7);
-    EXPECT_EQ(col_row4[1], 0);
+    EXPECT_EQ((int)col_row4[0], 7);
+    EXPECT_EQ((int)col_row4[1], 7);
 
-    EXPECT_EQ(col_row5[0], 2);
-    EXPECT_EQ(col_row5[1], 6);
+    EXPECT_EQ((int)col_row5[0], 2);
+    EXPECT_EQ((int)col_row5[1], 1);
 
-    EXPECT_EQ(col_row6[0], 6);
-    EXPECT_EQ(col_row6[1], 4);
+    EXPECT_EQ((int)col_row6[0], 6);
+    EXPECT_EQ((int)col_row6[1], 3);
 
-    EXPECT_EQ(col_row7[0], 4);
-    EXPECT_EQ(col_row7[1], 6);
+    EXPECT_EQ((int)col_row7[0], 4);
+    EXPECT_EQ((int)col_row7[1], 1);
+
+    EXPECT_EQ(row_col_idx_to_position_idx(col_row1[0], col_row1[1]), i1);
+    EXPECT_EQ(row_col_idx_to_position_idx(col_row2[0], col_row2[1]), i2);
+    EXPECT_EQ(row_col_idx_to_position_idx(col_row3[0], col_row3[1]), i3);
+    EXPECT_EQ(row_col_idx_to_position_idx(col_row4[0], col_row4[1]), i4);
+    EXPECT_EQ(row_col_idx_to_position_idx(col_row5[0], col_row5[1]), i5);
+    EXPECT_EQ(row_col_idx_to_position_idx(col_row6[0], col_row6[1]), i6);
+    EXPECT_EQ(row_col_idx_to_position_idx(col_row7[0], col_row7[1]), i7);
 }
 
 TEST(Bitboards, BoardScan)
@@ -203,4 +211,36 @@ TEST(Bitboards, BoardScan)
         idx_list4.pop_back();
         actual4.pop_front();
     }
+}
+
+TEST(Bitboard, GetSetIndividualBit)
+{
+    uint64_t ex1 = row_1;
+    uint64_t ex2 = col_d;
+    uint64_t ex3 = edge_half;
+    uint64_t ex4 = row_5;
+
+    EXPECT_TRUE(get_board_at_idx(ex1, 0));
+    EXPECT_TRUE(get_board_at_idx(ex2, 31));
+    EXPECT_TRUE(get_board_at_idx(ex3, 7));
+    EXPECT_TRUE(get_board_at_idx(ex4, 44));
+
+    EXPECT_FALSE(get_board_at_idx(ex1, 1));
+
+    uint64_t ex1_b = set_board_1_at_idx(ex1, 1);
+    EXPECT_TRUE(get_board_at_idx(ex1_b, 1));
+
+    uint64_t ex1_c = set_board_0_at_idx(ex1_b, 1);
+    EXPECT_FALSE(get_board_at_idx(ex1_c, 1));
+}
+
+TEST(Bitboard, MailboxImport)
+{
+    C_Board board = mailbox_to_bitboard_representation(get_example_board());
+    uint64_t pawns = board.get_pawns(board.turn);
+    EXPECT_TRUE(get_board_at_idx(pawns, 1));
+    EXPECT_TRUE(get_board_at_idx(pawns, 49));
+
+    uint64_t b_king = board.get_king(Black);
+    EXPECT_TRUE(get_board_at_idx(b_king, row_col_idx_to_position_idx(4, 7)));
 }

@@ -99,13 +99,13 @@ UCIStrings get_uci_moves(C_Board board)
 
 void C_Board::collect_pawn_moves_and_captures()
 {
-    extract_moves_with_offset(get_pawn_single_moves(turn), legal_moves, 1);
+    extract_moves_with_offset(get_pawn_single_moves(turn), legal_moves, -1. * turn);
     extract_promotions(get_pawn_promotions(turn), legal_moves);
     extract_promotion_captures(this, get_pawn_promotion_attacks_left(turn), legal_moves);
     extract_promotion_captures(this, get_pawn_promotion_attacks_right(turn), legal_moves);
-    extract_moves_with_offset(get_pawn_double_moves(turn), legal_moves, 2);
-    extract_captures_with_offset(this, get_pawn_attacks_left(turn), legal_moves, -9);
-    extract_captures_with_offset(this, get_pawn_attacks_right(turn), legal_moves, 7);
+    extract_moves_with_offset(get_pawn_double_moves(turn), legal_moves, -2 * turn);
+    extract_captures_with_offset(this, get_pawn_attacks_left(turn), legal_moves, -9 * turn);
+    extract_captures_with_offset(this, get_pawn_attacks_right(turn), legal_moves, 7 * turn);
 }
 
 inline void C_Board::collect_knight_moves_and_captures()

@@ -42,4 +42,7 @@ int main()
     {
         std::cout << m << "\n";
     }
+    C_Board test = get_new_game_board();
+    print_bitboard(test.get_pawn_double_moves(test.turn));
+    print_bitboard(test.get_pawn_single_moves(White));
 }

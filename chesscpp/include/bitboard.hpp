@@ -120,15 +120,15 @@ public:
 
     inline uint64_t get_pawn_single_moves(const float color)
     {
-        float shift = -1. * color;
-        uint64_t no_promotion_mask = color == 1. ? row_7 : row_2;
+        float shift = 1. * color;
+        uint64_t no_promotion_mask = color == 1. ? ~row_7 : ~row_2;
         uint64_t pawns = get_pawns(color) & no_promotion_mask;
         return mask_and_shift_by_n(shift, pawns) & get_empty_fields();
     }
 
     inline uint64_t get_pawn_promotions(const float color)
     {
-        float shift = -1. * color;
+        float shift = 1. * color;
         uint64_t promotion_mask = color == 1. ? row_7 : row_2;
         uint64_t pawns = get_pawns(color) & promotion_mask;
         return mask_and_shift_by_n(shift, pawns) & get_empty_fields();
@@ -155,7 +155,7 @@ public:
         uint64_t half = color == 1. ? white_half : black_half;
         float shift = 1. * color;
         uint64_t single_moves = get_pawn_single_moves(color) & center_half;
-        return shift_by_n(shift, single_moves) & get_empty_fields() & half;
+        return mask_and_shift_by_n(shift, single_moves) & get_empty_fields() & half;
     }
 
     inline uint64_t get_pawn_attacks_left(const float color)
