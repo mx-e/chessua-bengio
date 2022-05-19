@@ -84,13 +84,23 @@ inline uint64_t set_board_0_at_idx(uint64_t bb, int idx)
     return bb & ~(most_sig_bit >> idx);
 }
 
+inline uint64_t board_from_idx_list(std::list<int> idx_list)
+{
+    uint64_t bb = empty_board;
+    for (int idx : idx_list)
+    {
+        set_board_1_at_idx(bb, idx);
+    }
+    return bb;
+}
+
 inline std::list<int> scan_board(uint64_t bb)
 {
     std::list<int> idx_list = {};
     if (bb)
         do
         {
-            idx_list.push_back((int)(forward_scan(bb)));
+            idx_list.push_back(forward_scan(bb));
         } while (bb &= bb - 1);
     return idx_list;
 }

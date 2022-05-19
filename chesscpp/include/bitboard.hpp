@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
+#include <stack>
 #include "bitboard_types.hpp"
 #include "bitboard_constants.hpp"
 #include "types.hpp"
@@ -49,13 +51,14 @@ public:
     float half_moves = 0.;
 
     std::vector<move> legal_moves = {};
+    std::stack<move> move_stack = {};
 
     const std::map<float, int>
         color_to_BB_index = {{-1., 0}, {1., 7}};
 
-    inline uint64_t get_pieces(const float color, const uint8_t type)
+    inline uint64_t get_pieces(const float color, const uint8_t piece_type)
     {
-        return pieces[type] & pieces[color_to_BB_index.at(color)];
+        return pieces[piece_type] & pieces[color_to_BB_index.at(color)];
     };
 
     inline uint64_t get_pawns(const float color)
@@ -101,6 +104,12 @@ public:
     {
         pieces[type] |= (most_sig_bit >> position_idx);
         pieces[color_to_BB_index.at(color)] |= (most_sig_bit >> position_idx);
+    }
+
+    inline void unset_single_piece(const float color, const uint8_t type, const uint8_t position_idx)
+    {
+        pieces[type] &= ~(most_sig_bit >> position_idx);
+        pieces[color_to_BB_index.at(color)] &= ~(most_sig_bit >> position_idx);
     }
 
     inline uint64_t get_all_pieces()
@@ -275,7 +284,17 @@ public:
     inline void collect_rook_moves_and_captures();
     inline void collect_queen_moves_and_captures();
 
-    inline void collect_legal_moves();
+    void collect_legal_moves();
+
+    void push_move(move m);
+    move pop_move();
+
+    inline int get_rating()
+    {
+        std::srand(std::time(nullptr)); // use current time as seed for random generator
+        int random_variable = std::rand();
+        return (random_variable % 200) - 100
+    }
 };
 
 inline C_Board mailbox_to_bitboard_representation(Board mailbox)

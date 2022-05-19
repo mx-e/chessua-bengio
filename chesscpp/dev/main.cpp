@@ -50,5 +50,17 @@ int main()
     //     i++;
     // }
 
+    C_Board board = mailbox_to_bitboard_representation(get_example_board());
+    board.collect_legal_moves();
+    auto legal_moves = board.legal_moves;
+    move &m;
+    for (move mv : legal_moves)
+    {
+        if (mv.src == 8)
+        {
+            m = mv;
+        }
+    }
+
     // print_all_knight_move_boards();
 }

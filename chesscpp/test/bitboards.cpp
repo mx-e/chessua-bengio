@@ -213,6 +213,22 @@ TEST(Bitboards, BoardScan)
     }
 }
 
+TEST(Bitboard, GetPieceTypeOfField)
+{
+    C_Board board = mailbox_to_bitboard_representation(get_example_board());
+    EXPECT_EQ(board.get_pawns(1.), white_pawns_starting_config);
+
+    int ex1 = get_piece_type_of_field(&board, 0);
+    int ex2 = get_piece_type_of_field(&board, 7);
+    int ex3 = get_piece_type_of_field(&board, 9);
+    int ex4 = get_piece_type_of_field(&board, 39);
+
+    EXPECT_EQ(ex1, pRook);
+    EXPECT_EQ(ex2, pRook);
+    EXPECT_EQ(ex3, pPawn);
+    EXPECT_EQ(ex4, pKing);
+}
+
 TEST(Bitboard, GetSetIndividualBit)
 {
     uint64_t ex1 = row_1;
@@ -243,4 +259,26 @@ TEST(Bitboard, MailboxImport)
 
     uint64_t b_king = board.get_king(Black);
     EXPECT_TRUE(get_board_at_idx(b_king, row_col_idx_to_position_idx(4, 7)));
+}
+
+TEST(Bitboard, PushPopMoves)
+{
+    C_Board board = mailbox_to_bitboard_representation(get_example_board());
+    board.collect_legal_moves();
+    auto legal_moves = board.legal_moves;
+    move m = create_move(0, 0);
+    for (move mv : legal_moves)
+    {
+        if (mv.src == 8 && mv.dest == 18)
+        {
+            m = mv;
+        }
+    }
+    EXPECT_EQ((int)m.dest, 18);
+    EXPECT_EQ((int)m.capture, 0);
+    EXPECT_EQ((int)m.flag, 0);
+
+    board.push_move(m);
+    uint8_t dest_piece_type = get_piece_type_of_field(&board, m.dest);
+    EXPECT_EQ((int)dest_piece_type, (int)pKnight);
 }

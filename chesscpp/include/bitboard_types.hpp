@@ -9,10 +9,16 @@ const std::map<u_int8_t, char>
 
 struct move
 {
-    uint8_t src;
-    uint8_t dest;
-    uint8_t capture;
-    uint8_t flag;
+    uint8_t src;              // 6 b
+    uint8_t dest;             // 6 b
+    uint8_t capture;          // 3 b (actually less)
+    uint8_t flag;             // 2 b (promotion)
+    uint8_t prev_ep;          // 6 b
+    uint8_t prev_c;           // 4 b
+    uint8_t castling;         // 2 b
+    uint8_t prev_half_move_c; // 6b
+
+    // 29b
 };
 
 inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t capture = 0, const uint8_t flag = 0)

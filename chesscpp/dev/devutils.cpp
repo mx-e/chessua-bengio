@@ -78,7 +78,7 @@ void print_all_knight_move_boards()
         uint64_t knight_moves = empty_board;
         for (knight_direction d : all_knight_directions)
         {
-            knight_moves |= board.get_knight_moves_and_attacks(White, d);
+            knight_moves |= board.get_knight_attacks(White, d);
         }
         // std::cout << i << "\n";
         //  print_bitboard(knight_moves);
