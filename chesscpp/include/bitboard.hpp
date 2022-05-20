@@ -146,24 +146,26 @@ public:
 
     inline uint64_t get_pawn_attacks(const pawn_shift direction, const float color)
     {
-        return mask_and_shift_by_n(direction, get_pawns(color), color) & get_enemy_fields(color);
+        return mask_and_shift_by_n(direction, get_pawns(color), color);
     }
 
-    inline void collect_pawn_moves_and_captures();
+    inline uint64_t collect_pawn_moves_and_captures();
 
     inline uint64_t get_knight_moves(const float color, const int field_idx)
     {
         return knight_moves[field_idx];
     }
 
-    inline void collect_knight_moves_and_captures();
+    inline uint64_t collect_knight_moves_and_captures();
 
     inline uint64_t get_king_moves(const int field_idx)
     {
         return king_moves[field_idx];
     }
 
-    inline void collect_king_moves_and_captures();
+    inline uint64_t get_castling_moves(const int);
+
+    inline uint64_t collect_king_moves_and_captures();
 
     inline uint64_t get_bishop_moves_and_attacks(int field_idx, uint64_t blockers)
     {
@@ -202,7 +204,7 @@ public:
         return moves;
     }
 
-    inline void collect_bishop_moves_and_captures();
+    inline uint64_t collect_bishop_moves_and_captures();
 
     inline uint64_t get_rook_moves_and_attacks(int field_idx, uint64_t blockers)
     {
@@ -240,8 +242,8 @@ public:
         }
         return moves;
     }
-    inline void collect_rook_moves_and_captures();
-    inline void collect_queen_moves_and_captures();
+    inline uint64_t collect_rook_moves_and_captures();
+    inline uint64_t collect_queen_moves_and_captures();
 
     void collect_legal_moves();
 

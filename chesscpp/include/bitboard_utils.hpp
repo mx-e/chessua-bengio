@@ -28,19 +28,13 @@ enum pawn_shift
 const std::map<pawn_shift, float>
     pawn_shift_map = {{single, 1.},
                       {attack_right, 9.},
-                      {attack_left, -7.},
-                      {single_reverse, -1.},
-                      {attack_left_reverse, 7.},
-                      {attack_right_reverse, -9.}};
+                      {attack_left, -7.}};
 
 const std::map<float, uint64_t>
     pawn_shift_mask_map = {
         {single, ~(row_8)},
         {single_reverse, ~row_1},
         {attack_left, ~(row_8)},
-        {attack_right, ~(row_8)},
-        {attack_left_reverse, ~row_1},
-        {attack_right_reverse, ~row_1},
 };
 
 // shifts are denoted in field index change not left/right bit shift

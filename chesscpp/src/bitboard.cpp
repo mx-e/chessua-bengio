@@ -22,7 +22,7 @@ void extract_promotions(uint64_t move_board, std::vector<move> &move_list, float
         {
             for (uint8_t p : {2, 3, 4, 5})
             {
-                move_list.push_back(create_move((uint8_t)m + 1 * color, (uint8_t)m, 0, p));
+                move_list.push_back(create_move(m + 1 * color, (uint8_t)m, 0, p));
             }
         }
     }
@@ -37,29 +37,29 @@ void extract_promotion_captures(const C_Board *board, uint64_t move_board, std::
         {
             for (uint8_t p : {2, 3, 4, 5})
             {
-                move_list.push_back(create_move((uint8_t)m + 1, (uint8_t)m, get_piece_type_of_field(board, m), p));
+                move_list.push_back(create_move(m + 1, (uint8_t)m, get_piece_type_of_field(board, m), p));
             }
         }
     }
 }
 
-void extract_moves_with_offset(uint64_t move_board, std::vector<move> &move_list, int source_offset)
+void extract_moves_with_offset(uint64_t move_board, std::vector<move> &move_list, float source_offset)
 {
     if (move_board == 0)
         return;
     for (int m : scan_board(move_board))
     {
-        move_list.push_back(create_move(m + source_offset, (uint8_t)m));
+        move_list.push_back(create_move(m + (int)source_offset, (uint8_t)m));
     }
 }
 
-void extract_captures_with_offset(const C_Board *board, uint64_t move_board, std::vector<move> &move_list, int source_offset)
+void extract_captures_with_offset(const C_Board *board, uint64_t move_board, std::vector<move> &move_list, float source_offset)
 {
     if (move_board == 0)
         return;
     for (int m : scan_board(move_board))
     {
-        move_list.push_back(create_move(m + source_offset, m, get_piece_type_of_field(board, (uint8_t)m)));
+        move_list.push_back(create_move(m + (int)source_offset, m, get_piece_type_of_field(board, (uint8_t)m)));
     }
 }
 
@@ -107,7 +107,7 @@ UCIStrings get_uci_moves(C_Board board)
     return uci_moves;
 }
 
-inline void C_Board::collect_pawn_moves_and_captures()
+inline uint64_t C_Board::collect_pawn_moves_and_captures()
 {
     uint64_t promotion_row = turn == 1. ? row_8 : row_1;
 
@@ -120,81 +120,91 @@ inline void C_Board::collect_pawn_moves_and_captures()
 
     uint64_t pawn_attacks_left = get_pawn_attacks(attack_right, turn);
     uint64_t pawn_attacks_right = get_pawn_attacks(attack_right, turn);
-    extract_captures_with_offset(this, pawn_attacks_left & ~promotion_row, legal_moves, -pawn_shift_map.at(attack_left) * turn);
-    extract_captures_with_offset(this, pawn_attacks_right & ~promotion_row, legal_moves, -pawn_shift_map.at(attack_right) * turn);
+    extract_captures_with_offset(this,
+                                 pawn_attacks_left & ~promotion_row & get_enemy_fields(turn),
+                                 legal_moves,
+                                 -pawn_shift_map.at(attack_left) * turn);
+    extract_captures_with_offset(this,
+                                 pawn_attacks_right & ~promotion_row & get_enemy_fields(turn),
+                                 legal_moves,
+                                 -pawn_shift_map.at(attack_right) * turn);
     extract_promotion_captures(this, pawn_attacks_left & promotion_row, legal_moves);
     extract_promotion_captures(this, pawn_attacks_right & promotion_row, legal_moves);
-    king_attack |= (bool)(pawn_attacks_left & get_king(-1 * turn));
-    king_attack |= (bool)(pawn_attacks_right & get_king(-1 * turn));
+    return pawn_attacks_left & pawn_attacks_right;
 }
 
-inline void C_Board::collect_knight_moves_and_captures()
+inline uint64_t C_Board::collect_knight_moves_and_captures()
 {
+    uint64_t knigth_attacks = empty_board;
     for (int knight_idx : scan_board(get_knights(turn)))
     {
         uint64_t knight_moves = get_knight_moves(turn, knight_idx);
-
+        knigth_attacks |= knight_moves;
         extract_moves_with_explicit_src(knight_moves & get_empty_fields(), legal_moves, knight_idx);
         extract_captures_with_explicit_src(this, knight_moves & get_enemy_fields(turn), legal_moves, knight_idx);
-        king_attack |= (bool)(knight_moves & get_king(-1 * turn));
     }
+    return knigth_attacks;
 }
 
-inline void C_Board::collect_king_moves_and_captures()
+inline uint64_t C_Board::collect_king_moves_and_captures()
 {
     int king_idx = scan_board(get_king(turn)).front();
     uint64_t king_moves = get_king_moves(king_idx);
     extract_moves_with_explicit_src(king_moves & get_enemy_fields(turn), legal_moves, king_idx);
     extract_captures_with_explicit_src(this, king_moves & get_empty_fields(), legal_moves, king_idx);
-    king_attack |= (bool)(king_attack & get_king(-1 * turn));
+    return king_moves;
 }
 
-inline void C_Board::collect_bishop_moves_and_captures()
+inline uint64_t C_Board::collect_bishop_moves_and_captures()
 {
+    uint64_t bishop_attacks = empty_board;
     for (int bishop_idx : scan_board(get_bishops(turn)))
     {
         uint64_t bishop_moves = get_bishop_moves_and_attacks(bishop_idx, get_all_pieces());
+        bishop_attacks |= bishop_moves;
         extract_moves_with_explicit_src(bishop_moves & get_empty_fields(), legal_moves, bishop_idx);
         extract_captures_with_explicit_src(this, bishop_moves & get_enemy_fields(turn), legal_moves, bishop_idx);
-        king_attack |= (bool)(bishop_moves & get_king(-1 * turn));
     }
+    return bishop_attacks;
 }
 
-inline void C_Board::collect_rook_moves_and_captures()
+inline uint64_t C_Board::collect_rook_moves_and_captures()
 {
+    uint64_t rook_attacks = empty_board;
     for (int rook_idx : scan_board(get_rooks(turn)))
     {
         uint64_t rook_moves = get_rook_moves_and_attacks(rook_idx, get_all_pieces());
+        rook_attacks |= rook_moves;
         extract_moves_with_explicit_src(rook_moves & get_empty_fields(), legal_moves, rook_idx);
         extract_captures_with_explicit_src(this, rook_moves & get_enemy_fields(turn), legal_moves, rook_idx);
-        king_attack |= (bool)(rook_moves & get_king(-1 * turn));
     }
+    return rook_attacks;
 }
 
-inline void C_Board::collect_queen_moves_and_captures()
+inline uint64_t C_Board::collect_queen_moves_and_captures()
 {
+    uint64_t queen_attacks = empty_board;
     for (int queen_idx : scan_board(get_queen(turn)))
     {
         uint64_t queen_moves = get_bishop_moves_and_attacks(queen_idx, get_all_pieces()) | get_rook_moves_and_attacks(queen_idx, get_all_pieces());
+        queen_attacks |= queen_moves;
         extract_moves_with_explicit_src(queen_moves & get_empty_fields(), legal_moves, queen_idx);
         extract_captures_with_explicit_src(this, queen_moves & get_enemy_fields(turn), legal_moves, queen_idx);
-        king_attack |= (bool)(queen_moves & get_king(-1 * turn));
     }
+    return queen_attacks;
 }
 
 void C_Board::collect_legal_moves()
 {
+    uint64_t all_attacks = empty_board;
     legal_moves = std::vector<move>();
-    collect_pawn_moves_and_captures();
-    collect_knight_moves_and_captures();
-    collect_king_moves_and_captures();
-    collect_bishop_moves_and_captures();
-    collect_queen_moves_and_captures();
-    collect_rook_moves_and_captures();
-    if (king_attack)
-    {
-        legal_moves = std::vector<move>();
-    }
+    all_attacks |= collect_pawn_moves_and_captures();
+    all_attacks |= collect_knight_moves_and_captures();
+    all_attacks |= collect_king_moves_and_captures();
+    all_attacks |= collect_bishop_moves_and_captures();
+    all_attacks |= collect_rook_moves_and_captures();
+    all_attacks |= collect_queen_moves_and_captures();
+    king_attack = !((bool)all_attacks & get_king(-1. * turn));
 }
 
 void C_Board::push_move(move m)
