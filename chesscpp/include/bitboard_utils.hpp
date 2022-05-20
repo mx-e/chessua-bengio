@@ -33,9 +33,8 @@ const std::map<pawn_shift, float>
 const std::map<float, uint64_t>
     pawn_shift_mask_map = {
         {single, ~(row_8)},
-        {single_reverse, ~row_1},
         {attack_left, ~(row_8)},
-};
+        {attack_right, ~(row_8)}};
 
 // shifts are denoted in field index change not left/right bit shift
 // they are the negative of bit shift
@@ -132,8 +131,14 @@ inline std::string field_id_to_string(uint8_t idx)
 
 inline std::string move_to_uci_str(const move m)
 {
-    char flag = piece_code_to_char.at(m.flag);
-    return field_id_to_string(m.src) + field_id_to_string(m.dest) + flag;
+    if (m.flag != 0)
+    {
+        return field_id_to_string(m.src) + field_id_to_string(m.dest) + piece_code_to_char.at(m.flag);
+    }
+    else
+    {
+        return field_id_to_string(m.src) + field_id_to_string(m.dest);
+    }
 }
 
 #endif

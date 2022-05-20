@@ -125,7 +125,7 @@ public:
 
     inline uint64_t get_enemy_fields(float color)
     {
-        return pieces[color_to_BB_index.at(color * -1)];
+        return pieces[color_to_BB_index.at(color * -1.)];
     }
 
     inline uint64_t get_empty_or_enemy(float color)
@@ -141,7 +141,7 @@ public:
     inline uint64_t get_pawn_double_moves(uint64_t single_moves, const float color)
     {
         uint64_t half = color == 1. ? white_half : black_half;
-        return mask_and_shift_by_n(single, single_moves, color) & get_empty_fields() & half;
+        return mask_and_shift_by_n(single, single_moves & center_half, color) & get_empty_fields() & half;
     }
 
     inline uint64_t get_pawn_attacks(const pawn_shift direction, const float color)
@@ -151,7 +151,7 @@ public:
 
     inline uint64_t collect_pawn_moves_and_captures();
 
-    inline uint64_t get_knight_moves(const float color, const int field_idx)
+    inline uint64_t get_knight_moves(const int field_idx)
     {
         return knight_moves[field_idx];
     }
@@ -245,7 +245,7 @@ public:
     inline uint64_t collect_rook_moves_and_captures();
     inline uint64_t collect_queen_moves_and_captures();
 
-    void collect_legal_moves();
+    uint64_t collect_legal_moves();
 
     void push_move(move m);
     move pop_move();
@@ -293,11 +293,12 @@ void extract_moves_with_explicit_src(uint64_t move_board, const std::vector<move
 
 void extract_captures_with_explicit_src(const C_Board &board, uint64_t move_board, const std::vector<move> &move_list, int src_idx);
 
-UCIStrings get_uci_moves(const C_Board board);
+UCIStrings get_uci_moves(C_Board &board);
 
 inline bool check_move_causes_check(C_Board &board, move &m)
 {
     board.push_move(m);
+    board.collect_legal_moves();
     bool check = board.king_attack;
     board.pop_move();
     return check;

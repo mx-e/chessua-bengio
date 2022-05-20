@@ -384,6 +384,22 @@ bool _exists(std::vector<T> iterable, std::function<bool(T)> condition)
     return found;
 }
 
+void print_moves(std::vector<move> moves)
+{
+    for (move m : moves)
+    {
+        print_move(m);
+    }
+}
+
+void print_strings(UCIStrings strings)
+{
+    for (std::string s : strings)
+    {
+        std::cout << s << "\n";
+    }
+}
+
 TEST(PossibleCBoards, PawnOpeningWhite)
 {
     Board board{};
@@ -414,8 +430,11 @@ TEST(PossibleCBoards, PawnOpeningWhiteBlocked)
     // BoardState boardState{board, COLOR_WHITE};
     C_Board cboard = mailbox_to_bitboard_representation(board);
     cboard.turn = White;
-    cboard.collect_legal_moves();
     std::vector<move> moves = cboard.legal_moves;
+    for (move m : moves)
+    {
+        print_move(m);
+    }
 
     EXPECT_EQ(moves.size(), 0);
 }
@@ -562,10 +581,11 @@ TEST(PossibleCBoards, CheckBlack)
     board[0].at(0) = 1;
     board[0].at(2) = -2;
 
-    //BoardState boardState{board, COLOR_BLACK};
+    // BoardState boardState{board, COLOR_BLACK};
     C_Board cboard = mailbox_to_bitboard_representation(board);
     cboard.turn = White;
-    cboard.collect_legal_moves();
+    print_bitboard(cboard.collect_legal_moves());
+
     std::vector<move> moves = cboard.legal_moves;
 
     EXPECT_EQ(_exists<move>(moves, [&cboard](move move)
@@ -579,11 +599,12 @@ TEST(PossibleCBoards, CheckWhite)
     board[0].at(0) = -1;
     board[0].at(2) = 2;
 
-    //BoardState boardState{board, COLOR_WHITE};
+    // BoardState boardState{board, COLOR_WHITE};
     C_Board cboard = mailbox_to_bitboard_representation(board);
     cboard.turn = Black;
     cboard.collect_legal_moves();
     std::vector<move> moves = cboard.legal_moves;
+    print_moves(moves);
 
     EXPECT_EQ(_exists<move>(moves, [&cboard](move move)
                             { return check_move_causes_check(cboard, move); }),
@@ -599,8 +620,8 @@ TEST(PossibleCBoards, PawnPromotionWhite)
     C_Board cboard = mailbox_to_bitboard_representation(board);
     cboard.turn = White;
     cboard.collect_legal_moves();
-    std::vector<move> moves = cboard.legal_moves;
 
+    std::vector<move> moves = cboard.legal_moves;
     EXPECT_EQ(moves.size(), 4);
 
     EXPECT_EQ(_exists<move>(moves, [](move move)
@@ -648,10 +669,11 @@ TEST(PossibleCBoards, UCIStringPawnMove)
     C_Board cboard = mailbox_to_bitboard_representation(board);
     cboard.turn = White;
     UCIStrings uci = get_uci_moves(cboard);
+    print_strings(uci);
+    std::cout << uci.size() << "\n";
 
-    // TODO: There is a space after the uci-string?
     EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
-                                   { return uci_string == "d3d4 "; }),
+                                   { return uci_string.compare("d3d4") == 0; }),
               true);
 }
 
@@ -661,11 +683,13 @@ TEST(PossibleCBoards, UCIStringQueenMove)
     board[3].at(2) = 2;
 
     C_Board cboard = mailbox_to_bitboard_representation(board);
+
     cboard.turn = White;
     UCIStrings uci = get_uci_moves(cboard);
+    print_strings(uci);
 
     EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
-                                   { return uci_string == "d3g6 "; }),
+                                   { return uci_string.compare("d3g6") == 0; }),
               true);
 }
 
@@ -677,6 +701,7 @@ TEST(PossibleCBoards, UCIStringPromotion)
     C_Board cboard = mailbox_to_bitboard_representation(board);
     cboard.turn = White;
     UCIStrings uci = get_uci_moves(cboard);
+    print_strings(uci);
 
     EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
                                    { return uci_string == "d7d8q"; }),
@@ -697,8 +722,8 @@ TEST(PossibleCBoards, UCIStringPromotion)
 
 /**
  * @brief These tests are yet to be ported.
- * 
- 
+ *
+
 BoardStates get_castling_scenario_black(Board board, ColorCastlingRights rights)
 {
     BoardState boardState{board, COLOR_BLACK};
