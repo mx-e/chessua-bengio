@@ -179,6 +179,10 @@ void C_Board::collect_legal_moves()
     collect_bishop_moves_and_captures();
     collect_queen_moves_and_captures();
     collect_rook_moves_and_captures();
+    if (king_attack)
+    {
+        legal_moves = std::vector<move>();
+    }
 }
 
 void C_Board::push_move(move m)
@@ -234,6 +238,7 @@ move C_Board::pop_move()
     moves -= (turn == 1.) * 1.;
 
     turn *= -1;
+    king_attack = false;
     move_stack.pop();
     legal_moves = std::vector<move>();
     return m;
