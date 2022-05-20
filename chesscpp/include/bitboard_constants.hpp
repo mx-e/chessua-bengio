@@ -1,7 +1,7 @@
 #ifndef BB_CONSTANTS
 #define BB_CONSTANTS
 #include <map>
-#include <list>
+#include <vector>
 #include <stdint.h>
 
 const uint8_t pKing = 1;
@@ -25,7 +25,7 @@ enum knight_direction
     NWW,
     NNW,
 };
-const std::list<knight_direction> all_knight_directions = {NNE, NEE, SEE, SSE, SSW, SWW, NWW, NNW};
+const std::vector<knight_direction> all_knight_directions = {NNE, NEE, SEE, SSE, SSW, SWW, NWW, NNW};
 const std::map<knight_direction, float> knight_idx_offsets =
     {{NNE, 10.}, {NEE, 17.}, {SEE, 15.}, {SSE, 6.}, {SSW, -10.}, {SWW, -17.}, {NWW, -15.}, {NNW, -6}};
 
@@ -63,7 +63,9 @@ const uint64_t edge_half = 0xC3C3C3C3C3C3C3C3LL;
 const uint64_t most_sig_bit = 0x8000000000000000LL;
 const uint64_t empty_board = 0x0000000000000000LL;
 
-const uint64_t white_pawns_starting_config = row_2;
+const uint64_t castling_w_ks_no_attack = 0x00
+
+    const uint64_t white_pawns_starting_config = row_2;
 const uint64_t black_pawns_starting_config = row_7;
 const uint64_t white_rooks_starting_config = row_1 & (col_a | col_h);
 const uint64_t black_rooks_starting_config = row_8 & (col_a | col_h);
@@ -170,7 +172,7 @@ enum sliding_direction
     NW
 };
 
-const std::list<sliding_direction>
+const std::vector<sliding_direction>
     all_sliding_directions = {N, NE, E, SE, S, SW, W, NW};
 const std::map<sliding_direction, float> sliding_idx_offset =
     {{N, 1.}, {NE, 9.}, {E, 8.}, {SE, 7.}, {S, -1.}, {SW, -9}, {W, -8}, {NW, -7.}};

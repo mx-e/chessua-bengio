@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "custom.hpp"
+#include <vector>
 #include <array>
 
 void print_bitboard(uint64_t bb)
@@ -111,22 +112,22 @@ TEST(Bitboards, BoardScan)
     uint64_t bb3 = board.get_pawn_double_moves(board.get_pawn_single_moves(White), White);
     uint64_t bb4 = board.get_king_moves(col_row_idx_to_position_idx(4, 7)) & board.get_empty_fields();
 
-    std::list<int> idx_list1 = scan_board(bb1);
-    std::list<int> idx_list2 = scan_board(bb2);
-    std::list<int> idx_list3 = scan_board(bb3);
-    std::list<int> idx_list4 = scan_board(bb4);
+    std::vector<int> idx_list1 = scan_board(bb1);
+    std::vector<int> idx_list2 = scan_board(bb2);
+    std::vector<int> idx_list3 = scan_board(bb3);
+    std::vector<int> idx_list4 = scan_board(bb4);
 
-    std::list<int> actual1 = {47, 23};
-    std::list<int> actual2 = {56, 0};
-    std::list<int> actual3 = {59,
-                              51,
-                              43,
-                              35,
-                              27,
-                              19,
-                              11,
-                              3};
-    std::list<int> actual4 = {};
+    std::vector<int> actual1 = {47, 23};
+    std::vector<int> actual2 = {56, 0};
+    std::vector<int> actual3 = {59,
+                                51,
+                                43,
+                                35,
+                                27,
+                                19,
+                                11,
+                                3};
+    std::vector<int> actual4 = {};
 
     ASSERT_EQ(idx_list1.size(), actual1.size());
     ASSERT_EQ(idx_list2.size(), actual2.size());
@@ -136,30 +137,30 @@ TEST(Bitboards, BoardScan)
     print_bitboard(bb1);
     while (actual1.size() > 0)
     {
-        ASSERT_EQ(idx_list1.front(), actual1.front());
-        idx_list1.pop_front();
-        actual1.pop_front();
+        ASSERT_EQ(idx_list1.back(), actual1.back());
+        idx_list1.pop_back();
+        actual1.pop_back();
     }
     print_bitboard(bb2);
     while (actual2.size() > 0)
     {
-        ASSERT_EQ(idx_list2.front(), actual2.front());
-        idx_list2.pop_front();
-        actual2.pop_front();
+        ASSERT_EQ(idx_list2.back(), actual2.back());
+        idx_list2.pop_back();
+        actual2.pop_back();
     }
     print_bitboard(bb3);
     while (actual3.size() > 0)
     {
-        ASSERT_EQ(idx_list3.front(), actual3.front());
-        idx_list3.pop_front();
-        actual3.pop_front();
+        ASSERT_EQ(idx_list3.back(), actual3.back());
+        idx_list3.pop_back();
+        actual3.pop_back();
     }
     print_bitboard(bb4);
     while (actual4.size() > 0)
     {
-        ASSERT_EQ(idx_list4.front(), actual4.front());
-        idx_list4.pop_front();
-        actual4.pop_front();
+        ASSERT_EQ(idx_list4.back(), actual4.back());
+        idx_list4.pop_back();
+        actual4.pop_back();
     }
 
     idx_list1 = scan_board_reverse(bb1);
@@ -183,33 +184,39 @@ TEST(Bitboards, BoardScan)
     ASSERT_EQ(idx_list3.size(), actual3.size());
     ASSERT_EQ(idx_list4.size(), actual4.size());
 
+    int i = 0;
     print_bitboard(bb1);
-    while (actual1.size() > 0)
+    while (idx_list1.size() > 0)
     {
-        ASSERT_EQ(idx_list1.back(), actual1.front());
+        ASSERT_EQ(idx_list1.back(), actual1[i]);
         idx_list1.pop_back();
-        actual1.pop_front();
+        i++;
     }
     print_bitboard(bb2);
-    while (actual2.size() > 0)
+    i = 0;
+
+    while (idx_list2.size() > 0)
     {
-        ASSERT_EQ(idx_list2.back(), actual2.front());
+        ASSERT_EQ(idx_list2.back(), actual2[i]);
         idx_list2.pop_back();
-        actual2.pop_front();
+        i++;
     }
     print_bitboard(bb3);
-    while (actual3.size() > 0)
+    i = 0;
+
+    while (idx_list3.size() > 0)
     {
-        ASSERT_EQ(idx_list3.back(), actual3.front());
+        ASSERT_EQ(idx_list3.back(), actual3[i]);
         idx_list3.pop_back();
-        actual3.pop_front();
+        i++;
     }
     print_bitboard(bb4);
-    while (actual4.size() > 0)
+    i = 0;
+    while (idx_list4.size() > 0)
     {
-        ASSERT_EQ(idx_list4.back(), actual4.front());
+        ASSERT_EQ(idx_list4.back(), actual4[i]);
         idx_list4.pop_back();
-        actual4.pop_front();
+        i++;
     }
 }
 
