@@ -27,6 +27,11 @@ inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t ca
     m.src = src;
     m.dest = dest;
     m.flag = flag;
+    m.prev_ep = 0;
+    m.capture = capture;
+    m.prev_c = 0;
+    m.castling = 0;
+    m.prev_half_move_c = 0;
     return m;
 }
 

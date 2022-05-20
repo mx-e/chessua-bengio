@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "bitboard_constants.hpp"
 
-inline void print_move_(move m)
+inline void print_move(move m)
 {
     std::cout << "src: " << (int)m.src << "\n";
     std::cout << "dest:" << (int)m.dest << "\n";
@@ -53,7 +53,7 @@ inline std::array<uint8_t, 2> position_idx_to_col_row_idx(uint8_t position_idx)
     return {col, row};
 }
 
-inline uint8_t row_col_idx_to_position_idx(uint8_t col_idx, uint8_t row_idx)
+inline uint8_t col_row_idx_to_position_idx(uint8_t col_idx, uint8_t row_idx)
 {
     return col_idx * 8 + row_idx;
 }

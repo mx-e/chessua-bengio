@@ -50,8 +50,8 @@ public:
     float moves = 0.;
     float half_moves = 0.;
 
-    std::vector<move> legal_moves = {};
-    std::stack<move> move_stack = {};
+    std::vector<move> legal_moves = std::vector<move>();
+    std::stack<move> move_stack = std::stack<move>();
 
     const std::map<float, int>
         color_to_BB_index = {{-1., 0}, {1., 7}};
@@ -311,7 +311,7 @@ inline C_Board mailbox_to_bitboard_representation(Board mailbox)
             }
             float color = (float)((0. < field_state) - (field_state < 0.));
             uint8_t type = abs(field_state);
-            uint8_t position_idx = row_col_idx_to_position_idx(col, row);
+            uint8_t position_idx = col_row_idx_to_position_idx(col, row);
             bitboard.set_single_piece(color, type, position_idx);
         }
     }

@@ -178,14 +178,15 @@ void C_Board::push_move(move m)
     set_single_piece(turn, piece_type, m.dest);
 
     // set counters
-    m.prev_half_move_c = half_moves;
+    m.prev_half_move_c = (uint8_t)half_moves;
     half_moves += 1.;
-    half_moves *= (!(piece_type == pPawn) && !(m.capture));
+    half_moves *= ((!(piece_type == pPawn) && !(m.capture)));
     moves += (turn == -1.) * 1.;
 
     turn *= -1;
 
     move_stack.push(m);
+    legal_moves = std::vector<move>();
 }
 
 move C_Board::pop_move()
@@ -215,5 +216,6 @@ move C_Board::pop_move()
 
     turn *= -1;
     move_stack.pop();
+    legal_moves = std::vector<move>();
     return m;
 }

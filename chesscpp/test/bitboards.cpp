@@ -94,13 +94,13 @@ TEST(Bitboards, FieldIdxToRowColConversion)
     EXPECT_EQ((int)col_row7[0], 4);
     EXPECT_EQ((int)col_row7[1], 1);
 
-    EXPECT_EQ(row_col_idx_to_position_idx(col_row1[0], col_row1[1]), i1);
-    EXPECT_EQ(row_col_idx_to_position_idx(col_row2[0], col_row2[1]), i2);
-    EXPECT_EQ(row_col_idx_to_position_idx(col_row3[0], col_row3[1]), i3);
-    EXPECT_EQ(row_col_idx_to_position_idx(col_row4[0], col_row4[1]), i4);
-    EXPECT_EQ(row_col_idx_to_position_idx(col_row5[0], col_row5[1]), i5);
-    EXPECT_EQ(row_col_idx_to_position_idx(col_row6[0], col_row6[1]), i6);
-    EXPECT_EQ(row_col_idx_to_position_idx(col_row7[0], col_row7[1]), i7);
+    EXPECT_EQ(col_row_idx_to_position_idx(col_row1[0], col_row1[1]), i1);
+    EXPECT_EQ(col_row_idx_to_position_idx(col_row2[0], col_row2[1]), i2);
+    EXPECT_EQ(col_row_idx_to_position_idx(col_row3[0], col_row3[1]), i3);
+    EXPECT_EQ(col_row_idx_to_position_idx(col_row4[0], col_row4[1]), i4);
+    EXPECT_EQ(col_row_idx_to_position_idx(col_row5[0], col_row5[1]), i5);
+    EXPECT_EQ(col_row_idx_to_position_idx(col_row6[0], col_row6[1]), i6);
+    EXPECT_EQ(col_row_idx_to_position_idx(col_row7[0], col_row7[1]), i7);
 }
 
 TEST(Bitboards, BoardScan)
@@ -258,13 +258,15 @@ TEST(Bitboard, MailboxImport)
     EXPECT_TRUE(get_board_at_idx(pawns, 49));
 
     uint64_t b_king = board.get_king(Black);
-    EXPECT_TRUE(get_board_at_idx(b_king, row_col_idx_to_position_idx(4, 7)));
+    EXPECT_TRUE(get_board_at_idx(b_king, col_row_idx_to_position_idx(4, 7)));
 }
 
 TEST(Bitboard, PushPopMoves)
 {
     C_Board board = mailbox_to_bitboard_representation(get_example_board());
     board.collect_legal_moves();
+
+    // first move
     auto legal_moves = board.legal_moves;
     move m = create_move(0, 0);
     for (move mv : legal_moves)
@@ -280,5 +282,41 @@ TEST(Bitboard, PushPopMoves)
 
     board.push_move(m);
     uint8_t dest_piece_type = get_piece_type_of_field(&board, m.dest);
+    uint8_t src_piece_type = get_piece_type_of_field(&board, m.src);
     EXPECT_EQ((int)dest_piece_type, (int)pKnight);
+    EXPECT_EQ((int)src_piece_type, 0);
+    EXPECT_EQ((int)m.prev_half_move_c, 0);
+    EXPECT_EQ((int)board.half_moves, 1);
+    EXPECT_EQ((int)board.moves, 0);
+    EXPECT_EQ((int)board.turn, -1);
+
+    // second_move
+    board.collect_legal_moves();
+    legal_moves = board.legal_moves;
+
+    for (move mv : legal_moves)
+    {
+
+        if (mv.src == col_row_idx_to_position_idx(3, 6) && mv.dest == 28)
+        {
+            print_move(mv);
+            m = mv;
+        }
+    }
+    EXPECT_EQ((int)m.dest, 28);
+    EXPECT_EQ((int)m.capture, 0);
+    EXPECT_EQ((int)m.flag, 0);
+
+    board.push_move(m);
+    dest_piece_type = get_piece_type_of_field(&board, m.dest);
+    src_piece_type = get_piece_type_of_field(&board, m.src);
+
+    EXPECT_EQ((int)dest_piece_type, (int)pPawn);
+    EXPECT_EQ((int)src_piece_type, 0);
+    // EXPECT_EQ((int)m.prev_half_move_c, 1);
+    EXPECT_EQ((int)board.half_moves, 0);
+    EXPECT_EQ((int)board.moves, 1);
+    EXPECT_EQ((int)board.turn, 1);
+
+    // EXPECT_EQ(false, true);
 }
