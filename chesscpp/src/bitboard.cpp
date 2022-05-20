@@ -83,14 +83,6 @@ void extract_captures_with_explicit_src(const C_Board *board, uint64_t move_boar
     }
 }
 
-inline bool check_move_causes_check(C_Board &board, move &m)
-{
-    board.push_move(m);
-    bool check = board.king_attack;
-    board.pop_move();
-    return check;
-}
-
 UCIStrings get_uci_moves(C_Board board)
 {
     board.collect_legal_moves();
