@@ -87,7 +87,7 @@ UCIStrings get_uci_moves(C_Board &board)
 {
     board.collect_legal_moves();
     std::vector<move> moves = board.legal_moves;
-    moves.capacity(32);
+    moves.reserve(32);
     UCIStrings uci_moves = {};
     for (move m : moves)
     {
