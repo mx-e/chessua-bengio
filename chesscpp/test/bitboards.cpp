@@ -367,3 +367,522 @@ TEST(Bitboard, PushPopMoves)
     // TODO
     // EXPECT_EQ(false, true);
 }
+
+int row_col_to_idx(int row, int col)
+{
+    return row * 8 + col;
+}
+
+template <class T>
+bool _exists(std::vector<T> iterable, std::function<bool(T)> condition)
+{
+    bool found;
+    for (auto item : iterable)
+    {
+        found = found || condition(item);
+    }
+    return found;
+}
+
+TEST(PossibleCBoards, PawnOpeningWhite)
+{
+    Board board{};
+    board[0].at(1) = 6;
+
+    // BoardState boardState{board, COLOR_WHITE};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    // 0 = a1 1 = a2
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 1) && move.dest == row_col_to_idx(0, 2); }),
+              true);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 1) && move.dest == row_col_to_idx(0, 3); }),
+              true);
+}
+
+TEST(PossibleCBoards, PawnOpeningWhiteBlocked)
+{
+    Board board{};
+    board[0].at(1) = 6;
+    board[0].at(2) = -6;
+
+    // BoardState boardState{board, COLOR_WHITE};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 0);
+}
+
+TEST(PossibleCBoards, PawnOpeningBlack)
+{
+    Board board{};
+    board[0].at(6) = -6;
+
+    // BoardState boardState{board, COLOR_BLACK};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = Black;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 6) && move.dest == row_col_to_idx(0, 5); }),
+              true);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 6) && move.dest == row_col_to_idx(0, 4); }),
+              true);
+}
+
+TEST(PossibleCBoards, PawnOpeningBlackBlocked)
+{
+    Board board{};
+    board[0].at(6) = -6;
+    board[0].at(5) = 6;
+
+    // BoardState boardState{board, COLOR_BLACK};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = Black;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 0);
+}
+
+TEST(PossibleCBoards, BlockedRook)
+{
+    Board board{};
+    board[0].at(0) = 5;
+    board[1].at(0) = 6;
+    board[0].at(3) = 6;
+
+    // BoardState boardState{board, COLOR_WHITE;
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 4);
+}
+
+TEST(PossibleCBoards, PawnCaptures)
+{
+    Board board{};
+    board[4].at(1) = 6;
+
+    board[3].at(2) = -6;
+    board[5].at(2) = -6;
+
+    // BoardState boardState{board, COLOR_WHITE};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(4, 1) && move.dest == row_col_to_idx(3, 2) && move.capture == 6; }),
+              true);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(4, 1) && move.dest == row_col_to_idx(5, 2) && move.capture == 6; }),
+              true);
+
+    EXPECT_EQ(moves.size(), 4);
+}
+
+TEST(PossibleCBoards, QueenCapture)
+{
+    Board board{};
+    board[0].at(0) = 2;
+    board[0].at(3) = -6;
+
+    // BoardState boardState{board, COLOR_WHITE};
+    // boardState.window = Window{0, 0, 1, 8};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 0) && move.dest == row_col_to_idx(0, 4); }),
+              false);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 0) && move.dest == row_col_to_idx(0, 3) && move.capture == 6; }),
+              true);
+
+    EXPECT_EQ(moves.size(), 17);
+}
+
+TEST(PossibleCBoards, PawnNoStraightCaptureWhite)
+{
+    Board board{};
+    board[0].at(1) = 6;
+    board[1].at(1) = 6;
+
+    board[0].at(2) = -6;
+    board[1].at(3) = -6;
+
+    // BoardState boardState{board, COLOR_WHITE};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 2);
+}
+
+TEST(PossibleCBoards, PawnNoStraightCaptureBlack)
+{
+    Board board{};
+    board[0].at(6) = -6;
+    board[1].at(6) = -6;
+
+    board[0].at(5) = 6;
+    board[1].at(4) = 6;
+
+    // BoardState boardState{board, COLOR_BLACK};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = Black;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 2);
+}
+
+TEST(PossibleCBoards, CheckBlack)
+{
+    Board board{};
+    board[0].at(0) = 1;
+    board[0].at(2) = -2;
+
+    //BoardState boardState{board, COLOR_BLACK};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(_exists<move>(moves, [&cboard](move move)
+                            { return check_move_causes_check(cboard, move); }),
+              true);
+}
+
+TEST(PossibleCBoards, CheckWhite)
+{
+    Board board{};
+    board[0].at(0) = -1;
+    board[0].at(2) = 2;
+
+    //BoardState boardState{board, COLOR_WHITE};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = Black;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(_exists<move>(moves, [&cboard](move move)
+                            { return check_move_causes_check(cboard, move); }),
+              true);
+}
+
+TEST(PossibleCBoards, PawnPromotionWhite)
+{
+    Board board{};
+    board[0].at(6) = 6;
+
+    // BoardState boardState{board, COLOR_WHITE};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 4);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 6) && move.dest == row_col_to_idx(0, 7) && move.flag == 2; }),
+              true);
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 6) && move.dest == row_col_to_idx(0, 7) && move.flag == 3; }),
+              true);
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 6) && move.dest == row_col_to_idx(0, 7) && move.flag == 4; }),
+              true);
+}
+
+TEST(PossibleCBoards, PawnPromotionBlack)
+{
+    Board board{};
+    board[0].at(1) = -6;
+
+    // BoardState boardState{board, COLOR_BLACK};
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = Black;
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 4);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 1) && move.dest == row_col_to_idx(0, 0) && move.flag == 2; }),
+              true);
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 1) && move.dest == row_col_to_idx(0, 0) && move.flag == 3; }),
+              true);
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+                            { return move.src == row_col_to_idx(0, 1) && move.dest == row_col_to_idx(0, 0) && move.flag == 4; }),
+              true);
+
+    EXPECT_EQ(moves.size(), 4);
+}
+
+TEST(PossibleCBoards, UCIStringPawnMove)
+{
+    Board board{};
+    board[3].at(2) = 6;
+
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    UCIStrings uci = get_uci_moves(cboard);
+
+    // TODO: There is a space after the uci-string?
+    EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
+                                   { return uci_string == "d3d4 "; }),
+              true);
+}
+
+TEST(PossibleCBoards, UCIStringQueenMove)
+{
+    Board board{};
+    board[3].at(2) = 2;
+
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    UCIStrings uci = get_uci_moves(cboard);
+
+    EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
+                                   { return uci_string == "d3g6 "; }),
+              true);
+}
+
+TEST(PossibleCBoards, UCIStringPromotion)
+{
+    Board board{};
+    board[3].at(6) = 6;
+
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    UCIStrings uci = get_uci_moves(cboard);
+
+    EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
+                                   { return uci_string == "d7d8q"; }),
+              true);
+
+    EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
+                                   { return uci_string == "d7d8b"; }),
+              true);
+
+    EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
+                                   { return uci_string == "d7d8n"; }),
+              true);
+
+    EXPECT_EQ(_exists<std::string>(uci, [](std::string uci_string)
+                                   { return uci_string == "d7d8r"; }),
+              true);
+}
+
+/**
+ * @brief These tests are yet to be ported.
+ * 
+ 
+BoardStates get_castling_scenario_black(Board board, ColorCastlingRights rights)
+{
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.castlingRights = CastlingRights{.black = rights};
+    boardState.window = rights.queenSide ? Window{0, 7, 5, 8} : Window{4, 7, 8, 8};
+    return get_possible_boards(boardState);
+}
+
+BoardStates get_castling_scenario_white(Board board, ColorCastlingRights rights)
+{
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.castlingRights = CastlingRights{.white = rights};
+    boardState.window = rights.queenSide ? Window{0, 0, 5, 1} : Window{4, 0, 8, 1};
+    return get_possible_boards(boardState);
+}
+
+TEST(PossibleBoards, KingSideCastleWhite)
+{
+    Board board{};
+    board[4].at(0) = 1;
+    board[7].at(0) = 5;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 4);
+    EXPECT_CASTLE_EXISTS(boardStates, KingSide, 1);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.white.kingSide; });
+}
+
+TEST(PossibleBoards, QueenSideCastleWhite)
+{
+    Board board{};
+    board[4].at(0) = 1;
+    board[0].at(0) = 5;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{true, false});
+
+    EXPECT_EQ(boardStates.size(), 5);
+    EXPECT_CASTLE_EXISTS(boardStates, QueenSide, 1);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.white.queenSide; });
+}
+
+TEST(PossibleBoards, KingSideCastleBlack)
+{
+    Board board{};
+    board[4].at(7) = -1;
+    board[7].at(7) = -5;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 4);
+    EXPECT_CASTLE_EXISTS(boardStates, KingSide, COLOR_BLACK);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.black.kingSide; });
+}
+
+TEST(PossibleBoards, QueenSideCastleBlack)
+{
+    Board board{};
+    board[4].at(7) = -1;
+    board[0].at(7) = -5;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{true, false});
+
+    EXPECT_EQ(boardStates.size(), 5);
+    EXPECT_CASTLE_EXISTS(boardStates, QueenSide, COLOR_BLACK);
+
+    EXPECT_FORALL(boardStates, [](BoardState boardState)
+                  { return !boardState.castlingRights.black.queenSide; });
+}
+
+TEST(PossibleBoards, KingSideCastleWhiteBlocked)
+{
+    Board board{};
+    board[4].at(0) = 1;
+    board[7].at(0) = 5;
+    board[6].at(0) = -4;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 2);
+}
+
+TEST(PossibleBoards, QueenSideCastleWhiteBlocked)
+{
+    Board board{};
+    board[4].at(0) = 1;
+    board[0].at(0) = 5;
+    board[3].at(0) = -4;
+
+    BoardStates boardStates = get_castling_scenario_white(board, ColorCastlingRights{true, false});
+
+    EXPECT_EQ(boardStates.size(), 4);
+}
+
+TEST(PossibleBoards, KingSideCastleBlackBlocked)
+{
+    Board board{};
+    board[4].at(7) = -1;
+    board[7].at(7) = -5;
+    board[5].at(7) = 4;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{false, true});
+
+    EXPECT_EQ(boardStates.size(), 3);
+}
+
+TEST(PossibleBoards, QueenSideCastleBlackBlocked)
+{
+    Board board{};
+    board[4].at(7) = -1;
+    board[0].at(7) = -5;
+    board[3].at(7) = 4;
+
+    BoardStates boardStates = get_castling_scenario_black(board, ColorCastlingRights{true, false});
+    EXPECT_EQ(boardStates.size(), 4);
+}
+
+ * TEST(PossibleBoards, EnPassantWhite)
+{
+    Board board{};
+    board[0].at(0) = 6;
+    board[1].at(0) = -6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    boardState.enpassant = EnPassants{{1, 1}};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[1][1] == 6 && boardState.board[1][0] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][1] == 6 && boardState.board[1][0] == -6; });
+}
+
+TEST(PossibleBoards, EnPassantBlack)
+{
+    Board board{};
+    board[0].at(3) = 6;
+    board[1].at(3) = -6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    boardState.enpassant = EnPassants{{0, 2}};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[0][2] == -6 && boardState.board[0][3] == 0; });
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.board[1][2] == -6 && boardState.board[0][3] == 6; });
+}
+
+TEST(PossibleBoards, EnPassantSetCorrectlyWhite)
+{
+    Board board{};
+    board[0].at(1) = 6;
+
+    BoardState boardState{board, COLOR_WHITE};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.enpassant.size() > 0 && boardState.enpassant[0].first == 0 && boardState.enpassant[0].second == 2; });
+}
+
+TEST(PossibleBoards, EnPassantSetCorrectlyBlack)
+{
+    Board board{};
+    board[0].at(6) = -6;
+
+    BoardState boardState{board, COLOR_BLACK};
+    BoardStates boardStates = get_possible_boards(boardState);
+
+    EXPECT_EQ(boardStates.size(), 2);
+
+    EXPECT_EXISTS(boardStates, [](BoardState boardState)
+                  { return boardState.enpassant.size() > 0 && boardState.enpassant[0].first == 0 && boardState.enpassant[0].second == 5; });
+}
+ */
