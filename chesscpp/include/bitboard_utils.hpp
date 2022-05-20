@@ -136,14 +136,6 @@ inline std::string field_id_to_string(uint8_t idx)
     return col_int_to_string_map.at(col_row[0]) + std::to_string(col_row[1] + 1);
 }
 
-inline bool check_move_causes_check(C_Board &board, move &m)
-{
-    board.push_move(m);
-    bool check = board.king_attack;
-    board.pop_move();
-    return check;
-}
-
 inline std::string move_to_uci_str(const move m)
 {
     char flag = piece_code_to_char.at(m.flag);
