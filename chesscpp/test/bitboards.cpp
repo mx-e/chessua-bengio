@@ -109,7 +109,7 @@ TEST(Bitboards, BoardScan)
     uint64_t bb1 = board.get_bishops(Black);
     uint64_t bb2 = board.get_rooks(White);
     uint64_t bb3 = board.get_pawn_double_moves(board.get_pawn_single_moves(White), White);
-    uint64_t bb4 = board.get_king_moves(col_row_idx_to_position_idx(4, 7));
+    uint64_t bb4 = board.get_king_moves(col_row_idx_to_position_idx(4, 7)) & board.get_empty_fields();
 
     std::list<int> idx_list1 = scan_board(bb1);
     std::list<int> idx_list2 = scan_board(bb2);
