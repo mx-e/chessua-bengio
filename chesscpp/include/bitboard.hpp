@@ -52,6 +52,7 @@ public:
 
     std::vector<move> legal_moves = std::vector<move>();
     std::stack<move> move_stack = std::stack<move>();
+    bool king_attack = false;
 
     const std::map<float, int>
         color_to_BB_index = {{-1., 0}, {1., 7}};
@@ -152,23 +153,14 @@ public:
 
     inline uint64_t get_knight_moves(const float color, const int field_idx)
     {
-        return knight_moves[field_idx] & get_empty_fields();
+        return knight_moves[field_idx];
     }
 
-    inline uint64_t get_knight_attacks(const float color, const int field_idx)
-    {
-        return knight_moves[field_idx] & get_enemy_fields(color);
-    }
     inline void collect_knight_moves_and_captures();
 
     inline uint64_t get_king_moves(const int field_idx)
     {
-        return king_moves[field_idx] & get_empty_fields();
-    }
-
-    inline uint64_t get_king_attacks(const float color, const int field_idx)
-    {
-        return king_moves[field_idx] & get_enemy_fields(color);
+        return king_moves[field_idx];
     }
 
     inline void collect_king_moves_and_captures();
