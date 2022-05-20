@@ -87,6 +87,7 @@ UCIStrings get_uci_moves(C_Board &board)
 {
     board.collect_legal_moves();
     std::vector<move> moves = board.legal_moves;
+    moves.capacity(32);
     UCIStrings uci_moves = {};
     for (move m : moves)
     {
@@ -232,7 +233,7 @@ void C_Board::push_move(move m)
 
     turn *= -1;
 
-    move_stack.push(m);
+    move_stack.push_back(m);
     legal_moves = std::vector<move>();
 }
 
@@ -242,7 +243,7 @@ move C_Board::pop_move()
     {
         return create_move(0, 0);
     }
-    move m = move_stack.top();
+    move m = move_stack.back();
 
     // update board
     uint8_t piece_type = get_piece_type_of_field(this, m.dest);
@@ -263,7 +264,7 @@ move C_Board::pop_move()
 
     turn *= -1;
     king_attack = false;
-    move_stack.pop();
+    move_stack.pop_back();
     legal_moves = std::vector<move>();
     return m;
 }

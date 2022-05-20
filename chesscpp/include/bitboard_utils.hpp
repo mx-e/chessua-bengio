@@ -4,6 +4,7 @@
 #include <map>
 #include <bit>
 #include <array>
+#include <list>
 #include <stdint.h>
 #include "bitboard_constants.hpp"
 
@@ -102,23 +103,30 @@ inline std::vector<int> scan_board(uint64_t bb)
 {
     std::vector<int> idx_list = std::vector<int>();
     if (bb)
+    {
+        idx_list.reserve(16);
         do
         {
             idx_list.push_back(forward_scan(bb));
         } while (bb &= bb - 1);
+    }
     return idx_list;
 }
 
 inline std::vector<int> scan_board_reverse(uint64_t bb)
 {
     std::vector<int> idx_list = std::vector<int>();
-    int reverse_scan_idx = 0;
     if (bb)
+    {
+        idx_list.reserve(16);
+        int reverse_scan_idx = 0;
         do
         {
             reverse_scan_idx = reverse_scan(bb);
             idx_list.push_back(reverse_scan_idx);
         } while (bb &= ~(most_sig_bit >> reverse_scan_idx));
+    }
+
     return idx_list;
 }
 

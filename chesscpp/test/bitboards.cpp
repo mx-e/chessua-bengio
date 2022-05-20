@@ -319,7 +319,7 @@ TEST(Bitboard, PushPopMoves)
 
     EXPECT_EQ((int)dest_piece_type, (int)pPawn);
     EXPECT_EQ((int)src_piece_type, 0);
-    EXPECT_EQ((int)board.move_stack.top().prev_half_move_c, 1);
+    EXPECT_EQ((int)board.move_stack.back().prev_half_move_c, 1);
     EXPECT_EQ((int)board.half_moves, 0);
     EXPECT_EQ((int)board.moves, 1);
     EXPECT_EQ((int)board.turn, 1);
@@ -345,7 +345,7 @@ TEST(Bitboard, PushPopMoves)
     src_piece_type = get_piece_type_of_field(&board, m.src);
     EXPECT_EQ((int)dest_piece_type, (int)pKnight);
     EXPECT_EQ((int)src_piece_type, 0);
-    EXPECT_EQ((int)board.move_stack.top().prev_half_move_c, 0);
+    EXPECT_EQ((int)board.move_stack.back().prev_half_move_c, 0);
     EXPECT_EQ((int)board.half_moves, 0);
     EXPECT_EQ((int)board.moves, 1);
     EXPECT_EQ((int)board.turn, -1);
@@ -357,7 +357,7 @@ TEST(Bitboard, PushPopMoves)
     EXPECT_EQ((int)dest_piece_type, (int)pPawn);
     EXPECT_TRUE((bool)get_board_at_idx(board.pieces[b_black], m.dest));
     EXPECT_EQ((int)src_piece_type, pKnight);
-    EXPECT_EQ((int)board.move_stack.top().prev_half_move_c, 1);
+    EXPECT_EQ((int)board.move_stack.back().prev_half_move_c, 1);
     EXPECT_EQ((int)board.half_moves, 0);
     EXPECT_EQ((int)board.moves, 1);
     EXPECT_EQ((int)board.turn, 1);

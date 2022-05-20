@@ -63,9 +63,7 @@ const uint64_t edge_half = 0xC3C3C3C3C3C3C3C3LL;
 const uint64_t most_sig_bit = 0x8000000000000000LL;
 const uint64_t empty_board = 0x0000000000000000LL;
 
-const uint64_t castling_w_ks_no_attack = 0x00
-
-    const uint64_t white_pawns_starting_config = row_2;
+const uint64_t white_pawns_starting_config = row_2;
 const uint64_t black_pawns_starting_config = row_7;
 const uint64_t white_rooks_starting_config = row_1 & (col_a | col_h);
 const uint64_t black_rooks_starting_config = row_8 & (col_a | col_h);

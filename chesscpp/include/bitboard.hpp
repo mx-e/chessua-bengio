@@ -51,7 +51,8 @@ public:
     float half_moves = 0.;
 
     std::vector<move> legal_moves = std::vector<move>();
-    std::stack<move> move_stack = std::stack<move>();
+    std::vector<move> move_stack = std::vector<move>();
+
     bool king_attack = false;
 
     const std::map<float, int>
