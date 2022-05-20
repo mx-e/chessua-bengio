@@ -15,35 +15,47 @@ inline void print_move(move m)
     std::cout << "capt:" << (int)m.capture << "\n";
     std::cout << "flag:" << (int)m.flag << "\n\n";
 }
+enum pawn_shift
+{
+    single,
+    attack_left,
+    attack_right,
+    single_reverse,
+    attack_left_reverse,
+    attack_right_reverse,
+};
 
-const std::map<float, uint64_t> shift_mask_map = {
-    {1., ~(row_8)},
-    {-1., ~(row_1)},
-    {-7., ~(row_8)},
-    {9., ~(row_8)},
-    {7, ~row_1},
-    {-9, ~row_1},
-    {10., ~(row_7 | row_8)},
-    {17., ~row_8},
-    {15., ~row_1},
-    {6., ~(row_1 | row_2)},
-    {-10., ~(row_1 | row_2)},
-    {-17., ~row_1},
-    {-15, ~row_8},
-    {-6, ~(row_7 | row_8)}};
+const std::map<pawn_shift, float>
+    pawn_shift_map = {{single, 1.},
+                      {attack_right, 9.},
+                      {attack_left, -7.},
+                      {single_reverse, -1.},
+                      {attack_left_reverse, 7.},
+                      {attack_right_reverse, -9.}};
+
+const std::map<float, uint64_t>
+    pawn_shift_mask_map = {
+        {single, ~(row_8)},
+        {single_reverse, ~row_1},
+        {attack_left, ~(row_8)},
+        {attack_right, ~(row_8)},
+        {attack_left_reverse, ~row_1},
+        {attack_right_reverse, ~row_1},
+};
 
 // shifts are denoted in field index change not left/right bit shift
 // they are the negative of bit shift
-inline uint64_t shift_by_n(const float shift, const uint64_t val)
+inline uint64_t
+shift_by_n(const float shift, const uint64_t val)
 {
     return shift > 0 ? val >> (int)shift : val << (int)(shift * -1.);
 }
 
 // shifts are denoted in field index change not left/right bit shift
-inline uint64_t mask_and_shift_by_n(const float shift, const uint64_t val)
+inline uint64_t mask_and_shift_by_n(const pawn_shift shift, uint64_t val, float color)
 {
-    uint64_t shift_mask = shift_mask_map.at(shift);
-    return shift_by_n(shift, val & shift_mask);
+    uint64_t shift_mask = pawn_shift_mask_map.at(shift);
+    return shift_by_n(pawn_shift_map.at(shift) * color, val & shift_mask);
 }
 
 inline std::array<uint8_t, 2> position_idx_to_col_row_idx(uint8_t position_idx)

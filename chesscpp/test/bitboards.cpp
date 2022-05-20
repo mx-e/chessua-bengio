@@ -108,8 +108,8 @@ TEST(Bitboards, BoardScan)
     C_Board board = get_new_game_board();
     uint64_t bb1 = board.get_bishops(Black);
     uint64_t bb2 = board.get_rooks(White);
-    uint64_t bb3 = board.get_pawn_double_moves(White);
-    uint64_t bb4 = board.get_king_moves_and_attacks(Black);
+    uint64_t bb3 = board.get_pawn_double_moves(board.get_pawn_single_moves(White), White);
+    uint64_t bb4 = board.get_king_moves(col_row_idx_to_position_idx(4, 7));
 
     std::list<int> idx_list1 = scan_board(bb1);
     std::list<int> idx_list2 = scan_board(bb2);
@@ -299,7 +299,6 @@ TEST(Bitboard, PushPopMoves)
 
         if (mv.src == col_row_idx_to_position_idx(3, 6) && mv.dest == 28)
         {
-            print_move(mv);
             m = mv;
         }
     }
@@ -313,10 +312,58 @@ TEST(Bitboard, PushPopMoves)
 
     EXPECT_EQ((int)dest_piece_type, (int)pPawn);
     EXPECT_EQ((int)src_piece_type, 0);
-    // EXPECT_EQ((int)m.prev_half_move_c, 1);
+    EXPECT_EQ((int)board.move_stack.top().prev_half_move_c, 1);
     EXPECT_EQ((int)board.half_moves, 0);
     EXPECT_EQ((int)board.moves, 1);
     EXPECT_EQ((int)board.turn, 1);
 
+    // third_move (capture)
+    board.collect_legal_moves();
+    legal_moves = board.legal_moves;
+
+    for (move mv : legal_moves)
+    {
+        if (mv.capture != 0)
+        {
+            m = mv;
+        }
+    }
+    EXPECT_EQ((int)m.dest, 28);
+    EXPECT_EQ((int)m.src, 18);
+    EXPECT_EQ((int)m.capture, 6);
+    EXPECT_EQ((int)m.flag, 0);
+
+    board.push_move(m);
+    dest_piece_type = get_piece_type_of_field(&board, m.dest);
+    src_piece_type = get_piece_type_of_field(&board, m.src);
+    EXPECT_EQ((int)dest_piece_type, (int)pKnight);
+    EXPECT_EQ((int)src_piece_type, 0);
+    EXPECT_EQ((int)board.move_stack.top().prev_half_move_c, 0);
+    EXPECT_EQ((int)board.half_moves, 0);
+    EXPECT_EQ((int)board.moves, 1);
+    EXPECT_EQ((int)board.turn, -1);
+
+    // rolling back capture
+    m = board.pop_move();
+    dest_piece_type = get_piece_type_of_field(&board, m.dest);
+    src_piece_type = get_piece_type_of_field(&board, m.src);
+    EXPECT_EQ((int)dest_piece_type, (int)pPawn);
+    EXPECT_TRUE((bool)get_board_at_idx(board.pieces[b_black], m.dest));
+    EXPECT_EQ((int)src_piece_type, pKnight);
+    EXPECT_EQ((int)board.move_stack.top().prev_half_move_c, 1);
+    EXPECT_EQ((int)board.half_moves, 0);
+    EXPECT_EQ((int)board.moves, 1);
+    EXPECT_EQ((int)board.turn, 1);
+
+    // pawn promotion and rollback
+    C_Board promo_board = C_Board();
+    promo_board.set_single_piece(White, pPawn, 6);
+    promo_board.collect_legal_moves();
+    legal_moves = promo_board.legal_moves;
+
+    // TODO
+
+    // pawn promotion capture and rollback
+    // TODO
     // EXPECT_EQ(false, true);
 }

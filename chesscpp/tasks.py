@@ -1,3 +1,4 @@
+from pickle import BUILD
 from invoke import task 
 import invoke
 import os
@@ -60,7 +61,8 @@ CXX = CONFIG["CXX"]
 def configure_cmake(files=list[str], includeGTest=False):
     files_str = "\n".join([f'    {file}' for file in files])
     print(files_str)
-    if includeGTest: return CMAKELISTS.format(CXX, G_TEST_FETCH, G_COMPILE_OPTIONS, files_str, G_TEST_LINK_LIBRARY, G_TEST_INCLUDE)
+    if includeGTest: return CMAKELISTS.format(CXX, G_TEST_FETCH, G_COMPILE_OPTIONS, files_str, G_TEST_LINK_LIBRARY, G_TEST_INCLUDE
+    )
     return CMAKELISTS.format(CXX, '', '', files_str, '', '')
 
 

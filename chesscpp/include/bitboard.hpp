@@ -134,74 +134,41 @@ public:
 
     inline uint64_t get_pawn_single_moves(const float color)
     {
-        float shift = 1. * color;
-        uint64_t no_promotion_mask = color == 1. ? ~row_7 : ~row_2;
-        uint64_t pawns = get_pawns(color) & no_promotion_mask;
-        return mask_and_shift_by_n(shift, pawns) & get_empty_fields();
+        return mask_and_shift_by_n(single, get_pawns(color), color) & get_empty_fields();
     }
 
-    inline uint64_t get_pawn_promotions(const float color)
-    {
-        float shift = 1. * color;
-        uint64_t promotion_mask = color == 1. ? row_7 : row_2;
-        uint64_t pawns = get_pawns(color) & promotion_mask;
-        return mask_and_shift_by_n(shift, pawns) & get_empty_fields();
-    }
-
-    inline uint64_t get_pawn_promotion_attacks_left(const float color)
-    {
-        float shift = -7. * color;
-        uint64_t promotion_mask = color == 1. ? row_7 : row_2;
-        uint64_t pawns = get_pawns(color) & promotion_mask;
-        return mask_and_shift_by_n(shift, pawns) & get_empty_fields();
-    }
-
-    inline uint64_t get_pawn_promotion_attacks_right(const float color)
-    {
-        float shift = 9. * color;
-        uint64_t promotion_mask = color == 1. ? row_7 : row_2;
-        uint64_t pawns = get_pawns(color) & promotion_mask;
-        return mask_and_shift_by_n(shift, pawns) & get_empty_fields();
-    }
-
-    inline uint64_t get_pawn_double_moves(const float color)
+    inline uint64_t get_pawn_double_moves(uint64_t single_moves, const float color)
     {
         uint64_t half = color == 1. ? white_half : black_half;
-        float shift = 1. * color;
-        uint64_t single_moves = get_pawn_single_moves(color) & center_half;
-        return mask_and_shift_by_n(shift, single_moves) & get_empty_fields() & half;
+        return mask_and_shift_by_n(single, single_moves, color) & get_empty_fields() & half;
     }
 
-    inline uint64_t get_pawn_attacks_left(const float color)
+    inline uint64_t get_pawn_attacks(const pawn_shift direction, const float color)
     {
-        float shift_left_attack = -7 * color;
-        int color_idx = color_to_BB_index.at(color * -1);
-        return mask_and_shift_by_n(shift_left_attack, get_pawns(color)) & pieces[color_idx];
+        return mask_and_shift_by_n(direction, get_pawns(color), color) & get_enemy_fields(color);
     }
 
-    inline uint64_t get_pawn_attacks_right(const float color)
-    {
-        float shift_right_attack = 9. * color;
-        int color_idx = color_to_BB_index.at(color * -1);
-        return mask_and_shift_by_n(shift_right_attack, get_pawns(color)) & pieces[color_idx];
-    }
     inline void collect_pawn_moves_and_captures();
 
-    inline uint64_t get_knight_moves(const float color, const uint64_t field_idx)
+    inline uint64_t get_knight_moves(const float color, const int field_idx)
     {
         return knight_moves[field_idx] & get_empty_fields();
     }
 
-    inline uint64_t get_knight_attacks(const float color, const uint64_t field_idx)
+    inline uint64_t get_knight_attacks(const float color, const int field_idx)
     {
         return knight_moves[field_idx] & get_enemy_fields(color);
     }
     inline void collect_knight_moves_and_captures();
 
-    inline uint64_t get_king_moves_and_attacks(const float color)
+    inline uint64_t get_king_moves(const int field_idx)
     {
-        int king_pos = scan_board(get_king(color)).front();
-        return king_moves[king_pos] & get_empty_or_enemy(color);
+        return king_moves[field_idx] & get_empty_fields();
+    }
+
+    inline uint64_t get_king_attacks(const float color, const int field_idx)
+    {
+        return king_moves[field_idx] & get_enemy_fields(color);
     }
 
     inline void collect_king_moves_and_captures();
