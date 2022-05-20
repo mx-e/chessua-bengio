@@ -90,6 +90,10 @@ UCIStrings get_uci_moves(C_Board board)
     UCIStrings uci_moves = {};
     for (move m : moves)
     {
+        if (check_move_causes_check(board, m))
+        {
+            continue;
+        }
         uci_moves.push_back(move_to_uci_str(m));
     }
     return uci_moves;
