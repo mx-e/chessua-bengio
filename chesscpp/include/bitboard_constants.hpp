@@ -1,6 +1,7 @@
 #ifndef BB_CONSTANTS
 #define BB_CONSTANTS
 #include <map>
+#include <array>
 #include <vector>
 #include <stdint.h>
 
@@ -13,6 +14,28 @@ const uint8_t pPawn = 6;
 
 const int Black = -1.;
 const int White = 1.;
+
+enum board
+{
+    b_black,
+    b_kings,
+    b_queens,
+    b_bishops,
+    b_knights,
+    b_rooks,
+    b_pawns,
+    b_white,
+};
+enum castling
+{
+    w_kingside,
+    w_queenside,
+    b_kingside,
+    b_queenside,
+};
+
+const std::map<float, int>
+    color_to_BB_index = {{-1., 0}, {1., 7}};
 
 enum knight_direction
 {
@@ -62,6 +85,49 @@ const uint64_t center_half = 0x3C3C3C3C3C3C3C3CLL;
 const uint64_t edge_half = 0xC3C3C3C3C3C3C3C3LL;
 const uint64_t most_sig_bit = 0x8000000000000000LL;
 const uint64_t empty_board = 0x0000000000000000LL;
+
+const uint64_t w_ks_castling_mask = 0x0000000080000080LL;
+const uint64_t w_qs_castling_mask = 0x8000000080000000LL;
+const uint64_t b_ks_castling_mask = 0x0000000001000001LL;
+const uint64_t b_qs_castling_mask = 0x0100000001000000LL;
+
+const uint64_t w_ks_castling_no_attack = 0x0000000080808000LL;
+const uint64_t w_qs_castling_no_attack = 0x0000808080000000LL;
+const uint64_t b_ks_castling_no_attack = 0x0000000001010100LL;
+const uint64_t b_qs_castling_no_attack = 0x0000010101000000LL;
+
+const uint64_t w_ks_castling_free = 0x0000000000808000LL;
+const uint64_t w_qs_castling_free = 0x0080808000000000LL;
+const uint64_t b_ks_castling_free = 0x0000000000010100LL;
+const uint64_t b_qs_castling_free = 0x0001010100000000LL;
+
+const uint64_t ep_zone = row_3 | row_6;
+
+const std::map<float, std::array<uint64_t, 2>> color_to_castling_mask =
+    {{1., {w_ks_castling_mask, w_qs_castling_mask}}, {-1., {b_ks_castling_mask, b_qs_castling_mask}}};
+
+const std::map<float, std::array<uint64_t, 2>> color_to_castling_no_attack =
+    {{1., {w_ks_castling_no_attack, w_qs_castling_no_attack}}, {-1., {b_ks_castling_no_attack, b_qs_castling_no_attack}}};
+
+const std::map<float, uint64_t> castling_to_castling_free =
+    {{w_kingside, w_ks_castling_free},
+     {w_queenside, w_qs_castling_free},
+     {b_kingside, b_ks_castling_free},
+     {b_queenside, b_qs_castling_free}};
+
+const uint8_t w_ks_castling_state_mask = UINT8_C(0x01);
+const uint8_t w_qs_castling_state_mask = UINT8_C(0x02);
+const uint8_t b_ks_castling_state_mask = UINT8_C(0x04);
+const uint8_t b_qs_castling_state_mask = UINT8_C(0x08);
+
+const std::map<castling, uint8_t> castling_to_castling_state_mask =
+    {{w_kingside, w_ks_castling_state_mask},
+     {w_queenside, w_qs_castling_state_mask},
+     {b_kingside, b_ks_castling_state_mask},
+     {b_queenside, b_qs_castling_state_mask}};
+
+const std::map<float, std::array<castling, 2>> color_to_castling_indicator =
+    {{1., {w_kingside, w_queenside}}, {-1., {b_kingside, b_queenside}}};
 
 const uint64_t white_pawns_starting_config = row_2;
 const uint64_t black_pawns_starting_config = row_7;

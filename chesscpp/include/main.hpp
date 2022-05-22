@@ -27,6 +27,7 @@ inline void bb_runtime_benchmark(Board board, int color, EnPassants enpassant, b
     C_Board bitboard = bb_create_board(board);
     for (int _ = 0; _ < runs; _++)
     {
+        // get_uci_moves(bitboard);
         bitboard.collect_legal_moves();
     }
 }

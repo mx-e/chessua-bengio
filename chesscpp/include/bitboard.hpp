@@ -12,39 +12,14 @@
 #include "bitboard_constants.hpp"
 #include "types.hpp"
 #include "bitboard_utils.hpp"
-enum enumBoards
-{
-    b_black,
-    b_kings,
-    b_queens,
-    b_bishops,
-    b_knights,
-    b_rooks,
-    b_pawns,
-    b_white,
-};
-enum enumCastling
-{
-    w_kingside,
-    w_queenside,
-    b_kingside,
-    b_queenside,
-};
-
-enum enumEnPassant
-{
-    en_passant_col,
-    en_passant_row
-};
 
 class C_Board
 {
 public:
     uint64_t pieces[8];
 
-    uint8_t castling[4];
-
-    uint8_t en_passant[2];
+    uint8_t castling_rights = UINT8_C(0x0F);
+    uint8_t en_passant = UINT8_C(0x00);
 
     float turn = 1.;
     float moves = 0.;
@@ -54,9 +29,12 @@ public:
     std::vector<move> move_stack = std::vector<move>();
 
     bool king_attack = false;
+    bool castling_move_illegal = false;
 
-    const std::map<float, int>
-        color_to_BB_index = {{-1., 0}, {1., 7}};
+    inline void set_castling_rights(castling c_type, bool val)
+    {
+        castling_rights &= (uint8_t)~castling_to_castling_state_mask.at(c_type) & ((uint8_t)val << (int)c_type);
+    }
 
     inline uint64_t get_pieces(const float color, const uint8_t piece_type)
     {
@@ -164,7 +142,12 @@ public:
         return king_moves[field_idx];
     }
 
-    inline uint64_t get_castling_moves(const int);
+    inline bool get_castling_possible(castling c_type)
+    {
+        uint64_t castling_free = castling_to_castling_free.at(c_type);
+        uint8_t state_mask = castling_to_castling_state_mask.at(c_type);
+        return (state_mask & castling_rights) && ((get_all_pieces() & castling_free) == 0);
+    }
 
     inline uint64_t collect_king_moves_and_captures();
 
@@ -293,6 +276,12 @@ void extract_promotion_captures(const C_Board *board, uint64_t move_board, const
 void extract_moves_with_explicit_src(uint64_t move_board, const std::vector<move> &move_list, int src_idx);
 
 void extract_captures_with_explicit_src(const C_Board &board, uint64_t move_board, const std::vector<move> &move_list, int src_idx);
+
+void execute_move_forward(C_Board &board, move &m);
+
+void execute_move_backward(C_Board &board, move &m);
+
+bool check_castling_move_illegal(C_Board &board, move &m, uint64_t all_attacks);
 
 UCIStrings get_uci_moves(C_Board &board);
 
