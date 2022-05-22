@@ -4,6 +4,11 @@
 
 typedef std::pair<int, int> Position;
 typedef std::vector<Position> EnPassants;
+struct move_result
+{
+    int score;
+    std::string move;
+};
 
 inline C_BoardState to_bitboard(Board mailbox)
 {
@@ -32,7 +37,7 @@ inline UCIStrings get_uci_moves(C_BoardState &board_state)
     MoveList moves;
     moves.reserve(32);
     collect_legal_moves(board_state, moves);
-    
+
     UCIStrings uci_moves = {};
     for (move m : moves)
     {
@@ -111,3 +116,11 @@ inline void runtime_benchmark(Board board, int color, EnPassants enpassant, bool
         collect_legal_moves(board_state, moves);
     }
 }
+int evaluate(Board board);
+int alphabeta(int node, int depth, int alpha, int beta, int color);
+std::string bestmove(BoardState boardState, int depth, bool alphaBetaEnabled);
+
+std::string runtime_benchmark_bestmove(bool alphaBetaEnabled, Board board, int color, int depth, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove);
+void runtime_benchmark_evaluate(Board board, int runs);
+
+#endif

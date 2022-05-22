@@ -19,7 +19,6 @@ void move(Board &board, Piece &piece, Position previous, Position position)
 void Move::transfer(BoardState &newState, BoardState oldState)
 {
     newState.halfMove = captured ? 0 : oldState.halfMove + 1;
-    
 }
 
 bool Move::is_possible(BoardState boardState)
