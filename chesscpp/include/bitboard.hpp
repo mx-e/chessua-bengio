@@ -186,7 +186,7 @@ public:
             moves &= ~rays[SW][blockerIndex];
         }
         return moves;
-    }
+    };
 
     inline uint64_t collect_bishop_moves_and_captures();
 
@@ -261,7 +261,7 @@ inline C_Board mailbox_to_bitboard_representation(Board mailbox)
         }
     }
     return bitboard;
-}
+};
 
 uint8_t get_piece_type_of_field(const C_Board *board, int position_idx);
 

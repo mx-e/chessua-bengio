@@ -235,7 +235,7 @@ uint64_t C_Board::collect_queen_moves_and_captures()
     return queen_attacks;
 }
 
-inline uint64_t C_Board::collect_legal_moves()
+uint64_t C_Board::collect_legal_moves()
 {
     uint64_t all_attacks = empty_board;
     legal_moves = std::vector<move>();
