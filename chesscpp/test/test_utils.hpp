@@ -1,7 +1,10 @@
 #ifndef TEST_UTILS
 #define TEST_UTILS
 
-#include "../include/bitboard.hpp"
+#include <string>
+#include <iostream>
+#include "../include/constants.hpp"
+#include "../include/types.hpp"
 
 inline void print_bitboard(uint64_t bb)
 {
@@ -56,5 +59,15 @@ inline C_BoardState get_new_game_board()
 
     return board;
 }
+
+int flat(int row, int col)
+{
+    return row * 8 + col;
+}
+
+void fill_bitboard(uint64_t &bitboard, std::vector<std::pair<int, int>> positions);
+
+template <class T>
+bool exists(std::vector<T> iterable, std::function<bool(T)> condition);
 
 #endif

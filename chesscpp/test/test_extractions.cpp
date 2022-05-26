@@ -1,51 +1,6 @@
 #include <gtest/gtest.h>
 #include "../include/extractions.hpp"
-
-void _print_bitboard(uint64_t bb)
-{
-    std::string bb_str = "";
-    for (int row = 0; row < 8; row++)
-    {
-        for (int col = 7; col >= 0; col--)
-        {
-            uint64_t index = 1;
-            std::string bit = bb & (index << (col * 8 + row)) ? "1" : "∙";
-            bb_str += bit;
-            if (col != 0)
-            {
-                bb_str += " ";
-            }
-        }
-        bb_str += '\n';
-    }
-    bb_str += '\n';
-    std::cout << bb_str;
-}
-
-int flat(int row, int col)
-{
-    return row * 8 + col;
-}
-
-void fill_bitboard(uint64_t &bitboard, std::vector<std::pair<int, int> > positions)
-{
-    for (auto position : positions)
-    {
-        uint8_t idx = flat(position.first, position.second);
-        bitboard |= (most_sig_bit >> idx);
-    }
-}
-
-template <class T>
-bool exists(std::vector<T> iterable, std::function<bool(T)> condition)
-{
-    bool found;
-    for (auto item : iterable)
-    {
-        found = found || condition(item);
-    }
-    return found;
-}
+#include "test_utils.hpp"
 
 TEST(Extractions, SingleMoveWhite)
 {

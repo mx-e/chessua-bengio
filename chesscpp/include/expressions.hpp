@@ -1,9 +1,9 @@
 #ifndef EXPRESSIONS
 #define EXPRESSIONS
 
-#include "bitboard_types.hpp"
-#include "bitboard_constants.hpp"
-#include "bitboard_utils.hpp"
+#include "types.hpp"
+#include "constants.hpp"
+#include "utils.hpp"
 
 inline uint64_t get_pieces(const C_BoardState &board, const float color, const uint8_t piece_type)
 {
