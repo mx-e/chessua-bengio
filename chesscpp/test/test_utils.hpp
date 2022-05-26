@@ -62,7 +62,7 @@ inline C_BoardState get_new_game_board()
 
 int flat(int row, int col);
 
-void fill_bitboard(uint64_t &bitboard, std::vector<std::pair<int, int>> positions);
+uint64_t fill_bitboard(std::vector<std::pair<int, int>> positions);
 
 template <class T>
 inline bool exists(std::vector<T> iterable, std::function<bool(T)> condition)

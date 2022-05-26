@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <map>
+#include "constants.hpp"
 
 typedef std::array<std::array<int, 8>, 8> Board;
 typedef std::vector<std::string> UCIStrings;
@@ -44,6 +45,7 @@ struct C_BoardState
     uint64_t pieces[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     uint8_t castling_rights = UINT8_C(0x0F);
     uint8_t en_passant = UINT8_C(0x00);
+    uint64_t all_attacks = empty_board;
     std::vector<move> move_stack;
     std::vector<int> idx_list;
     float turn = 1.;

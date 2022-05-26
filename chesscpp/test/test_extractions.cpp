@@ -4,8 +4,7 @@
 
 TEST(Extractions, SingleMove)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{0, 5}, {3, 4}});
+    uint64_t bitboard = fill_bitboard({{0, 5}, {3, 4}});
 
     MoveList move_list;
     extract_moves_with_offset(bitboard, move_list, -pawn_shift_map.at(single));
@@ -23,8 +22,7 @@ TEST(Extractions, SingleMove)
 
 TEST(Extractions, DoubleMoveWhite)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{0, 3}});
+    uint64_t bitboard = fill_bitboard({{0, 3}});
 
     MoveList move_list;
     extract_pawn_double_moves(bitboard, move_list, 1.);
@@ -37,8 +35,7 @@ TEST(Extractions, DoubleMoveWhite)
 
 TEST(Extractions, DoubleMoveBlack)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{0, 4}});
+    uint64_t bitboard = fill_bitboard({{0, 4}});
 
     MoveList move_list;
     extract_pawn_double_moves(bitboard, move_list, -1.);
@@ -51,8 +48,7 @@ TEST(Extractions, DoubleMoveBlack)
 
 TEST(Extractions, PromotionWhite)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{0, 7}});
+    uint64_t bitboard = fill_bitboard({{0, 7}});
 
     MoveList move_list;
     extract_promotions(bitboard, move_list, -pawn_shift_map.at(single));
@@ -68,8 +64,7 @@ TEST(Extractions, PromotionWhite)
 
 TEST(Extractions, PromotionBlack)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{0, 0}});
+    uint64_t bitboard = fill_bitboard({{0, 0}});
 
     MoveList move_list;
     extract_promotions(bitboard, move_list, pawn_shift_map.at(single));
@@ -85,8 +80,7 @@ TEST(Extractions, PromotionBlack)
 
 TEST(Extractions, EnPassantCaptureLeft)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{0, 6}});
+    uint64_t bitboard = fill_bitboard({{0, 6}});
 
     MoveList move_list;
     extract_ep_captures(bitboard, move_list, -pawn_shift_map.at(attack_left));
@@ -99,8 +93,7 @@ TEST(Extractions, EnPassantCaptureLeft)
 
 TEST(Extractions, EnPassantCaptureRight)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{1, 6}});
+    uint64_t bitboard = fill_bitboard({{1, 6}});
 
     MoveList move_list;
     extract_ep_captures(bitboard, move_list, -pawn_shift_map.at(attack_right));
@@ -114,8 +107,7 @@ TEST(Extractions, EnPassantCaptureRight)
 
 TEST(Extractions, ExplicitSource)
 {
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{1, 1}, {5, 6}});
+    uint64_t bitboard = fill_bitboard({{1, 1}, {5, 6}});
 
     MoveList move_list;
     extract_moves_with_explicit_src(bitboard, move_list, 7);
@@ -136,8 +128,7 @@ TEST(Extractions, CaptureWithOffset)
     C_BoardState board_state;
     board_state.pieces[b_knights] |= (most_sig_bit >> flat(3, 3));
 
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{3, 3}});
+    uint64_t bitboard = fill_bitboard({{3, 3}});
 
     MoveList move_list;
     extract_captures_with_offset(board_state, bitboard, move_list, -pawn_shift_map.at(attack_left));
@@ -153,8 +144,7 @@ TEST(Extractions, PromotionCaptureWhite)
     C_BoardState board_state;
     board_state.pieces[b_rooks] |= (most_sig_bit >> flat(7, 7));
 
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{7, 7}});
+    uint64_t bitboard = fill_bitboard({{7, 7}});
 
     MoveList move_list;
     extract_promotion_captures(board_state, bitboard, move_list, -pawn_shift_map.at(attack_right));
@@ -173,8 +163,7 @@ TEST(Extractions, PromotionCaptureBlack)
     C_BoardState board_state;
     board_state.pieces[b_rooks] |= (most_sig_bit >> flat(0, 0));
 
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{0, 0}});
+    uint64_t bitboard = fill_bitboard({{0, 0}});
 
     MoveList move_list;
     extract_promotion_captures(board_state, bitboard, move_list, pawn_shift_map.at(attack_right));
@@ -194,8 +183,7 @@ TEST(Extractions, ExplicitSourceCapture)
     board_state.pieces[b_queens] |= (most_sig_bit >> flat(3, 3));
     board_state.pieces[b_bishops] |= (most_sig_bit >> flat(5, 6));
 
-    uint64_t bitboard = 0;
-    fill_bitboard(bitboard, {{3, 3}, {5, 6}});
+    uint64_t bitboard = fill_bitboard({{3, 3}, {5, 6}});
 
     MoveList move_list;
     extract_captures_with_explicit_src(board_state, bitboard, move_list, 7);
