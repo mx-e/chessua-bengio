@@ -87,7 +87,7 @@ TEST(Extractions, EnPassantCaptureLeft)
 
     EXPECT_EQ(exists<move>(
                   move_list, [](move move)
-                  { return move.src == flat(1, 5) && move.dest == flat(0, 6) && move.capture == pPawn; }),
+                  { return move.src == flat(1, 5) && move.dest == flat(0, 6) && move.capture == 0; }),
               true);
 }
 
@@ -100,7 +100,7 @@ TEST(Extractions, EnPassantCaptureRight)
 
     EXPECT_EQ(exists<move>(
                   move_list, [](move move)
-                  { return move.src == flat(0, 5) && move.dest == flat(1, 6) && move.capture == pPawn; }),
+                  { return move.src == flat(0, 5) && move.dest == flat(1, 6) && move.capture == 0; }),
               true);
 }
 

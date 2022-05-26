@@ -242,7 +242,7 @@ TEST(Collections, PawnEnPassantCaptureWhite)
 
         EXPECT_EQ(exists<move>(
                       move_list, [&en_passant](move move)
-                      { return move.src == flat(4, 4) && move.dest == en_passant && move.capture == pPawn; }),
+                      { return move.src == flat(4, 4) && move.dest == en_passant && move.capture == 0; }),
                   true);
     }
 }
@@ -264,7 +264,7 @@ TEST(Collections, PawnEnPassantCaptureBlack)
 
         EXPECT_EQ(exists<move>(
                       move_list, [&en_passant](move move)
-                      { return move.src == flat(4, 3) && move.dest == en_passant && move.capture == pPawn; }),
+                      { return move.src == flat(4, 3) && move.dest == en_passant && move.capture == 0; }),
                   true);
     }
 }
