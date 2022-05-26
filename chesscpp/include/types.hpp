@@ -67,9 +67,11 @@ struct C_Session
 inline void reserve_move_list_stack(MoveListStack &move_list_stack)
 {
     move_list_stack.reserve(12);
-    for (auto move_list : move_list_stack)
+    for (int i = 0; i < 12; i++)
     {
+        MoveList move_list;
         move_list.reserve(10);
+        move_list_stack.push_back(move_list);
     }
 }
 

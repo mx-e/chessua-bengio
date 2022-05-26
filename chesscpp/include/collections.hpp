@@ -4,7 +4,13 @@
 #include "types.hpp"
 #include "expressions.hpp"
 #include "extractions.hpp"
-#include "transforms.hpp"
+
+inline bool get_castling_possible(C_BoardState &board, castling c_type)
+{
+    uint64_t castling_free = castling_to_castling_free.at(c_type);
+    uint8_t state_mask = castling_to_castling_state_mask.at(c_type);
+    return (state_mask & board.castling_rights) && ((get_all_pieces(board) & castling_free) == 0);
+}
 
 inline void collect_pawn_moves_and_captures(C_BoardState &board_state, MoveList &legal_moves)
 {
@@ -65,7 +71,7 @@ inline void collect_king_moves_and_captures(C_BoardState &board_state, MoveList 
 
     int king_idx = scan_board(king).front();
     uint64_t king_moves = get_king_moves(king_idx);
-    
+
     extract_moves_with_explicit_src(king_moves & get_empty_fields(board_state), legal_moves, king_idx);
     extract_captures_with_explicit_src(board_state, king_moves & get_enemy_fields(board_state, board_state.turn), legal_moves, king_idx);
 

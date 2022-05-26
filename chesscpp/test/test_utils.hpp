@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "../include/constants.hpp"
 #include "../include/types.hpp"
+#include "../include/transforms.hpp"
 
 inline void print_bitboard(uint64_t bb)
 {
@@ -76,5 +77,13 @@ inline bool exists(std::vector<T> iterable, std::function<bool(T)> condition)
         found = found || condition(item);
     }
     return found;
+}
+
+inline C_BoardState init_board_state_for_test(float turn = White)
+{
+    C_BoardState board_state{.turn = turn};
+    set_pieces(board_state, White, pKing, fill_bitboard({{4, 0}}));
+    set_pieces(board_state, Black, pKing, fill_bitboard({{4, 7}}));
+    return board_state;
 }
 #endif

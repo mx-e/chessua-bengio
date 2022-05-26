@@ -95,64 +95,8 @@ TEST(BoardTransforms, SetUnsetCastlingRights)
     EXPECT_EQ((int)board.castling_rights, (int)UINT8_C(0x0F));
 }
 
-TEST(BoardTransforms, CastlingPossible)
-{
-    // w_kingside
-    C_Session session = construct_session();
-    C_BoardState board = session.board_state;
-    uint64_t blockers = fill_bitboard_max(empty_board, {56, 32});
-    print_bitboard(blockers);
-    board.pieces[b_black] = blockers;
-    EXPECT_EQ(get_castling_possible(board, w_kingside), true);
-
-    unset_castling_rights(board, w_kingside);
-    EXPECT_EQ(get_castling_possible(board, w_kingside), false);
-    set_castling_rights(board, w_kingside);
-    EXPECT_EQ(get_castling_possible(board, w_kingside), true);
-
-    blockers = fill_bitboard_max(empty_board, {56, 40, 48, 32});
-    print_bitboard(blockers);
-    board.pieces[b_black] = blockers;
-    EXPECT_EQ(get_castling_possible(board, w_kingside), false);
-    unset_castling_rights(board, w_kingside);
-
-    // w_queenside
-    blockers = fill_bitboard_max(empty_board, {0, 32});
-    print_bitboard(blockers);
-    board.pieces[b_white] = blockers;
-    EXPECT_EQ(get_castling_possible(board, w_queenside), true);
-    unset_castling_rights(board, w_queenside);
-    EXPECT_EQ(get_castling_possible(board, w_queenside), false);
-    set_castling_rights(board, w_queenside);
-
-    blockers = fill_bitboard_max(empty_board, {16});
-    board.pieces[b_white] = blockers;
-    EXPECT_EQ(get_castling_possible(board, w_queenside), false);
-
-    // b_kingside
-    EXPECT_EQ(get_castling_possible(board, b_kingside), true);
-    unset_castling_rights(board, b_kingside);
-    EXPECT_EQ(get_castling_possible(board, b_kingside), false);
-    set_castling_rights(board, b_kingside);
-    blockers = fill_bitboard_max(empty_board, {55});
-    board.pieces[b_white] = blockers;
-    EXPECT_EQ(get_castling_possible(board, b_kingside), false);
-
-    // b_queenside
-    EXPECT_EQ(get_castling_possible(board, b_queenside), true);
-    unset_castling_rights(board, b_queenside);
-    EXPECT_EQ(get_castling_possible(board, b_queenside), false);
-    set_castling_rights(board, b_queenside);
-    blockers = fill_bitboard_max(empty_board, {15});
-    board.pieces[b_black] = blockers;
-    EXPECT_EQ(get_castling_possible(board, b_queenside), false);
-}
-
 TEST(BoardTransform, ExecuteMoveForwardBackward)
 {
-    move pawn_promotion_white = create_move(62, 63, 0, pQueen, 0, 0, 0);
-    move pawn_promotion_capture_black = create_move(41, 32, pBishop, pRook, 0, 0, 0);
-    move en_passant_capture_white = create_move(4, 13, pPawn, 0, 0, 1);
     move queen_move_black = create_move(20, 36, pPawn, 0, 0, 0, 0);
     move rook_capture_white = create_move(0, 7, pRook, 0, 0, 0, 0);
     move castling_move_black = create_move(39, 55, 0, 0, 1, 0, 0);
@@ -164,16 +108,17 @@ TEST(BoardTransform, PushPopBoardPawnSingleMove)
 {
     move pawn_move_white = create_move(3, 4);
     C_Session session = construct_session();
-    C_BoardState board = session.board_state;
+    C_BoardState board = init_board_state_for_test(White);
+    session.board_state = board;
     uint64_t pawns = fill_bitboard_max(empty_board, {3, 15});
     set_pieces(board, White, pPawn, pawns);
 
     board.moves = 5.;
-    board.turn = 1.;
     board.half_moves = 20.;
     board.en_passant = 34;
 
-    push_move(board, pawn_move_white);
+    MoveList moves = MoveList();
+    push_move(board, pawn_move_white, moves);
 
     EXPECT_EQ(get_piece_type_of_field(board, 3), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 15), pPawn);
@@ -188,7 +133,7 @@ TEST(BoardTransform, PushPopBoardPawnSingleMove)
     EXPECT_EQ(top_of_stack.prev_half_move_c, 20.);
     EXPECT_EQ(top_of_stack.ep_field, 34);
 
-    pop_move(board);
+    pop_move(board, moves);
 
     EXPECT_EQ(get_piece_type_of_field(board, 3), pPawn);
     EXPECT_EQ(get_piece_type_of_field(board, 15), pPawn);
@@ -202,15 +147,15 @@ TEST(BoardTransform, PushPopPawnDoubleMove)
 {
     move pawn_double_move_black = create_move(6, 4, 0, 0, 0, 0, 5);
     C_Session session = construct_session();
-    C_BoardState board = session.board_state;
+    C_BoardState board = init_board_state_for_test(Black);
+    session.board_state = board;
     uint64_t pawns = fill_bitboard_max(empty_board, {6, 15});
     set_pieces(board, Black, pPawn, pawns);
 
-    board.turn = -1.;
     board.en_passant = 60;
     board.moves = 5.;
 
-    push_move(board, pawn_double_move_black);
+    push_move(board, pawn_double_move_black, session.move_list_stack[0]);
 
     EXPECT_EQ(get_piece_type_of_field(board, 4), pPawn);
     EXPECT_EQ(get_piece_type_of_field(board, 6), 0);
@@ -224,7 +169,7 @@ TEST(BoardTransform, PushPopPawnDoubleMove)
     EXPECT_EQ(top_of_stack.prev_half_move_c, 0.);
     EXPECT_EQ(top_of_stack.ep_field, 60);
 
-    pop_move(board);
+    pop_move(board, session.move_list_stack[0]);
 
     EXPECT_EQ(get_piece_type_of_field(board, 4), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 6), pPawn);
@@ -233,6 +178,69 @@ TEST(BoardTransform, PushPopPawnDoubleMove)
     EXPECT_EQ(board.turn, -1.);
 }
 
-TEST(BoardTransform, PushPopPawnPromotionWhite)
+TEST(BoardTransform, PushPopPawnPromotion)
 {
+    move pawn_promotion_white = create_move(62, 63, 0, pQueen, 0, 0, 0);
+    C_Session session = construct_session();
+    C_BoardState board = init_board_state_for_test(White);
+    session.board_state = board;
+    uint64_t pawns = fill_bitboard_max(empty_board, {62});
+    set_pieces(board, White, pPawn, pawns);
+
+    push_move(board, pawn_promotion_white, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 62), 0);
+    EXPECT_EQ(get_piece_type_of_field(board, 63), pQueen);
+
+    pop_move(board, session.move_list_stack[0]);
+    EXPECT_EQ(get_piece_type_of_field(board, 62), pPawn);
+    EXPECT_EQ(get_piece_type_of_field(board, 63), 0);
+}
+
+TEST(BoardTransform, PushPopPawnPromotionCapture)
+{
+    move pawn_promotion_capture_black = create_move(33, 24, pBishop, pRook, 0, 0, 0);
+    C_Session session = construct_session();
+    C_BoardState board = init_board_state_for_test(Black);
+    session.board_state = board;
+    uint64_t pawns = fill_bitboard_max(empty_board, {33});
+    uint64_t bishops = fill_bitboard_max(empty_board, {24});
+    set_pieces(board, Black, pPawn, pawns);
+    set_pieces(board, White, pBishop, bishops);
+
+    board.en_passant = 60;
+    board.moves = 5.;
+
+    push_move(board, pawn_promotion_capture_black, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 33), 0);
+    EXPECT_EQ(get_piece_type_of_field(board, 24), pRook);
+
+    pop_move(board, session.move_list_stack[0]);
+    EXPECT_EQ(get_piece_type_of_field(board, 33), pPawn);
+    EXPECT_EQ(get_piece_type_of_field(board, 24), pBishop);
+    EXPECT_EQ(board.en_passant, 60);
+    EXPECT_EQ(board.moves, 5);
+}
+
+TEST(BoardTransform, PushPopEnPassantCapture)
+{
+    move en_passant_capture_white = create_move(4, 13, pPawn, 0, 0, 1);
+    C_Session session = construct_session();
+    C_BoardState board = init_board_state_for_test(White);
+    session.board_state = board;
+    board.en_passant = 13;
+    board.half_moves = 20.;
+
+    uint64_t pawns_b = fill_bitboard_max(empty_board, {12});
+    uint64_t pawns_w = fill_bitboard_max(empty_board, {4});
+
+    set_pieces(board, Black, pPawn, pawns_b);
+    set_pieces(board, White, pPawn, pawns_w);
+
+    push_move(board, en_passant_capture_white, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 4), 0);
+    EXPECT_EQ(get_piece_type_of_field(board, 13), pPawn);
+    EXPECT_EQ(get_piece_type_of_field(board, 12), 0);
 }
