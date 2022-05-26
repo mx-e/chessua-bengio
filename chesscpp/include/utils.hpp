@@ -23,7 +23,6 @@ inline uint8_t get_piece_type_of_field(const C_BoardState &board_state, int posi
     return piece;
 }
 
-
 inline void print_move(move m)
 {
     std::cout << "src: " << (int)m.src << "\n";
