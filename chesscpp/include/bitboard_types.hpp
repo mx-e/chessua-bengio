@@ -39,4 +39,61 @@ inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t ca
     return m;
 }
 
+struct C_BoardState
+{
+    uint64_t pieces[8];
+    uint8_t castling_rights;
+    uint8_t en_passant;
+    std::vector<move> move_stack;
+    std::vector<int> idx_list;
+    float turn;
+    float moves;
+    float half_moves;
+    bool king_attack;
+    bool castling_move_illegal;
+};
+
+typedef std::vector<move> MoveList;
+typedef std::vector<MoveList> MoveListStack;
+
+struct C_Session
+{
+    MoveListStack move_list_stack;
+    C_BoardState board_state;
+};
+
+inline void reserve_move_list_stack(MoveListStack &move_list_stack)
+{
+    move_list_stack.reserve(12);
+    for (auto move_list : move_list_stack)
+    {
+        move_list.reserve(10);
+    }
+}
+
+inline void reserve_board_state(C_BoardState &board_state)
+{
+    board_state.move_stack.reserve(10);
+    board_state.idx_list.reserve(16);
+}
+
+inline C_Session construct_session()
+{
+    C_Session session{
+        .board_state = C_BoardState{
+            .castling_rights = UINT8_C(0x0F),
+            .en_passant = UINT8_C(0x00),
+            .turn = 1.,
+            .moves = 0.,
+            .half_moves = 0.,
+            .king_attack = false,
+            .castling_move_illegal = false}};
+
+    reserve_move_list_stack(session.move_list_stack);
+    reserve_board_state(session.board_state);    
+
+    return session;
+}
+
+
 #endif
