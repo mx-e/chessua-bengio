@@ -49,7 +49,12 @@ const std::map<float, uint64_t>
     pawn_shift_mask_map = {
         {single, ~(row_8)},
         {attack_left, ~(row_8)},
-        {attack_right, ~(row_8)}};
+        {attack_right, ~(row_8)},
+        {-single, ~(row_1)},
+        {-attack_left, ~(row_1)},
+        {-attack_right, ~(row_1)}
+
+};
 
 // shifts are denoted in field index change not left/right bit shift
 // they are the negative of bit shift
@@ -62,7 +67,7 @@ shift_by_n(const float shift, const uint64_t val)
 // shifts are denoted in field index change not left/right bit shift
 inline uint64_t mask_and_shift_by_n(const pawn_shift shift, uint64_t val, float color)
 {
-    uint64_t shift_mask = pawn_shift_mask_map.at(shift);
+    uint64_t shift_mask = pawn_shift_mask_map.at(shift * color);
     return shift_by_n(pawn_shift_map.at(shift) * color, val & shift_mask);
 }
 
