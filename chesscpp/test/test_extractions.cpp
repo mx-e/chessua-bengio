@@ -1,27 +1,6 @@
 #include <gtest/gtest.h>
 #include "../include/extractions.hpp"
 
-void _print_bitboard(uint64_t bb)
-{
-    std::string bb_str = "";
-    for (int row = 0; row < 8; row++)
-    {
-        for (int col = 7; col >= 0; col--)
-        {
-            uint64_t index = 1;
-            std::string bit = bb & (index << (col * 8 + row)) ? "1" : "∙";
-            bb_str += bit;
-            if (col != 0)
-            {
-                bb_str += " ";
-            }
-        }
-        bb_str += '\n';
-    }
-    bb_str += '\n';
-    std::cout << bb_str;
-}
-
 int flat(int row, int col)
 {
     return row * 8 + col;
