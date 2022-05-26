@@ -24,15 +24,15 @@ struct move
 inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t capture = 0, const uint8_t flag = 0, const uint8_t cast = 0, const uint8_t ep = 0, uint8_t ep_field = 0)
 {
     struct move m;
-    m.src = src;
-    m.dest = dest;
-    m.flag = flag;
-    m.ep_field = ep_field;
-    m.capture = capture;
-    m.prev_c = 0;
-    m.castling = cast;
-    m.prev_half_move_c = 0;
-    m.ep = ep;
+    m.src = src; // both
+    m.dest = dest; // both
+    m.flag = flag; // promotion, both
+    m.ep_field = ep_field; // both but with different use
+    m.capture = capture; // stack/pop
+    m.prev_c = 0; // stack/pop
+    m.castling = cast; // both
+    m.prev_half_move_c = 0; // stack/pop
+    m.ep = ep; // if ep_field == 0 => m.ep = false
     return m;
 }
 

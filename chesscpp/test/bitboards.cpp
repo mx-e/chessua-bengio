@@ -727,6 +727,33 @@ TEST(PossibleCBoards, UCIStringPromotion)
               true);
 }
 
+TEST(PossibleCBoards, KingSideCastleWhite)
+{
+    Board board{};
+    board[4].at(0) = 1;
+    board[7].at(0) = 5;
+
+    C_Board cboard = mailbox_to_bitboard_representation(board);
+    cboard.turn = White;
+    cboard.set_castling_rights(w_kingside, true);
+    cboard.set_castling_rights(w_queenside, false);
+    cboard.set_castling_rights(b_kingside, false);
+    cboard.set_castling_rights(b_queenside, false);
+
+    cboard.collect_legal_moves();
+    std::vector<move> moves = cboard.legal_moves;
+
+    EXPECT_EQ(moves.size(), 14);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+        { return move.src == row_col_to_idx(4, 0); }),
+              true);
+
+    EXPECT_EQ(_exists<move>(moves, [](move move)
+        { return move.src == row_col_to_idx(7, 0); }),
+              true);
+}
+
 /**
  * @brief These tests are yet to be ported.
  *
