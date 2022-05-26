@@ -67,7 +67,7 @@ inline void execute_move_forward(C_BoardState &board, const move &m)
     }
     if (m.ep)
     {
-        unset_single_piece(board, board.turn, m.capture, m.dest - (int)board.turn);
+        unset_single_piece(board, board.turn * -1, pPawn, m.dest - (int)board.turn);
     }
 }
 
@@ -99,7 +99,7 @@ inline void execute_move_backward(C_BoardState &board, const move &m)
     }
     if (m.ep)
     {
-        set_single_piece(board, board.turn, m.capture, m.dest + (int)board.turn);
+        set_single_piece(board, board.turn, pPawn, m.dest + (int)board.turn);
     }
 }
 

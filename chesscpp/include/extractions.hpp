@@ -45,7 +45,7 @@ inline void extract_ep_captures(uint64_t move_board, MoveList &move_list, float 
         return;
     for (int m : scan_board(move_board))
     {
-        move_list.push_back(create_move(m + (int)source_offset, (uint8_t)m, pPawn, 0, 0, 1));
+        move_list.push_back(create_move(m + (int)source_offset, (uint8_t)m, 0, 0, 0, 1));
     }
 }
 

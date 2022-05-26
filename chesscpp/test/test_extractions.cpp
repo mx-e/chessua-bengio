@@ -104,7 +104,6 @@ TEST(Extractions, EnPassantCaptureRight)
               true);
 }
 
-
 TEST(Extractions, ExplicitSource)
 {
     uint64_t bitboard = fill_bitboard({{1, 1}, {5, 6}});
