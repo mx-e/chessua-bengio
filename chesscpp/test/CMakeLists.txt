@@ -20,8 +20,8 @@ enable_testing()
 
 add_executable(
     chesscpp 
-    test_transforms.cpp
     expressions.cpp
+    test_transforms.cpp
     test_utils.cpp
     test_collections.cpp
     test_extractions.cpp
