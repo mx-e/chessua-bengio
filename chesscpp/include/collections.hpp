@@ -4,7 +4,7 @@
 #include "types.hpp"
 #include "expressions.hpp"
 #include "extractions.hpp"
-#include "board_transforms.hpp"
+#include "transforms.hpp"
 
 inline void collect_pawn_moves_and_captures(C_BoardState &board_state, MoveList &legal_moves)
 {

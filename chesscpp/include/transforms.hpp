@@ -29,7 +29,7 @@ inline void set_pieces(C_BoardState &board, const float color, const uint8_t typ
 
 inline void set_castling_rights(C_BoardState &board, castling c_type)
 {
-    int address_bit = (int)c_type << 1;
+    uint8_t address_bit = 1 << c_type;
     board.castling_rights |= address_bit;
 }
 
