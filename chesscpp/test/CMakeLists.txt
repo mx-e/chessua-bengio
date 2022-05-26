@@ -21,7 +21,8 @@ enable_testing()
 add_executable(
     chesscpp 
     ../src/bitboard.cpp
-    bitboards.cpp
+    expressions.cpp
+    board_transforms.cpp
 )
 target_link_libraries(
   chesscpp
