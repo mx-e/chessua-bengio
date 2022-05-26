@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "test_utils.hpp"
 #include "../include/expressions.hpp"
-#include "../include/board_transforms.hpp"
+#include "../include/transforms.hpp"
 
 TEST(Expressions, GetPieces)
 {
