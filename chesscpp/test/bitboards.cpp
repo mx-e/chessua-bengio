@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include "custom.hpp"
+//#include "custom.hpp"
+#include "../include/bitboard.hpp"
 #include <vector>
 #include <array>
 

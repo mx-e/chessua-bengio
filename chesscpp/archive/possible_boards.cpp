@@ -1,7 +1,7 @@
-#include "custom.hpp"
+//#include "custom.hpp"
 #include <gtest/gtest.h>
 
-TEST(PossibleBoards, PawnOpeningWhite)
+/*TEST(PossibleBoards, PawnOpeningWhite)
 {
     Board board{};
     board[0].at(1) = 6;
@@ -468,3 +468,4 @@ TEST(PossibleBoards, UCIStringSwap)
     EXPECT_EXISTS(boardStates, [](BoardState boardState)
                   { return boardState.uci == "d7d8r"; });
 }
+*/

@@ -20,14 +20,8 @@ enable_testing()
 
 add_executable(
     chesscpp 
-    ../src/types.cpp
     ../src/bitboard.cpp
-    ../src/pieces.cpp
-    ../src/moves.cpp
-    ../src/main.cpp
     bitboards.cpp
-    possible_boards.cpp
-    custom.cpp
 )
 target_link_libraries(
   chesscpp
