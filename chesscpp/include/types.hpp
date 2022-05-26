@@ -15,7 +15,7 @@ struct move
     uint8_t src;              // 6 b
     uint8_t dest;             // 6 b
     uint8_t capture;          // 3 b (actually less)
-    uint8_t promotion;             // 2 b (promotion)
+    uint8_t promotion;        // 2 b (promotion)
     uint8_t ep_field;         // 6 b
     uint8_t prev_c;           // 4 b
     uint8_t castling;         // 2 b
@@ -27,30 +27,30 @@ struct move
 inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t capture = 0, const uint8_t promotion = 0, const uint8_t cast = 0, const uint8_t ep = 0, uint8_t ep_field = 0)
 {
     struct move m;
-    m.src = src; // both
-    m.dest = dest; // both
+    m.src = src;             // both
+    m.dest = dest;           // both
     m.promotion = promotion; // promotion, both
-    m.ep_field = ep_field; // both but with different use
-    m.capture = capture; // stack/pop
-    m.prev_c = 0; // stack/pop
-    m.castling = cast; // both
-    m.prev_half_move_c = 0; // stack/pop
-    m.ep = ep; // if ep_field == 0 => m.ep = false
+    m.ep_field = ep_field;   // both but with different use
+    m.capture = capture;     // stack/pop
+    m.prev_c = 0;            // stack/pop
+    m.castling = cast;       // both
+    m.prev_half_move_c = 0;  // stack/pop
+    m.ep = ep;               // if ep_field == 0 => m.ep = false
     return m;
 }
 
 struct C_BoardState
 {
-    uint64_t pieces[8];
-    uint8_t castling_rights;
-    uint8_t en_passant;
+    uint64_t pieces[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    uint8_t castling_rights = UINT8_C(0x0F);
+    uint8_t en_passant = UINT8_C(0x00);
     std::vector<move> move_stack;
     std::vector<int> idx_list;
-    float turn;
-    float moves;
-    float half_moves;
-    bool king_attack;
-    bool castling_move_illegal;
+    float turn = 1.;
+    float moves = 0.;
+    float half_moves = 0.;
+    bool king_attack = false;
+    bool castling_move_illegal = false;
 };
 
 typedef std::vector<move> MoveList;
@@ -79,21 +79,12 @@ inline void reserve_board_state(C_BoardState &board_state)
 
 inline C_Session construct_session()
 {
-    C_Session session{
-        .board_state = C_BoardState{
-            .castling_rights = UINT8_C(0x0F),
-            .en_passant = UINT8_C(0x00),
-            .turn = 1.,
-            .moves = 0.,
-            .half_moves = 0.,
-            .king_attack = false,
-            .castling_move_illegal = false}};
+    C_Session session;
 
     reserve_move_list_stack(session.move_list_stack);
-    reserve_board_state(session.board_state);    
+    reserve_board_state(session.board_state);
 
     return session;
 }
-
 
 #endif
