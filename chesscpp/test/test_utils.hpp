@@ -1,7 +1,9 @@
 #ifndef TEST_UTILS
 #define TEST_UTILS
 
-#include "../include/bitboard.hpp"
+//#include "../include/bitboard.hpp"
+#include "../include/types.hpp"
+#include "../include/constants.hpp"
 
 inline void print_bitboard(uint64_t bb)
 {

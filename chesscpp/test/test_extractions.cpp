@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../include/extractions.hpp"
+#include "test_utils.hpp"
 
 int flat(int row, int col)
 {

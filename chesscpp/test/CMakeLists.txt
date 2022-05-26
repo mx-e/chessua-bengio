@@ -20,6 +20,7 @@ enable_testing()
 
 add_executable(
     chesscpp
+    expressions.cpp
     test_extractions.cpp
 )
 target_link_libraries(
