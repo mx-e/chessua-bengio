@@ -24,12 +24,57 @@ void _print_bitboard(uint64_t bb)
     std::cout << bb_str;
 }
 
-C_BoardState init_board_state_for_test(float turn = White)
+TEST(BoardTransforms, CastlingPossible)
 {
-    C_BoardState board_state{.turn = turn};
-    set_pieces(board_state, White, pKing, fill_bitboard({{4, 0}}));
-    set_pieces(board_state, Black, pKing, fill_bitboard({{4, 7}}));
-    return board_state;
+    // w_kingside
+    C_Session session = construct_session();
+    C_BoardState board = session.board_state;
+    uint64_t blockers = fill_bitboard_max(empty_board, {56, 32});
+    print_bitboard(blockers);
+    board.pieces[b_black] = blockers;
+    EXPECT_EQ(get_castling_possible(board, w_kingside), true);
+
+    unset_castling_rights(board, w_kingside);
+    EXPECT_EQ(get_castling_possible(board, w_kingside), false);
+    set_castling_rights(board, w_kingside);
+    EXPECT_EQ(get_castling_possible(board, w_kingside), true);
+
+    blockers = fill_bitboard_max(empty_board, {56, 40, 48, 32});
+    print_bitboard(blockers);
+    board.pieces[b_black] = blockers;
+    EXPECT_EQ(get_castling_possible(board, w_kingside), false);
+    unset_castling_rights(board, w_kingside);
+
+    // w_queenside
+    blockers = fill_bitboard_max(empty_board, {0, 32});
+    print_bitboard(blockers);
+    board.pieces[b_white] = blockers;
+    EXPECT_EQ(get_castling_possible(board, w_queenside), true);
+    unset_castling_rights(board, w_queenside);
+    EXPECT_EQ(get_castling_possible(board, w_queenside), false);
+    set_castling_rights(board, w_queenside);
+
+    blockers = fill_bitboard_max(empty_board, {16});
+    board.pieces[b_white] = blockers;
+    EXPECT_EQ(get_castling_possible(board, w_queenside), false);
+
+    // b_kingside
+    EXPECT_EQ(get_castling_possible(board, b_kingside), true);
+    unset_castling_rights(board, b_kingside);
+    EXPECT_EQ(get_castling_possible(board, b_kingside), false);
+    set_castling_rights(board, b_kingside);
+    blockers = fill_bitboard_max(empty_board, {55});
+    board.pieces[b_white] = blockers;
+    EXPECT_EQ(get_castling_possible(board, b_kingside), false);
+
+    // b_queenside
+    EXPECT_EQ(get_castling_possible(board, b_queenside), true);
+    unset_castling_rights(board, b_queenside);
+    EXPECT_EQ(get_castling_possible(board, b_queenside), false);
+    set_castling_rights(board, b_queenside);
+    blockers = fill_bitboard_max(empty_board, {15});
+    board.pieces[b_black] = blockers;
+    EXPECT_EQ(get_castling_possible(board, b_queenside), false);
 }
 
 TEST(Collections, PawnFreeMove)
@@ -409,7 +454,7 @@ TEST(Collections, KingFreeMoves)
     C_BoardState board_state;
     set_pieces(board_state, White, pKing, fill_bitboard({{2, 2}}));
     board_state.castling_rights = 0;
-    //set_pieces(board_state, Black, pPawn, fill_bitboard({{2, 3}}));
+    // set_pieces(board_state, Black, pPawn, fill_bitboard({{2, 3}}));
 
     MoveList move_list;
     collect_king_moves_and_captures(board_state, move_list);
@@ -417,37 +462,37 @@ TEST(Collections, KingFreeMoves)
     EXPECT_EQ(move_list.size(), 8);
 
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(1, 1); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(1, 1); }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(1, 2); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(1, 2); }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(2, 1); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(2, 1); }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(2, 3); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(2, 3); }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(3, 2); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(3, 2); }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(3, 3); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(3, 3); }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(3, 1); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(3, 1); }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(1, 3); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(1, 3); }),
+              true);
 }
 
 TEST(Collections, KingCaptureMoves)
@@ -465,13 +510,13 @@ TEST(Collections, KingCaptureMoves)
     EXPECT_EQ(move_list.size(), 8);
 
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(1, 1) && move.capture == pKnight; }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(1, 1) && move.capture == pKnight; }),
+              true);
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(2, 2) && move.dest == flat(2, 3) && move.capture == pRook; }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(2, 2) && move.dest == flat(2, 3) && move.capture == pRook; }),
+              true);
 }
 
 TEST(Collections, CastlingWhite)
@@ -487,14 +532,14 @@ TEST(Collections, CastlingWhite)
     collect_king_moves_and_captures(board_state, move_list);
 
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(4, 0) && move.dest == flat(6, 0); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(4, 0) && move.dest == flat(6, 0); }),
+              true);
 
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(4, 0) && move.dest == flat(2, 0); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(4, 0) && move.dest == flat(2, 0); }),
+              true);
 }
 
 TEST(Collections, CastlingBlack)
@@ -510,14 +555,12 @@ TEST(Collections, CastlingBlack)
     collect_king_moves_and_captures(board_state, move_list);
 
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(4, 7) && move.dest == flat(6, 7); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(4, 7) && move.dest == flat(6, 7); }),
+              true);
 
     EXPECT_EQ(exists<move>(
-                    move_list, [](move move)
-                    { return move.src == flat(4, 7) && move.dest == flat(2, 7); }),
-                true);
+                  move_list, [](move move)
+                  { return move.src == flat(4, 7) && move.dest == flat(2, 7); }),
+              true);
 }
-
-

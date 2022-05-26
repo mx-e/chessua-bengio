@@ -5,6 +5,7 @@
 #include "types.hpp"
 #include "expressions.hpp"
 #include "utils.hpp"
+#include "collections.hpp"
 
 inline void set_single_piece(C_BoardState &board, const float color, const uint8_t type, const uint8_t position_idx)
 {
@@ -36,13 +37,6 @@ inline void set_castling_rights(C_BoardState &board, castling c_type)
 inline void unset_castling_rights(C_BoardState &board, castling c_type)
 {
     board.castling_rights &= ~castling_to_castling_state_mask.at(c_type);
-}
-
-inline bool get_castling_possible(C_BoardState &board, castling c_type)
-{
-    uint64_t castling_free = castling_to_castling_free.at(c_type);
-    uint8_t state_mask = castling_to_castling_state_mask.at(c_type);
-    return (state_mask & board.castling_rights) && ((get_all_pieces(board) & castling_free) == 0);
 }
 
 inline void execute_move_forward(C_BoardState &board, const move &m)
@@ -118,19 +112,11 @@ inline void update_castling_rights(C_BoardState &board)
     bool ks_castling_rights = (bool)(~(king_and_rooks ^ castling_masks[0]));
     bool qs_castling_rights = (bool)(~(king_and_rooks ^ castling_masks[1]));
 
-    if (ks_castling_rights)
-    {
-        set_castling_rights(board, castling_indicator[0]);
-    }
-    else
+    if (!ks_castling_rights)
     {
         unset_castling_rights(board, castling_indicator[0]);
     }
-    if (qs_castling_rights)
-    {
-        set_castling_rights(board, castling_indicator[1]);
-    }
-    else
+    if (!qs_castling_rights)
     {
         unset_castling_rights(board, castling_indicator[1]);
     }
@@ -144,7 +130,7 @@ inline bool check_castling_move_illegal(C_BoardState &board, const move &m, cons
     return (m.castling == 1 && match_kingside) || (m.castling == 2 && match_queenside);
 }
 
-inline void push_move(C_BoardState &board, move m)
+inline void push_move(C_BoardState &board, move m, MoveList &move_list)
 {
     execute_move_forward(board, m);
 
@@ -164,14 +150,15 @@ inline void push_move(C_BoardState &board, move m)
 
     board.turn *= -1;
 
-    // uint64_t all_new_attacks = collect_legal_moves(board);
-    // king_attack = (bool)(all_new_attacks & get_king(-1. * turn));
-    // castling_move_illegal = check_castling_move_illegal(board, m, all_new_attacks);
+    move_list.clear();
+    collect_legal_moves(board, move_list);
+    board.king_attack = (bool)(board.all_attacks & get_king(board, -1. * board.turn));
+    board.castling_move_illegal = check_castling_move_illegal(board, m, board.all_attacks);
 
     board.move_stack.push_back(m);
 }
 
-inline move pop_move(C_BoardState &board)
+inline move pop_move(C_BoardState &board, MoveList &move_list)
 {
     if (board.move_stack.empty())
     {
@@ -198,12 +185,12 @@ inline move pop_move(C_BoardState &board)
     return m;
 }
 
-inline bool check_move_causes_check(C_BoardState &board, move &m)
+inline bool check_move_causes_check(C_BoardState &board, move &m, MoveList &move_list)
 {
-    push_move(board, m);
-    // collect_legal_moves(board);
+    push_move(board, m, move_list);
+    collect_legal_moves(board, move_list);
     bool check = board.king_attack;
-    pop_move(board);
+    pop_move(board, move_list);
     return check;
 }
 
