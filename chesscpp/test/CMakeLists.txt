@@ -19,8 +19,10 @@ add_compile_options(
 enable_testing()
 
 add_executable(
-    chesscpp
+    chesscpp 
+    board_transforms.cpp
     expressions.cpp
+    test_utils.cpp
     test_extractions.cpp
 )
 target_link_libraries(

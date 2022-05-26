@@ -2,31 +2,6 @@
 #include "../include/extractions.hpp"
 #include "test_utils.hpp"
 
-int flat(int row, int col)
-{
-    return row * 8 + col;
-}
-
-void fill_bitboard(uint64_t &bitboard, std::vector<std::pair<int, int> > positions)
-{
-    for (auto position : positions)
-    {
-        uint8_t idx = flat(position.first, position.second);
-        bitboard |= (most_sig_bit >> idx);
-    }
-}
-
-template <class T>
-bool exists(std::vector<T> iterable, std::function<bool(T)> condition)
-{
-    bool found;
-    for (auto item : iterable)
-    {
-        found = found || condition(item);
-    }
-    return found;
-}
-
 TEST(Extractions, SingleMove)
 {
     uint64_t bitboard = 0;
