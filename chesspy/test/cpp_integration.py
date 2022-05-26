@@ -29,6 +29,9 @@ class CPPIntegration(unittest.TestCase):
             true_n_legal_moves = solution["n_legal_moves"]
             true_moves_list = sorted(solution["legal_moves"])
 
+            if true_n_legal_moves != n_moves:
+                import pdb; pdb.set_trace()
+
             self.assertEqual(
                 true_n_legal_moves, n_moves
             )
