@@ -174,7 +174,7 @@ inline move pop_move(C_BoardState &board, MoveList &move_list)
 inline bool check_move_causes_check(C_BoardState &board, move &m, MoveList &move_list)
 {
     push_move(board, m, move_list);
-    bool check = board.king_attack;
+    bool check = board.king_attack || board.castling_move_illegal;
     pop_move(board, move_list);
     return check;
 }
