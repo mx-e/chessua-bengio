@@ -56,7 +56,7 @@ inline void execute_move_forward(C_BoardState &board, const move &m)
     {
         uint64_t rook_move = castling_king_dest_to_rook_move_map.at(m.dest);
         board.pieces[b_rooks] ^= rook_move;
-        board.pieces[color_to_BB_index.at(turn)] ^= rook_move;
+        board.pieces[color_to_BB_index.at(board.turn)] ^= rook_move;
     }
     if (m.ep)
     {
@@ -81,7 +81,7 @@ inline void execute_move_backward(C_BoardState &board, const move &m)
     {
         uint64_t rook_move = castling_king_dest_to_rook_move_map.at(m.dest);
         board.pieces[b_rooks] ^= rook_move;
-        board.pieces[color_to_BB_index.at(turn * -1)] ^= rook_move;
+        board.pieces[color_to_BB_index.at(board.turn * -1)] ^= rook_move;
     }
     if (m.ep)
     {
@@ -95,14 +95,14 @@ inline void update_castling_rights(C_BoardState &board)
     std::array<uint64_t, 2> castling_masks = color_to_castling_mask.at(board.turn);
     std::array<castling, 2> castling_indicator = color_to_castling_indicator.at(board.turn);
 
-    bool ks_castling_rights = (bool)(~(king_and_rooks ^ castling_masks[0]));
-    bool qs_castling_rights = (bool)(~(king_and_rooks ^ castling_masks[1]));
+    bool castling_voided_ks = (bool)(((king_and_rooks & ~col_a) ^ castling_masks[0]));
+    bool castling_voided_qs = (bool)(((king_and_rooks & ~col_h) ^ castling_masks[1]));
 
-    if (!ks_castling_rights)
+    if (castling_voided_ks)
     {
         unset_castling_rights(board, castling_indicator[0]);
     }
-    if (!qs_castling_rights)
+    if (castling_voided_qs)
     {
         unset_castling_rights(board, castling_indicator[1]);
     }

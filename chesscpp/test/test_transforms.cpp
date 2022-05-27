@@ -295,11 +295,19 @@ TEST(Transforms, PushPopCastlingMoveBlack)
     session.board_state = board;
 
     uint64_t rook_b = fill_bitboard_max(empty_board, {63, 7});
+    uint64_t rook_w = fill_bitboard_max(empty_board, {0, 56});
     set_pieces(board, Black, pRook, rook_b);
+    set_pieces(board, White, pRook, rook_w);
+
     push_move(board, castling_move_black, session.move_list_stack[0]);
 
     EXPECT_EQ(get_piece_type_of_field(board, 63), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 39), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 55), pKing);
     EXPECT_EQ(get_piece_type_of_field(board, 47), pRook);
+
+    EXPECT_EQ(board.castling_rights, 3);
+
+    move m = board.move_stack.back();
+    EXPECT_EQ(m.prev_c, 15);
 }
