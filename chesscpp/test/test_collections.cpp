@@ -387,6 +387,8 @@ TEST(Collections, RookFreeMoves)
         collect_rook_moves_and_captures(board_state, move_list);
 
         EXPECT_EQ(move_list.size(), 13);
+
+        
     }
 }
 
@@ -452,7 +454,6 @@ TEST(Collections, KingFreeMoves)
     C_BoardState board_state;
     set_pieces(board_state, White, pKing, fill_bitboard({{2, 2}}));
     board_state.castling_rights = 0;
-    // set_pieces(board_state, Black, pPawn, fill_bitboard({{2, 3}}));
 
     MoveList move_list;
     collect_king_moves_and_captures(board_state, move_list);
