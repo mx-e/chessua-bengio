@@ -93,13 +93,6 @@ TEST(Transforms, SetUnsetCastlingRights)
     EXPECT_EQ((int)board.castling_rights, (int)UINT8_C(0x0F));
 }
 
-TEST(Transforms, ExecuteMoveForwardBackward)
-{
-    move castling_move_black = create_move(39, 55, 0, 0, 1, 0, 0);
-    move illegal_castling_move_black = create_move(39, 23, 0, 0, 2, 0, 0);
-    move king_in_check_move_white = create_move(32, 33, pPawn);
-}
-
 TEST(Transforms, PushPopBoardPawnSingleMove)
 {
     move pawn_move_white = create_move(3, 4);
@@ -285,6 +278,14 @@ TEST(Transforms, PushPopRookCaptureWhite)
     EXPECT_EQ(get_board_at_idx(board.pieces[b_white], 7), true);
     EXPECT_EQ(get_board_at_idx(board.pieces[b_white], 0), false);
     EXPECT_EQ(get_board_at_idx(board.pieces[b_black], 7), false);
+
+    pop_move(board, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 0), pRook);
+    EXPECT_EQ(get_piece_type_of_field(board, 7), pRook);
+    EXPECT_EQ(get_board_at_idx(board.pieces[b_white], 7), false);
+    EXPECT_EQ(get_board_at_idx(board.pieces[b_white], 0), true);
+    EXPECT_EQ(get_board_at_idx(board.pieces[b_black], 7), true);
 }
 
 TEST(Transforms, PushPopCastlingMoveBlack)
@@ -310,4 +311,72 @@ TEST(Transforms, PushPopCastlingMoveBlack)
 
     move m = board.move_stack.back();
     EXPECT_EQ(m.prev_c, 15);
+    EXPECT_EQ(board.castling_move_illegal, false);
+
+    pop_move(board, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 63), pRook);
+    EXPECT_EQ(get_piece_type_of_field(board, 39), pKing);
+    EXPECT_EQ(get_piece_type_of_field(board, 55), 0);
+    EXPECT_EQ(get_piece_type_of_field(board, 47), 0);
+
+    EXPECT_EQ(board.castling_rights, 15);
+}
+
+TEST(Transforms, PushPopIllegalCastlingMove)
+{
+    move illegal_castling_move_black = create_move(39, 23, 0, 0, 2, 0, 0);
+    C_Session session = construct_session();
+    C_BoardState board = init_board_state_for_test(Black);
+    session.board_state = board;
+
+    uint64_t rook_b = fill_bitboard_max(empty_board, {63, 7});
+    uint64_t rook_w = fill_bitboard_max(empty_board, {24, 56});
+    set_pieces(board, Black, pRook, rook_b);
+    set_pieces(board, White, pRook, rook_w);
+
+    unset_castling_rights(board, w_queenside);
+
+    push_move(board, illegal_castling_move_black, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 39), 0);
+    EXPECT_EQ(get_piece_type_of_field(board, 23), pKing);
+    EXPECT_EQ(get_piece_type_of_field(board, 7), 0);
+    EXPECT_EQ(get_piece_type_of_field(board, 31), pRook);
+
+    EXPECT_EQ(board.castling_rights, 1);
+    EXPECT_EQ(board.castling_move_illegal, true);
+
+    move m = board.move_stack.back();
+    EXPECT_EQ(m.prev_c, 13);
+
+    pop_move(board, session.move_list_stack[0]);
+    EXPECT_EQ(board.castling_move_illegal, false);
+}
+
+TEST(Transforms, PushPopKingMoveInCheck)
+{
+    move king_in_check_move_white = create_move(32, 33, pPawn);
+    C_Session session = construct_session();
+    C_BoardState board = init_board_state_for_test(White);
+    session.board_state = board;
+
+    uint64_t queen_b = fill_bitboard_max(empty_board, {36});
+    uint64_t pawn_b = fill_bitboard_max(empty_board, {33});
+    set_pieces(board, Black, pQueen, queen_b);
+    set_pieces(board, Black, pPawn, pawn_b);
+
+    push_move(board, king_in_check_move_white, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 32), 0);
+    EXPECT_EQ(get_piece_type_of_field(board, 33), pKing);
+
+    EXPECT_EQ(board.king_attack, true);
+
+    pop_move(board, session.move_list_stack[0]);
+
+    EXPECT_EQ(get_piece_type_of_field(board, 32), pKing);
+    EXPECT_EQ(get_piece_type_of_field(board, 33), pPawn);
+
+    EXPECT_EQ(board.king_attack, false);
 }
