@@ -54,16 +54,9 @@ inline void execute_move_forward(C_BoardState &board, const move &m)
     set_single_piece(board, board.turn, piece_type, m.dest);
     if (m.castling)
     {
-        if (m.castling == 1)
-        {
-            unset_single_piece(board, board.turn, pRook, 56);
-            set_single_piece(board, board.turn, pRook, 40);
-        }
-        else if (m.castling == 2)
-        {
-            unset_single_piece(board, board.turn, pRook, 0);
-            set_single_piece(board, board.turn, pRook, 24);
-        }
+        uint64_t rook_move = castling_king_dest_to_rook_move_map.at(m.dest);
+        board.pieces[b_rooks] ^= rook_move;
+        board.pieces[color_to_BB_index.at(turn)] ^= rook_move;
     }
     if (m.ep)
     {
@@ -86,16 +79,9 @@ inline void execute_move_backward(C_BoardState &board, const move &m)
     set_single_piece(board, board.turn * -1, piece_type, m.src);
     if (m.castling)
     {
-        if (m.castling == 1)
-        {
-            unset_single_piece(board, board.turn, pRook, 40);
-            set_single_piece(board, board.turn, pRook, 56);
-        }
-        else if (m.castling == 2)
-        {
-            unset_single_piece(board, board.turn, pRook, 23);
-            set_single_piece(board, board.turn, pRook, 0);
-        }
+        uint64_t rook_move = castling_king_dest_to_rook_move_map.at(m.dest);
+        board.pieces[b_rooks] ^= rook_move;
+        board.pieces[color_to_BB_index.at(turn * -1)] ^= rook_move;
     }
     if (m.ep)
     {

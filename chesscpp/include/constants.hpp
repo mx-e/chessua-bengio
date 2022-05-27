@@ -129,6 +129,14 @@ const std::map<castling, uint8_t> castling_to_castling_state_mask =
 const std::map<float, std::array<castling, 2>> color_to_castling_indicator =
     {{1., {w_kingside, w_queenside}}, {-1., {b_kingside, b_queenside}}};
 
+const uint64_t castling_rook_move_w_ks = 0x0000000000800080LL;
+const uint64_t castling_rook_move_w_qs = 0x8000008000000000LL;
+const uint64_t castling_rook_move_b_ks = 0x0000000000010001LL;
+const uint64_t castling_rook_move_b_qs = 0x0100000100000000LL;
+
+const std::map<int, uint64_t> castling_king_dest_to_rook_move_map =
+    {{48, castling_rook_move_w_ks}, {16, castling_rook_move_w_qs}, {55, castling_rook_move_b_ks}, {23, castling_rook_move_b_qs}};
+
 const uint64_t white_pawns_starting_config = row_2;
 const uint64_t black_pawns_starting_config = row_7;
 const uint64_t white_rooks_starting_config = row_1 & (col_a | col_h);
