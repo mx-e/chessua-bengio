@@ -1,6 +1,4 @@
 #include <gtest/gtest.h>
-#include "../include/collections.hpp"
-#include "../include/transforms.hpp"
 #include "test_utils.hpp"
 
 void _print_bitboard(uint64_t bb)

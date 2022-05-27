@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include "../include/extractions.hpp"
 #include "test_utils.hpp"
 
 TEST(Extractions, SingleMove)
