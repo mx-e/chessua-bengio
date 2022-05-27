@@ -56,7 +56,7 @@ inline void execute_move_forward(C_BoardState &board, const move &m)
     {
         uint64_t rook_move = castling_king_dest_to_rook_move_map.at(m.dest);
         board.pieces[b_rooks] ^= rook_move;
-        board.pieces[color_to_BB_index.at(turn)] ^= rook_move;
+        board.pieces[color_to_BB_index.at(board.turn)] ^= rook_move;
     }
     if (m.ep)
     {
@@ -81,7 +81,7 @@ inline void execute_move_backward(C_BoardState &board, const move &m)
     {
         uint64_t rook_move = castling_king_dest_to_rook_move_map.at(m.dest);
         board.pieces[b_rooks] ^= rook_move;
-        board.pieces[color_to_BB_index.at(turn * -1)] ^= rook_move;
+        board.pieces[color_to_BB_index.at(board.turn * -1)] ^= rook_move;
     }
     if (m.ep)
     {
