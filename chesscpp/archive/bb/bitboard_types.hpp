@@ -1,9 +1,8 @@
-#ifndef TYPES
-#define TYPES
+#ifndef BB_TYPES
+#define BB_TYPES
 
 #include <stdint.h>
 #include <map>
-#include "constants.hpp"
 
 typedef std::array<std::array<int, 8>, 8> Board;
 typedef std::vector<std::string> UCIStrings;
@@ -16,7 +15,7 @@ struct move
     uint8_t src;              // 6 b
     uint8_t dest;             // 6 b
     uint8_t capture;          // 3 b (actually less)
-    uint8_t promotion;        // 2 b (promotion)
+    uint8_t flag;             // 2 b (promotion)
     uint8_t ep_field;         // 6 b
     uint8_t prev_c;           // 4 b
     uint8_t castling;         // 2 b
@@ -25,34 +24,33 @@ struct move
     // 29b
 };
 
-inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t capture = 0, const uint8_t promotion = 0, const uint8_t cast = 0, const uint8_t ep = 0, uint8_t ep_field = 0)
+inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t capture = 0, const uint8_t flag = 0, const uint8_t cast = 0, const uint8_t ep = 0, uint8_t ep_field = 0)
 {
     struct move m;
-    m.src = src;             // both
-    m.dest = dest;           // both
-    m.promotion = promotion; // promotion, both
-    m.ep_field = ep_field;   // both but with different use
-    m.capture = capture;     // stack/pop
-    m.prev_c = 0;            // stack/pop
-    m.castling = cast;       // both
-    m.prev_half_move_c = 0;  // stack/pop
-    m.ep = ep;               // if ep_field == 0 => m.ep = false
+    m.src = src; // both
+    m.dest = dest; // both
+    m.flag = flag; // promotion, both
+    m.ep_field = ep_field; // both but with different use
+    m.capture = capture; // stack/pop
+    m.prev_c = 0; // stack/pop
+    m.castling = cast; // both
+    m.prev_half_move_c = 0; // stack/pop
+    m.ep = ep; // if ep_field == 0 => m.ep = false
     return m;
 }
 
 struct C_BoardState
 {
-    uint64_t pieces[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    uint8_t castling_rights = UINT8_C(0x0F);
-    uint8_t en_passant = UINT8_C(0x00);
-    uint64_t all_attacks = empty_board;
+    uint64_t pieces[8];
+    uint8_t castling_rights;
+    uint8_t en_passant;
     std::vector<move> move_stack;
     std::vector<int> idx_list;
-    float turn = 1.;
-    float moves = 0.;
-    float half_moves = 0.;
-    bool king_attack = false;
-    bool castling_move_illegal = false;
+    float turn;
+    float moves;
+    float half_moves;
+    bool king_attack;
+    bool castling_move_illegal;
 };
 
 typedef std::vector<move> MoveList;
@@ -67,11 +65,9 @@ struct C_Session
 inline void reserve_move_list_stack(MoveListStack &move_list_stack)
 {
     move_list_stack.reserve(12);
-    for (int i = 0; i < 12; i++)
+    for (auto move_list : move_list_stack)
     {
-        MoveList move_list;
         move_list.reserve(10);
-        move_list_stack.push_back(move_list);
     }
 }
 
@@ -83,12 +79,21 @@ inline void reserve_board_state(C_BoardState &board_state)
 
 inline C_Session construct_session()
 {
-    C_Session session;
+    C_Session session{
+        .board_state = C_BoardState{
+            .castling_rights = UINT8_C(0x0F),
+            .en_passant = UINT8_C(0x00),
+            .turn = 1.,
+            .moves = 0.,
+            .half_moves = 0.,
+            .king_attack = false,
+            .castling_move_illegal = false}};
 
     reserve_move_list_stack(session.move_list_stack);
-    reserve_board_state(session.board_state);
+    reserve_board_state(session.board_state);    
 
     return session;
 }
+
 
 #endif

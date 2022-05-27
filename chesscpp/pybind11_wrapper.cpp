@@ -4,8 +4,9 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(chesscpp, m) {
+PYBIND11_MODULE(chesscpp, m)
+{
     m.doc() = "Chess-AI C++ Backend";
     m.def("generate_moves", &generate_moves, "Generates all possible moves given an initial state.");
-    m.def("runtime_benchmark", &runtime_benchmark, "");
+    m.def("runtime_benchmark", &runtime_benchmark, "Runs runtime benchmark for bitboard move generation n times.");
 }

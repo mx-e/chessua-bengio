@@ -4,7 +4,7 @@ from pybind11.setup_helpers import Pybind11Extension, build_ext
 
 class BuildExt(build_ext):
     def build_extension(self, ext) -> None:
-        ext.extra_compile_args = ['-g']
+        ext.extra_compile_args = ['-g', '-o3']
         return super().build_extension(ext)
 
 setup(
