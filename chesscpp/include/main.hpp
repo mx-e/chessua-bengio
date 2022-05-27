@@ -36,7 +36,8 @@ inline UCIStrings get_uci_moves(C_BoardState &board_state)
     UCIStrings uci_moves = {};
     for (move m : moves)
     {
-        if (check_move_causes_check(board_state, m, moves))
+        MoveList move_list;   
+        if (check_move_causes_check(board_state, m, move_list))
         {
             continue;
         }
