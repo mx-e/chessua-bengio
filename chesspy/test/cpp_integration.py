@@ -43,6 +43,6 @@ class CPPIntegration(unittest.TestCase):
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr)
-    # uncomment for debugging
-    # logging.getLogger( "tests.testMoveGenerator" ).setLevel( logging.DEBUG )
+    #uncomment for debugging
+    logging.getLogger( "tests.testMoveGenerator" ).setLevel( logging.DEBUG )
     unittest.main()
