@@ -37,6 +37,7 @@ inline UCIStrings get_uci_moves(C_BoardState &board_state)
     for (move m : moves)
     {
         MoveList move_list;   
+        std::cout << move_to_uci_str(m);
         if (check_move_causes_check(board_state, m, move_list))
         {
             continue;
