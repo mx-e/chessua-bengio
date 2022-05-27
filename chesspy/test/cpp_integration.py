@@ -30,6 +30,10 @@ class CPPIntegration(unittest.TestCase):
             true_moves_list = sorted(solution["legal_moves"])
 
             if true_n_legal_moves != n_moves:
+                print(board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+                print(true_moves_list)
+                print(uci_moves_list)
+                print(board.board_state)
                 import pdb; pdb.set_trace()
 
             self.assertEqual(
