@@ -10,6 +10,28 @@ std::string uci_part(Position position)
     return LETTERS[position.first] + std::to_string(position.second + 1);
 }
 
+void add_boards_along(BoardStates &boardStates, BoardState boardState, Move &move, Piece &piece, Position position)
+{
+    int steps = piece.get_steps();
+    move.step();
+
+    while (move.is_possible(boardState) && steps > 0)
+    {
+        move.update(boardState.board, boardState, piece);
+
+        steps--;
+
+        BoardState newState = prepare_board_state(boardState);
+
+        newState.uci = uci_part(position) + uci_part(move.get_position());
+
+        move.transfer(newState, boardState);
+        boardStates.push_back(newState);
+
+        move.step();
+    }
+}
+
 void add_boards_for_piece(BoardStates &boardStates, BoardState boardState, Piece &piece, Position position)
 {
     for (auto move : piece.get_moves(boardState, position))
