@@ -129,6 +129,8 @@ inline void collect_queen_moves_and_captures(C_BoardState &board_state, MoveList
 
 inline void collect_legal_moves(C_BoardState &board_state, MoveList &legal_moves)
 {
+    if (get_king(board_state, board_state.turn) == 0)
+        return;
     board_state.all_attacks = empty_board;
     collect_pawn_moves_and_captures(board_state, legal_moves);
     collect_knight_moves_and_captures(board_state, legal_moves);

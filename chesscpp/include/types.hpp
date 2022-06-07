@@ -55,13 +55,24 @@ struct C_BoardState
     bool castling_move_illegal = false;
 };
 
-typedef std::vector<move> MoveList;
+struct AlphaBetaState
+{
+    int alpha;
+    int beta;
+    int depth;
+    unsigned int reached_nodes;
+    std::vector<move> bestmove;
+};
+
+typedef std::vector<move>
+    MoveList;
 typedef std::vector<MoveList> MoveListStack;
 
 struct C_Session
 {
     MoveListStack move_list_stack;
     C_BoardState board_state;
+    AlphaBetaState alpha_beta_state;
 };
 
 inline void reserve_move_list_stack(MoveListStack &move_list_stack)

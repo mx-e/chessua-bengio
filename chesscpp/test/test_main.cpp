@@ -30,3 +30,33 @@ TEST(Main, UCICastlingKingCaptureInTransit)
                   { return uci == "a1b1"; }),
               true);
 }
+
+TEST(Bestmove, Capture)
+{
+    Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pBishop, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, -pRook, 0, 0}}};
+    std::string value = bestmove(board, 1., {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ("d2h6", value);
+}
+
+TEST(Bestmove, Checkmate)
+{
+    Board board = {{{0, 0, 0, 0, 0, 0, 0, pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {pRook, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, 0, 0, 0, -pKing}}};
+    std::string value = bestmove(board, 1., {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ("e2h2", value);
+}
