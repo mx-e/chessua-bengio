@@ -1,14 +1,13 @@
 
 #include "transforms.hpp"
 #include "collections.hpp"
+#include "constants.hpp"
 
 typedef std::pair<int, int> Position;
 typedef std::vector<Position> EnPassants;
 
-inline C_BoardState to_bitboard(Board mailbox)
+inline void to_bitboard(C_BoardState &board_state, Board mailbox)
 {
-    C_BoardState board_state;
-
     for (int col = 0; col < 8; col++)
     {
         for (int row = 0; row < 8; row++)
@@ -24,7 +23,6 @@ inline C_BoardState to_bitboard(Board mailbox)
             set_single_piece(board_state, color, type, position_idx);
         }
     }
-    return board_state;
 };
 
 inline UCIStrings get_uci_moves(C_BoardState &board_state)
@@ -46,9 +44,9 @@ inline UCIStrings get_uci_moves(C_BoardState &board_state)
     return uci_moves;
 }
 
-inline C_BoardState marshall_board_state(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
+inline C_BoardState marshall_board_state(C_BoardState &board_state, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
 {
-    C_BoardState board_state = to_bitboard(board);
+    to_bitboard(board_state, board);
     board_state.turn = color;
     board_state.half_moves = halfMove;
     board_state.moves = fullMove;
@@ -98,13 +96,17 @@ inline C_BoardState marshall_board_state(Board board, int color, EnPassants enpa
 
 inline UCIStrings generate_moves(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
 {
-    C_BoardState board_state = marshall_board_state(board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
+
+    C_BoardState board_state = C_BoardState();
+    marshall_board_state(board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     return get_uci_moves(board_state);
 }
 
 inline void runtime_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
 {
-    C_BoardState board_state = marshall_board_state(board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
+    C_BoardState board_state = C_BoardState();
+
+    marshall_board_state(board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     MoveList moves;
     for (int _ = 0; _ < runs; _++)
     {
@@ -137,146 +139,133 @@ int count_pieces(const C_BoardState &board, const float color, const uint8_t pie
     return count;
 }
 
-void print_move_list(MoveList &move_list, int depth)
+void print_optimal_move_sequence(MoveList &move_list)
 {
-    for (int i = 0; i < depth; i++)
+    for (move m : move_list)
     {
-        printf("%s -> ", move_to_uci_str(move_list[i]).c_str());
+        printf("%s -> ", move_to_uci_str(m).c_str());
     }
 
     printf("\n");
 }
 
-int evaluate(C_BoardState &board_state)
+inline float evaluate(C_BoardState &board_state)
 {
-    int score = 0;
+    if (board_state.king_attack || board_state.castling_move_illegal)
+        return board_state.turn * infty;
 
-    score += count_pieces(board_state, 1., b_pawns);
-    score += -count_pieces(board_state, -1., b_pawns);
+    float score = 0;
 
-    score += 3 * count_pieces(board_state, 1., b_bishops);
-    score += -3 * count_pieces(board_state, -1., b_bishops);
+    score += count_pieces(board_state, White, b_pawns);
+    score += -count_pieces(board_state, Black, b_pawns);
 
-    score += 3 * count_pieces(board_state, 1., b_knights);
-    score += -3 * count_pieces(board_state, -1., b_knights);
+    score += 3 * count_pieces(board_state, White, b_bishops);
+    score += -3 * count_pieces(board_state, Black, b_bishops);
 
-    score += 5 * count_pieces(board_state, 1., b_rooks);
-    score += -5 * count_pieces(board_state, -1., b_rooks);
+    score += 3 * count_pieces(board_state, White, b_knights);
+    score += -3 * count_pieces(board_state, Black, b_knights);
 
-    score += 9 * count_pieces(board_state, 1., b_queens);
-    score += -9 * count_pieces(board_state, -1., b_queens);
+    score += 5 * count_pieces(board_state, White, b_rooks);
+    score += -5 * count_pieces(board_state, Black, b_rooks);
+
+    score += 9 * count_pieces(board_state, White, b_queens);
+    score += -9 * count_pieces(board_state, Black, b_queens);
 
     return score;
 }
+inline float alpha_beta_max(C_Session &session, float alpha, float beta, int depth_left);
 
-int alphabeta(C_Session &session)
+inline float alpha_beta_min(C_Session &session, float alpha, float beta, int depth_left)
 {
-    session.alpha_beta_state.reached_nodes++;
-    MoveList x = {};
-    x.reserve(20);
+    ++session.alpha_beta_state.reached_nodes;
+    if (depth_left == 0)
+        return -evaluate(session.board_state);
+    int depth = session.alpha_beta_state.max_depth - depth_left;
 
-    if (session.board_state.king_attack || session.board_state.castling_move_illegal)
+    MoveList &move_list = session.move_list_stack[depth];
+    float best_score = infty;
+    for (move m : move_list)
     {
-        if (session.board_state.turn == 1.)
-            return std::numeric_limits<int>::max();
-        return std::numeric_limits<int>::min();
-    }
+        push_move(session.board_state, m, session.move_list_stack[depth + 1]);
+        float score = discount_factor * alpha_beta_max(session, alpha, beta, depth_left - 1);
 
-    if (get_king(session.board_state, session.board_state.turn) == 0)
-    {
-        printf("No king\n");
-        print_move_list(session.board_state.move_stack, session.board_state.move_stack.size());
-    }
-
-    if (session.alpha_beta_state.depth == 0)
-        return evaluate(session.board_state);
-
-    MoveList &move_list = session.move_list_stack[session.alpha_beta_state.depth];
-    collect_legal_moves(session.board_state, move_list);
-
-    int value = 0;
-    if (session.board_state.turn == 1.)
-    {
-        value = std::numeric_limits<int>::min();
-        for (move m : move_list)
+        if (depth == 0 && score < best_score)
         {
-            push_move(session.board_state, m, x);
-
-            session.alpha_beta_state.depth--;
-            int new_value = alphabeta(session);
-            session.alpha_beta_state.depth++;
-
-            if (new_value > value)
-            {
-                value = new_value;
-                session.alpha_beta_state.bestmove[session.alpha_beta_state.depth] = m;
-            }
-            pop_move(session.board_state, x);
-
-            if (value >= session.alpha_beta_state.beta)
-                break;
-
-            session.alpha_beta_state.alpha = max(session.alpha_beta_state.alpha, value);
+            best_score = score;
+            session.alpha_beta_state.bestmove = m;
         }
+        pop_move(session.board_state);
+        session.move_list_stack[depth + 1].clear();
+
+        if (score <= alpha)
+            return alpha;
+        if (score < beta)
+            beta = score;
+    }
+    return beta;
+}
+
+inline float alpha_beta_max(C_Session &session, float alpha, float beta, int depth_left)
+{
+    ++session.alpha_beta_state.reached_nodes;
+    if (depth_left == 0)
+        return evaluate(session.board_state);
+    int depth = session.alpha_beta_state.max_depth - depth_left;
+
+    MoveList &move_list = session.move_list_stack[depth];
+
+    float best_score = -infty;
+    for (move m : move_list)
+    {
+        push_move(session.board_state, m, session.move_list_stack[depth + 1]);
+        float score = discount_factor * alpha_beta_min(session, alpha, beta, depth_left - 1);
+
+        if (depth == 0 && score > best_score)
+        {
+            best_score = score;
+            session.alpha_beta_state.bestmove = m;
+        }
+
+        pop_move(session.board_state);
+        session.move_list_stack[depth + 1].clear();
+
+        if (score >= beta)
+            return beta;
+
+        if (score > alpha)
+            alpha = score;
+    }
+
+    return alpha;
+}
+
+inline int alphabeta(C_Session &session, int max_depth)
+{
+    int best_move_score;
+    collect_legal_moves(session.board_state, session.move_list_stack[0]);
+    if (session.board_state.turn == White)
+    {
+        best_move_score = alpha_beta_max(session, -infty, infty, max_depth);
     }
     else
     {
-        value = std::numeric_limits<int>::max();
-        for (move m : move_list)
-        {
-            push_move(session.board_state, m, x);
-
-            session.alpha_beta_state.depth--;
-            int new_value = alphabeta(session);
-            session.alpha_beta_state.depth++;
-
-            if (new_value < value)
-            {
-                value = new_value;
-                session.alpha_beta_state.bestmove[session.alpha_beta_state.depth] = m;
-            }
-            pop_move(session.board_state, x);
-
-            if (value <= session.alpha_beta_state.alpha)
-                break;
-
-            session.alpha_beta_state.alpha = min(session.alpha_beta_state.beta, value);
-        }
+        best_move_score = alpha_beta_min(session, -infty, infty, max_depth);
     }
-
-    return value;
+    return best_move_score;
 }
 
-std::string bestmove(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
+std::string bestmove(int max_depth, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
 {
-    struct C_Session session;
-    int depth = 4;
+    C_Session session = construct_session(max_depth);
+    marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
 
-    AlphaBetaState alphabeta_state;
-    alphabeta_state.alpha = std::numeric_limits<int>::min();
-    alphabeta_state.beta = std::numeric_limits<int>::max();
-    alphabeta_state.depth = depth;
-    alphabeta_state.reached_nodes = 0;
-    alphabeta_state.bestmove.resize(depth);
-    session.alpha_beta_state = alphabeta_state;
-
-    C_BoardState board_state = marshall_board_state(board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
-    session.board_state = board_state;
-
-    UCIStrings x = get_uci_moves(board_state);
-
-    MoveListStack move_list_stack;
-    reserve_move_list_stack(move_list_stack);
-    session.move_list_stack = move_list_stack;
-
-    int bestmove = alphabeta(session);
+    float best_move_score = alphabeta(session, max_depth);
 
     printf("Reached %d nodes\n", session.alpha_beta_state.reached_nodes);
-    printf("Bestmove has a score of %d\n", bestmove);
+    printf("Bestmove has a score of %f\n", best_move_score);
 
-    print_move_list(session.alpha_beta_state.bestmove, depth);
-    print_move_list(session.board_state.move_stack, depth);
-    printf("%s\n", move_to_uci_str(session.alpha_beta_state.bestmove[depth]).c_str());
+    print_optimal_move_sequence(session.alpha_beta_state.best_move_stack);
+    printf("%s\n", move_to_uci_str(session.alpha_beta_state.bestmove).c_str());
 
-    return move_to_uci_str(session.alpha_beta_state.bestmove[depth]);
+    return move_to_uci_str(session.alpha_beta_state.bestmove);
 }

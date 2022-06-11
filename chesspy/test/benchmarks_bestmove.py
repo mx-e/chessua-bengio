@@ -1,6 +1,6 @@
 from tkinter import N
 import unittest, logging, sys, pathlib, json, numpy as np, time
-from chesscpp import runtime_benchmark_bestmove, generate_moves
+from chesscpp import bestmove
 from chesspy.game import import_fen, export_fen
 
 
@@ -22,24 +22,13 @@ class TestBenchmarks(unittest.TestCase):
                 start = time.time()
                 max_time = 10
 
-                log.debug("Testing position without alpha beta pruning.")
-
-                enpassant = [tuple(board.en_passant_tile)] if not (board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
-                depth = 1
-                while(time.time() - start <= max_time):
-                    bestmove = runtime_benchmark_bestmove(False, board.board_state, board.to_move, depth, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
-                    log.debug(f"current depth: {depth} time: {time.time() - start} seconds. bestmove: {bestmove}")
-                    depth += 1
-                
-                start = time.time()
-
                 log.debug("Testing position with alpha beta pruning.")
 
                 enpassant = [tuple(board.en_passant_tile)] if not (board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
                 depth = 1
                 while(time.time() - start <= max_time):
-                    bestmove = runtime_benchmark_bestmove(True, board.board_state, board.to_move, depth, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
-                    log.debug(f"current depth: {depth} time: {time.time() - start} seconds. bestmove: {bestmove}")
+                    best_move = bestmove(depth, board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+                    log.debug(f"current depth: {depth} time: {time.time() - start} seconds. bestmove: {best_move}")
                     depth += 1
                     
                 

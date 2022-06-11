@@ -55,17 +55,18 @@ struct C_BoardState
     bool castling_move_illegal = false;
 };
 
-struct AlphaBetaState
-{
-    int alpha;
-    int beta;
-    int depth;
-    unsigned int reached_nodes;
-    std::vector<move> bestmove;
-};
-
 typedef std::vector<move>
     MoveList;
+
+struct AlphaBetaState
+{
+    int depth = 0;
+    int max_depth;
+    unsigned int reached_nodes = 0;
+    move bestmove;
+    MoveList best_move_stack;
+};
+
 typedef std::vector<MoveList> MoveListStack;
 
 struct C_Session
@@ -75,29 +76,30 @@ struct C_Session
     AlphaBetaState alpha_beta_state;
 };
 
-inline void reserve_move_list_stack(MoveListStack &move_list_stack)
+inline void reserve_move_list_stack(MoveListStack &move_list_stack, int depth)
 {
-    move_list_stack.reserve(12);
-    for (int i = 0; i < 12; i++)
+    move_list_stack.reserve(depth + 1);
+    for (int i = 0; i <= depth; i++)
     {
         MoveList move_list;
-        move_list.reserve(10);
+        move_list.reserve(20);
         move_list_stack.push_back(move_list);
     }
 }
 
-inline void reserve_board_state(C_BoardState &board_state)
+inline void reserve_board_state(C_BoardState &board_state, int depth)
 {
-    board_state.move_stack.reserve(10);
-    board_state.idx_list.reserve(16);
+    board_state.move_stack.reserve(depth);
+    board_state.idx_list.reserve(depth);
 }
 
-inline C_Session construct_session()
+inline C_Session construct_session(int max_depth)
 {
     C_Session session;
-
-    reserve_move_list_stack(session.move_list_stack);
-    reserve_board_state(session.board_state);
+    session.alpha_beta_state.max_depth = max_depth;
+    session.alpha_beta_state.best_move_stack.reserve(max_depth);
+    reserve_move_list_stack(session.move_list_stack, max_depth);
+    reserve_board_state(session.board_state, max_depth);
 
     return session;
 }

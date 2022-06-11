@@ -136,7 +136,6 @@ inline void push_move(C_BoardState &board, move m, MoveList &move_list)
 
     board.turn *= -1;
 
-    move_list.clear();
     collect_legal_moves(board, move_list);
     board.king_attack = (bool)(board.all_attacks & get_king(board, -1. * board.turn));
     board.castling_move_illegal = check_castling_move_illegal(board, m, board.all_attacks);
@@ -144,7 +143,7 @@ inline void push_move(C_BoardState &board, move m, MoveList &move_list)
     board.move_stack.push_back(m);
 }
 
-inline move pop_move(C_BoardState &board, MoveList &move_list)
+inline move pop_move(C_BoardState &board)
 {
     if (board.move_stack.empty())
     {
@@ -175,7 +174,7 @@ inline bool check_move_causes_check(C_BoardState &board, move &m, MoveList &move
 {
     push_move(board, m, move_list);
     bool check = board.king_attack || board.castling_move_illegal;
-    pop_move(board, move_list);
+    pop_move(board);
     return check;
 }
 

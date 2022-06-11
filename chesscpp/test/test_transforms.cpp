@@ -4,7 +4,7 @@
 TEST(Transforms, SetSingleField)
 {
     // set
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = session.board_state;
 
     set_single_piece(board, White, pPawn, flat(0, 0));
@@ -55,7 +55,7 @@ TEST(Transforms, SetSingleField)
 
 TEST(Transforms, SetPieces)
 {
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = session.board_state;
 
     uint64_t knights = fill_bitboard_max(empty_board, {2, 23, 32, 58});
@@ -69,7 +69,7 @@ TEST(Transforms, SetPieces)
 
 TEST(Transforms, SetUnsetCastlingRights)
 {
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = session.board_state;
 
     unset_castling_rights(board, w_queenside);
@@ -96,7 +96,7 @@ TEST(Transforms, SetUnsetCastlingRights)
 TEST(Transforms, PushPopBoardPawnSingleMove)
 {
     move pawn_move_white = create_move(3, 4);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(White);
     session.board_state = board;
     uint64_t pawns = fill_bitboard_max(empty_board, {3, 15});
@@ -121,7 +121,7 @@ TEST(Transforms, PushPopBoardPawnSingleMove)
     EXPECT_EQ(top_of_stack.prev_half_move_c, 20.);
     EXPECT_EQ(top_of_stack.ep_field, 34);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
 
     EXPECT_EQ(get_piece_type_of_field(board, 3), pPawn);
     EXPECT_EQ(get_piece_type_of_field(board, 15), pPawn);
@@ -134,7 +134,7 @@ TEST(Transforms, PushPopBoardPawnSingleMove)
 TEST(Transforms, PushPopPawnDoubleMove)
 {
     move pawn_double_move_black = create_move(6, 4, 0, 0, 0, 0, 5);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(Black);
     session.board_state = board;
     uint64_t pawns = fill_bitboard_max(empty_board, {6, 15});
@@ -157,7 +157,7 @@ TEST(Transforms, PushPopPawnDoubleMove)
     EXPECT_EQ(top_of_stack.prev_half_move_c, 0.);
     EXPECT_EQ(top_of_stack.ep_field, 60);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
 
     EXPECT_EQ(get_piece_type_of_field(board, 4), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 6), pPawn);
@@ -169,7 +169,7 @@ TEST(Transforms, PushPopPawnDoubleMove)
 TEST(Transforms, PushPopPawnPromotion)
 {
     move pawn_promotion_white = create_move(62, 63, 0, pQueen, 0, 0, 0);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(White);
     session.board_state = board;
     uint64_t pawns = fill_bitboard_max(empty_board, {62});
@@ -180,7 +180,7 @@ TEST(Transforms, PushPopPawnPromotion)
     EXPECT_EQ(get_piece_type_of_field(board, 62), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 63), pQueen);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
     EXPECT_EQ(get_piece_type_of_field(board, 62), pPawn);
     EXPECT_EQ(get_piece_type_of_field(board, 63), 0);
 }
@@ -188,7 +188,7 @@ TEST(Transforms, PushPopPawnPromotion)
 TEST(Transforms, PushPopPawnPromotionCapture)
 {
     move pawn_promotion_capture_black = create_move(33, 24, pBishop, pRook, 0, 0, 0);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(Black);
     session.board_state = board;
     uint64_t pawns = fill_bitboard_max(empty_board, {33});
@@ -204,7 +204,7 @@ TEST(Transforms, PushPopPawnPromotionCapture)
     EXPECT_EQ(get_piece_type_of_field(board, 33), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 24), pRook);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
     EXPECT_EQ(get_piece_type_of_field(board, 33), pPawn);
     EXPECT_EQ(get_piece_type_of_field(board, 24), pBishop);
     EXPECT_EQ(board.en_passant, 60);
@@ -214,7 +214,7 @@ TEST(Transforms, PushPopPawnPromotionCapture)
 TEST(Transforms, PushPopEnPassantCapture)
 {
     move en_passant_capture_white = create_move(4, 13, 0, 0, 0, 1);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(White);
     session.board_state = board;
     board.en_passant = 13;
@@ -232,7 +232,7 @@ TEST(Transforms, PushPopEnPassantCapture)
     EXPECT_EQ(get_piece_type_of_field(board, 13), pPawn);
     EXPECT_EQ(get_piece_type_of_field(board, 12), 0);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
 
     EXPECT_EQ(get_piece_type_of_field(board, 4), pPawn);
     EXPECT_EQ(get_piece_type_of_field(board, 13), 0);
@@ -242,7 +242,7 @@ TEST(Transforms, PushPopEnPassantCapture)
 TEST(Transforms, PushPopQueenMove)
 {
     move queen_move_black = create_move(20, 36, 0, 0, 0, 0, 0);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(Black);
     session.board_state = board;
 
@@ -254,7 +254,7 @@ TEST(Transforms, PushPopQueenMove)
     EXPECT_EQ(get_piece_type_of_field(board, 20), 0);
     EXPECT_EQ(get_piece_type_of_field(board, 36), pQueen);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
     EXPECT_EQ(get_piece_type_of_field(board, 20), pQueen);
     EXPECT_EQ(get_piece_type_of_field(board, 36), 0);
 }
@@ -262,7 +262,7 @@ TEST(Transforms, PushPopQueenMove)
 TEST(Transforms, PushPopRookCaptureWhite)
 {
     move rook_capture_white = create_move(0, 7, pRook, 0, 0, 0, 0);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(White);
     session.board_state = board;
 
@@ -279,7 +279,7 @@ TEST(Transforms, PushPopRookCaptureWhite)
     EXPECT_EQ(get_board_at_idx(board.pieces[b_white], 0), false);
     EXPECT_EQ(get_board_at_idx(board.pieces[b_black], 7), false);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
 
     EXPECT_EQ(get_piece_type_of_field(board, 0), pRook);
     EXPECT_EQ(get_piece_type_of_field(board, 7), pRook);
@@ -291,7 +291,7 @@ TEST(Transforms, PushPopRookCaptureWhite)
 TEST(Transforms, PushPopCastlingMoveBlack)
 {
     move castling_move_black = create_move(39, 55, 0, 0, 1, 0, 0);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(Black);
     session.board_state = board;
 
@@ -313,7 +313,7 @@ TEST(Transforms, PushPopCastlingMoveBlack)
     EXPECT_EQ(m.prev_c, 15);
     EXPECT_EQ(board.castling_move_illegal, false);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
 
     EXPECT_EQ(get_piece_type_of_field(board, 63), pRook);
     EXPECT_EQ(get_piece_type_of_field(board, 39), pKing);
@@ -326,7 +326,7 @@ TEST(Transforms, PushPopCastlingMoveBlack)
 TEST(Transforms, PushPopIllegalCastlingMove)
 {
     move illegal_castling_move_black = create_move(39, 23, 0, 0, 2, 0, 0);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(Black);
     session.board_state = board;
 
@@ -350,14 +350,14 @@ TEST(Transforms, PushPopIllegalCastlingMove)
     move m = board.move_stack.back();
     EXPECT_EQ(m.prev_c, 13);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
     EXPECT_EQ(board.castling_move_illegal, false);
 }
 
 TEST(Transforms, PushPopKingMoveInCheck)
 {
     move king_in_check_move_white = create_move(32, 33, pPawn);
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = init_board_state_for_test(White);
     session.board_state = board;
 
@@ -373,7 +373,7 @@ TEST(Transforms, PushPopKingMoveInCheck)
 
     EXPECT_EQ(board.king_attack, true);
 
-    pop_move(board, session.move_list_stack[0]);
+    pop_move(board);
 
     EXPECT_EQ(get_piece_type_of_field(board, 32), pKing);
     EXPECT_EQ(get_piece_type_of_field(board, 33), pPawn);
