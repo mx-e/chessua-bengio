@@ -7,6 +7,7 @@
 
 const float infty = std::numeric_limits<float>::max();
 const float discount_factor = 0.90;
+const int expected_moves_per_game = 25;
 
 const uint8_t pKing = 1;
 const uint8_t pQueen = 2;

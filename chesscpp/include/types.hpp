@@ -47,7 +47,6 @@ struct C_BoardState
     uint8_t en_passant = UINT8_C(0x00);
     uint64_t all_attacks = empty_board;
     std::vector<move> move_stack;
-    std::vector<int> idx_list;
     float turn = 1.;
     float moves = 0.;
     float half_moves = 0.;
@@ -60,11 +59,11 @@ typedef std::vector<move>
 
 struct AlphaBetaState
 {
-    int depth = 0;
     int max_depth;
-    unsigned int reached_nodes = 0;
+    int current_max_depth = 1;
     move bestmove;
-    MoveList best_move_stack;
+    std::vector<float> runtimes_at_depth = {};
+    std::vector<uint32_t> nodes_at_depth = {};
 };
 
 typedef std::vector<MoveList> MoveListStack;
@@ -89,15 +88,16 @@ inline void reserve_move_list_stack(MoveListStack &move_list_stack, int depth)
 
 inline void reserve_board_state(C_BoardState &board_state, int depth)
 {
-    board_state.move_stack.reserve(depth);
-    board_state.idx_list.reserve(depth);
+    board_state.move_stack.reserve(depth + 1);
 }
 
 inline C_Session construct_session(int max_depth)
 {
     C_Session session;
     session.alpha_beta_state.max_depth = max_depth;
-    session.alpha_beta_state.best_move_stack.reserve(max_depth);
+    session.alpha_beta_state.runtimes_at_depth.resize(max_depth + 1);
+    session.alpha_beta_state.nodes_at_depth.resize(max_depth + 1, 0);
+
     reserve_move_list_stack(session.move_list_stack, max_depth);
     reserve_board_state(session.board_state, max_depth);
 
