@@ -58,33 +58,5 @@ TEST(Bestmove, Checkmate)
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
-    EXPECT_EQ("a2h2", value);
-}
-
-TEST(Bestmove, TimeManagement)
-{
-    Board board = {{{0, pRook, 0, 0, 0, 0, 0, pKing},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {pRook, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove(45, 10, board, 1., {}, false, false, false, false, 0, 0);
-    EXPECT_EQ(true, false);
-}
-
-TEST(Bestmove, SearchPerformance)
-{
-    Board board = {{{0, pRook, 0, 0, 0, 0, 0, pKing},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {pRook, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove(2000, 12, board, 1., {}, false, false, false, false, 0, 0);
-    EXPECT_EQ(true, false);
+    EXPECT_EQ(value, "a2h2");
 }

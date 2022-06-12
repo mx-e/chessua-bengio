@@ -40,6 +40,16 @@ inline move create_move(const u_int8_t src, const uint8_t dest, const uint8_t ca
     return m;
 }
 
+inline move create_empty_move()
+{
+    return create_move(0, 0);
+}
+
+inline bool is_move_empty(move m)
+{
+    return m.src == m.dest;
+}
+
 struct C_BoardState
 {
     uint64_t pieces[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -98,7 +108,7 @@ inline C_Session construct_session(int max_depth)
     session.alpha_beta_state.max_depth = max_depth;
     session.alpha_beta_state.runtimes_at_depth.resize(max_depth + 1);
     session.alpha_beta_state.nodes_at_depth.resize(max_depth + 1, 0);
-    session.alpha_beta_state.pvs_best_moves.resize(max_depth + 1, move());
+    session.alpha_beta_state.pvs_best_moves.resize(max_depth + 1, create_empty_move());
 
     reserve_move_list_stack(session.move_list_stack, max_depth + max_quiesence_depth);
     reserve_board_state(session.board_state, max_depth + max_quiesence_depth);
