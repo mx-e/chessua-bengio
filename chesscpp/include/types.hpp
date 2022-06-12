@@ -98,7 +98,7 @@ inline C_Session construct_session(int max_depth)
     session.alpha_beta_state.max_depth = max_depth;
     session.alpha_beta_state.runtimes_at_depth.resize(max_depth + 1);
     session.alpha_beta_state.nodes_at_depth.resize(max_depth + 1, 0);
-    session.alpha_beta_state.pvs_best_moves.reserve(max_depth + 1);
+    session.alpha_beta_state.pvs_best_moves.resize(max_depth + 1, move());
 
     reserve_move_list_stack(session.move_list_stack, max_depth + max_quiesence_depth);
     reserve_board_state(session.board_state, max_depth + max_quiesence_depth);

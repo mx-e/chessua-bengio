@@ -71,7 +71,8 @@ TEST(Bestmove, TimeManagement)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {pRook, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove(45, 4, board, 1., {}, false, false, false, false, 0, 0);
+    std::string value = bestmove(45, 10, board, 1., {}, false, false, false, false, 0, 0);
+    EXPECT_EQ(true, false);
 }
 
 TEST(Bestmove, SearchPerformance)
@@ -84,5 +85,6 @@ TEST(Bestmove, SearchPerformance)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {pRook, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove(2000, 8, board, 1., {}, false, false, false, false, 0, 0);
+    std::string value = bestmove(2000, 12, board, 1., {}, false, false, false, false, 0, 0);
+    EXPECT_EQ(true, false);
 }
