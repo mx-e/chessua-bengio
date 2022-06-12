@@ -5,6 +5,11 @@
 #include <vector>
 #include <stdint.h>
 
+const float infty = std::numeric_limits<float>::max();
+const float discount_factor = 0.90;
+const int expected_moves_per_game = 25;
+const int max_quiesence_depth = 5;
+
 const uint8_t pKing = 1;
 const uint8_t pQueen = 2;
 const uint8_t pBishop = 3;
@@ -12,8 +17,8 @@ const uint8_t pKnight = 4;
 const uint8_t pRook = 5;
 const uint8_t pPawn = 6;
 
-const int Black = -1.;
-const int White = 1.;
+const float Black = -1.;
+const float White = 1.;
 
 enum board
 {

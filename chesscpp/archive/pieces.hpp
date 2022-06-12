@@ -84,7 +84,9 @@ public:
     virtual Moves get_moves(BoardState boardState, Position position);
     virtual int get_steps();
     virtual int get_id();
-    static const int ID = 1;
+
+ public:
+   static const int ID = 1;
 };
 
 /**
@@ -98,6 +100,9 @@ class Queen : public Piece
     virtual int get_steps();
     virtual int get_id();
     virtual int get_character();
+
+public:
+   static const int ID = 2;
 };
 
 /**
@@ -111,6 +116,9 @@ class Bishop : public Piece
     virtual int get_steps();
     virtual int get_id();
     virtual int get_character();
+
+public:
+    static const int ID = 3;
 };
 
 /**
@@ -124,6 +132,9 @@ class Knight : public Piece
     virtual int get_steps();
     virtual int get_id();
     virtual int get_character();
+
+public:
+    static const int ID = 4;
 };
 
 /**
@@ -152,6 +163,9 @@ class Pawn : public Piece
     virtual Moves get_moves(BoardState boardState, Position position);
     virtual int get_steps();
     virtual int get_id();
+
+public:
+    static const int ID = 6;
 };
 
 BoardState prepare_board_state(BoardState boardState);

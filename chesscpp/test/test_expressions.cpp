@@ -3,7 +3,7 @@
 
 TEST(Expressions, GetPieces)
 {
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     session.board_state = get_new_game_board();
     uint64_t b_bishops = get_pieces(session.board_state, Black, pBishop);
     uint64_t w_pawns = get_pieces(session.board_state, White, pPawn);
@@ -16,7 +16,7 @@ TEST(Expressions, GetPieces)
 
 TEST(Expressions, GetPiecesSpecific)
 {
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     session.board_state = get_new_game_board();
     C_BoardState board = session.board_state;
 
@@ -36,7 +36,7 @@ TEST(Expressions, GetPiecesSpecific)
 
 TEST(Expressions, ColoredPieces)
 {
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     session.board_state = get_new_game_board();
     C_BoardState board = session.board_state;
     EXPECT_EQ(get_pieces_of_color(board, White), row_1 | row_2);
@@ -45,7 +45,7 @@ TEST(Expressions, ColoredPieces)
 
 TEST(Expressions, EmptyEnemyFields)
 {
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     session.board_state = get_new_game_board();
     C_BoardState board = session.board_state;
     EXPECT_EQ(get_empty_fields(board), center_half);
@@ -57,14 +57,14 @@ TEST(Expressions, EmptyEnemyFields)
 TEST(Expressions, PawnSingleMoves)
 {
     // start board
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     session.board_state = get_new_game_board();
     C_BoardState board = session.board_state;
     EXPECT_EQ(get_pawn_single_moves(board, White), row_3);
     EXPECT_EQ(get_pawn_single_moves(board, Black), row_6);
 
     // some distributed pawns
-    session = construct_session();
+    session = construct_session(10);
     board = session.board_state;
     uint64_t pawns_distr = fill_bitboard_max(empty_board, {2, 14, 62});
     set_pieces(board, Black, pPawn, pawns_distr);
@@ -80,7 +80,7 @@ TEST(Expressions, PawnSingleMoves)
               true);
 
     // check_no_overflow
-    session = construct_session();
+    session = construct_session(10);
     board = session.board_state;
     pawns_distr = fill_bitboard_max(empty_board, {7, 15, 62});
     set_pieces(board, White, pPawn, pawns_distr);
@@ -99,14 +99,14 @@ TEST(Expressions, PawnSingleMoves)
 TEST(Expressions, PawnDoubleMove)
 {
     // start board
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     session.board_state = get_new_game_board();
     C_BoardState board = session.board_state;
     EXPECT_EQ(get_pawn_double_moves(board, get_pawn_single_moves(board, White), White), row_4);
     EXPECT_EQ(get_pawn_double_moves(board, get_pawn_single_moves(board, Black), Black), row_5);
 
     // illegal double moves
-    session = construct_session();
+    session = construct_session(10);
     board = session.board_state;
     uint64_t pawns_distr = fill_bitboard_max(empty_board, {1, 8, 18, 46});
     set_pieces(board, White, pPawn, pawns_distr);
@@ -128,7 +128,7 @@ TEST(Expressions, PawnDoubleMove)
 TEST(Expressions, PawnAttacks)
 {
     // start board
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     session.board_state = get_new_game_board();
     C_BoardState board = session.board_state;
     EXPECT_EQ(get_pawn_attacks(board, attack_left, White), row_3 & ~col_h);
@@ -138,7 +138,7 @@ TEST(Expressions, PawnAttacks)
     EXPECT_EQ(get_pawn_attacks(board, attack_right, Black), row_6 & ~col_h);
 
     // overflow attack move
-    session = construct_session();
+    session = construct_session(10);
     board = session.board_state;
     uint64_t pawns_distr = fill_bitboard_max(empty_board, {7, 63});
     set_pieces(board, White, pPawn, pawns_distr);
@@ -153,14 +153,14 @@ TEST(Expressions, PawnAttacks)
 TEST(Expressions, BishopMoves)
 {
     // Test1 - corner + block
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = session.board_state;
     uint64_t blockers = fill_bitboard_max(empty_board, {9, 18});
     EXPECT_EQ(get_bishop_moves_and_attacks(0, blockers), row_2 & col_b);
     EXPECT_EQ(get_bishop_moves_and_attacks(2, blockers), (uint64_t)0x0050080402010000LL);
 
     // Test2 - block all sides
-    session = construct_session();
+    session = construct_session(10);
     board = session.board_state;
     blockers = fill_bitboard_max(empty_board, {0, 18, 2, 16});
     EXPECT_EQ(get_bishop_moves_and_attacks(9, blockers), blockers);
@@ -169,7 +169,7 @@ TEST(Expressions, BishopMoves)
 TEST(Expression, RookMoves)
 {
     // Test1 - corner + block
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = session.board_state;
     uint64_t blockers = fill_bitboard_max(empty_board, {8, 1});
     EXPECT_EQ(get_rook_moves_and_attacks(0, blockers), blockers);

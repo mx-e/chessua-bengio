@@ -1,7 +1,93 @@
 //#include "custom.hpp"
 #include <gtest/gtest.h>
 
+<<<<<<< HEAD:chesscpp/archive/possible_boards.cpp
 /*TEST(PossibleBoards, PawnOpeningWhite)
+=======
+// TEST(BestMove, Rooks)
+// {
+//     Board board{{{0, 0, 0, 0, 0, 0, 0, -King::ID},
+//                  {Rook::ID, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, Rook::ID, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+//     BoardState boardState{board, COLOR_WHITE};
+//     std::string move = bestmove(boardState, 1, true);
+
+//     EXPECT_EQ(move, "c2a2");
+// }
+
+// TEST(BestMove, QueensLikeRooks)
+// {
+//     Board board{{{0, 0, 0, 0, 0, 0, 0, -King::ID},
+//                  {Queen::ID, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, Queen::ID, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+//     BoardState boardState{board, COLOR_WHITE};
+//     std::string move = bestmove(boardState, 1, true);
+
+//     EXPECT_EQ(move, "c2a2");
+// }
+
+// TEST(BestMove, Bishops)
+// {
+//     Board board{{{0, Rook::ID, 0, 0, 0, Bishop::ID, Bishop::ID, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {-King::ID, 0, 0, 0, 0, 0, 0, 0}}};
+
+//     BoardState boardState{board, COLOR_WHITE};
+//     std::string move = bestmove(boardState, 1, true);
+
+//     EXPECT_EQ(move, "a6b7");
+// }
+// TEST(BestMove, KingOfTheHill)
+// {
+//     Board board{{{0, Rook::ID, 0, 0, 0, Bishop::ID, Bishop::ID, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, -King::ID, 0, Rook::ID},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0},
+//                  {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+//     BoardState boardState{board, COLOR_BLACK};
+//     std::string move = bestmove(boardState, 1, true);
+
+//     EXPECT_EQ(move, "e6d5");
+// }
+
+TEST(Evaluation, Classic)
+{
+    Board board{{{Queen::ID, 0, 0, 0, 0, 0, 0, 0},
+                 {0, 0, 0, 0, 0, 0, 0, 0},
+                 {0, 0, 0, 0, 0, 0, 0, 0},
+                 {0, 0, 0, 0, 0, 0, 0, 0},
+                 {0, 0, King::ID, 0, 0, 0, 0, 0},
+                 {0, 0, 0, 0, 0, 0, 0, 0},
+                 {0, 0, 0, 0, 0, 0, 0, 0},
+                 {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+    int score = evaluate(board);
+    EXPECT_EQ(19, score);
+}
+
+TEST(PossibleBoards, PawnOpeningWhite)
+>>>>>>> edd2cfb (Add bestmove and evaluate function):chesscpp/test/main.cpp
 {
     Board board{};
     board[0].at(1) = 6;

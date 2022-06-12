@@ -53,7 +53,7 @@ Moves Queen::get_moves(BoardState boardState, Position position)
 }
 
 int Queen::get_steps() { return 8; }
-int Queen::get_id() { return color * 2; }
+int Queen::get_id() { return color * Queen::ID; }
 int Queen::get_character() { return 'q'; }
 
 Moves Bishop::get_moves(BoardState boardState, Position position)
@@ -62,7 +62,7 @@ Moves Bishop::get_moves(BoardState boardState, Position position)
 }
 
 int Bishop::get_steps() { return 8; }
-int Bishop::get_id() { return color * 3; }
+int Bishop::get_id() { return color * Bishop::ID; }
 int Bishop::get_character() { return 'b'; }
 
 Moves Knight::get_moves(BoardState boardState, Position position)
@@ -71,7 +71,7 @@ Moves Knight::get_moves(BoardState boardState, Position position)
 }
 
 int Knight::get_steps() { return 1; }
-int Knight::get_id() { return color * 4; }
+int Knight::get_id() { return color * Knight::ID; }
 int Knight::get_character() { return 'n'; }
 
 Moves Rook::get_moves(BoardState boardState, Position position)
@@ -161,7 +161,7 @@ Moves Pawn::get_moves(BoardState boardState, Position position)
 }
 
 int Pawn::get_steps() { return 1; }
-int Pawn::get_id() { return color * 6; }
+int Pawn::get_id() { return color * Pawn::ID; }
 
 BoardState prepare_board_state(BoardState boardState)
 {

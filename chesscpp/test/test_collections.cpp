@@ -25,7 +25,7 @@ void _print_bitboard(uint64_t bb)
 TEST(BoardTransforms, CastlingPossible)
 {
     // w_kingside
-    C_Session session = construct_session();
+    C_Session session = construct_session(10);
     C_BoardState board = session.board_state;
     uint64_t blockers = fill_bitboard_max(empty_board, {56, 32});
     print_bitboard(blockers);
@@ -387,8 +387,6 @@ TEST(Collections, RookFreeMoves)
         collect_rook_moves_and_captures(board_state, move_list);
 
         EXPECT_EQ(move_list.size(), 13);
-
-        
     }
 }
 
