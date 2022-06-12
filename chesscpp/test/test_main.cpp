@@ -60,3 +60,18 @@ TEST(Bestmove, Checkmate)
 
     EXPECT_EQ(value, "a2h2");
 }
+
+TEST(Bestmove, MoreComplexBoard)
+{
+    Board board = {{{0, pRook, 0, -pRook, 0, 0, pQueen, pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, pKnight, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, -pQueen, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
+    std::string value = bestmove_benchmark(10, board, 1., {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ(value, "a2h2");
+}
