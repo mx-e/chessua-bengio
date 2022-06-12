@@ -173,20 +173,47 @@ inline float evaluate(C_BoardState &board_state)
 
     return score;
 }
-inline float alpha_beta_max(C_Session &session, float alpha, float beta, int depth_left);
 
-inline float alpha_beta_min(C_Session &session, float alpha, float beta, int depth_left)
+float quiescence_search(C_Session &session, float alpha, float beta, int depth)
+{
+    float current_score = evaluate(session.board_state);
+    if (depth > max_quiesence_depth)
+        return current_score;
+    if (current_score >= beta)
+        return beta;
+    if (alpha < current_score)
+        alpha = current_score;
+    MoveList &move_list = session.move_list_stack[depth];
+    for (move m : move_list)
+    {
+        if (m.capture == 0)
+            continue;
+        ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
+        push_move(session.board_state, m, session.move_list_stack[depth + 1]);
+        float score = -quiescence_search(session, -beta, -alpha, depth + 1);
+        pop_move(session.board_state);
+        if (score >= beta)
+            return beta;
+        if (score > alpha)
+            alpha = score;
+    }
+    return alpha;
+}
+
+float alpha_beta_max(C_Session &session, float alpha, float beta, int depth_left);
+
+float alpha_beta_min(C_Session &session, float alpha, float beta, int depth_left)
 {
     int depth = session.alpha_beta_state.current_max_depth - depth_left;
 
-    ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
     if (depth_left == 0)
-        return -evaluate(session.board_state);
+        return -quiescence_search(session, alpha, beta, depth);
 
     MoveList &move_list = session.move_list_stack[depth];
     float best_score = infty;
     for (move m : move_list)
     {
+        ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
         push_move(session.board_state, m, session.move_list_stack[depth + 1]);
         float score = discount_factor * alpha_beta_max(session, alpha, beta, depth_left - 1);
 
@@ -206,19 +233,19 @@ inline float alpha_beta_min(C_Session &session, float alpha, float beta, int dep
     return beta;
 }
 
-inline float alpha_beta_max(C_Session &session, float alpha, float beta, int depth_left)
+float alpha_beta_max(C_Session &session, float alpha, float beta, int depth_left)
 {
     int depth = session.alpha_beta_state.current_max_depth - depth_left;
 
-    ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
     if (depth_left == 0)
-        return evaluate(session.board_state);
+        return quiescence_search(session, alpha, beta, depth_left);
 
     MoveList &move_list = session.move_list_stack[depth];
 
     float best_score = -infty;
     for (move m : move_list)
     {
+        ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
         push_move(session.board_state, m, session.move_list_stack[depth + 1]);
         float score = discount_factor * alpha_beta_min(session, alpha, beta, depth_left - 1);
 
@@ -237,11 +264,10 @@ inline float alpha_beta_max(C_Session &session, float alpha, float beta, int dep
         if (score > alpha)
             alpha = score;
     }
-
     return alpha;
 }
 
-inline int alphabeta(C_Session &session, int max_depth)
+int alphabeta(C_Session &session, int max_depth)
 {
     int best_move_score;
     collect_legal_moves(session.board_state, session.move_list_stack[0]);
