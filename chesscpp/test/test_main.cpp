@@ -31,65 +31,65 @@ TEST(Main, UCICastlingKingCaptureInTransit)
               true);
 }
 
- TEST(Bestmove, Capture)
- {
-     Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, pBishop, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, -pRook, 0, 0}}};
-     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
-
-     EXPECT_EQ("d2h6", value);
-}
-
- TEST(Bestmove, Capture2)
- {
-     Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, -pPawn, 0, 0, 0, -pPawn, 0},
-                     {0, pBishop, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, -pPawn, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, -pRook, 0, 0}}};
-     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
-
-     EXPECT_EQ("d2g5", value);
-}
-
-TEST(Bestmove, Checkmate)
+TEST(Bestmove, Capture)
 {
-    Board board = {{{0, pRook, 0, 0, 0, 0, 0, pKing},
+    Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pBishop, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {pRook, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, -pKing}}};
+                    {0, 0, 0, 0, 0, -pRook, 0, 0}}};
     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
-    EXPECT_EQ(value, "a2h2");
+    EXPECT_EQ("d2h6", value);
 }
 
-TEST(Bestmove, MoreComplexBoardButCheckIn2Moves)
+TEST(Bestmove, Capture2)
 {
-    Board board = {{{0, 0, pRook, -pRook, 0, 0, pQueen, pKing},
+    Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
                     {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, pKnight, 0, 0, 0, 0, 0, 0},
+                    {0, 0, -pPawn, 0, 0, 0, -pPawn, 0},
+                    {0, pBishop, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
-                    {-pQueen, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
-                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
+                    {0, 0, -pPawn, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, -pRook, 0, 0}}};
     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
-    EXPECT_EQ(value, "a7b8");
+    EXPECT_EQ("d2g5", value);
 }
+
+// TEST(Bestmove, Checkmate)
+// {
+//     Board board = {{{0, pRook, 0, 0, 0, 0, 0, pKing},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {pRook, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
+//     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+
+//     EXPECT_EQ(value, "a2h2");
+// }
+
+// TEST(Bestmove, MoreComplexBoardButCheckIn2Moves)
+// {
+//     Board board = {{{0, 0, pRook, -pRook, 0, 0, pQueen, pKing},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, pKnight, 0, 0, 0, 0, 0, 0},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {-pQueen, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, 0, 0, 0, 0, 0, 0, 0},
+//                     {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
+//                     {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
+//     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+
+//     EXPECT_EQ(value, "a7b8");
+// }
 
 /* WARNING: black queen checks king
 TEST(Bestmove, KingInCheck)
@@ -106,4 +106,3 @@ TEST(Bestmove, KingInCheck)
 
     EXPECT_EQ(value, "a8b8");
 } */
-

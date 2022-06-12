@@ -174,6 +174,17 @@ inline float evaluate(C_BoardState &board_state)
     return score;
 }
 
+inline void evaluate_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
+{
+    C_BoardState board_state = C_BoardState();
+
+    marshall_board_state(board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
+    for (int _ = 0; _ < runs; _++)
+    {
+        evaluate(board_state);
+    }
+}
+
 float quiescence_search(C_Session &session, float alpha, float beta, int depth)
 {
     float current_score = evaluate(session.board_state);
@@ -212,19 +223,19 @@ float zw_search(C_Session &session, float beta, int depth_left)
     MoveList &move_list = session.move_list_stack[depth];
 
     for (move m : move_list)
-    {   
+    {
         push_move(session.board_state, m, session.move_list_stack[depth + 1]);
-        
-        int score = -zw_search(session, 1-beta, depth_left - 1);
+
+        int score = -zw_search(session, 1 - beta, depth_left - 1);
 
         pop_move(session.board_state);
         session.move_list_stack[depth + 1].clear();
 
-        if(score >= beta)
+        if (score >= beta)
             return beta;
-    }   
+    }
 
-    return beta-1;
+    return beta - 1;
 }
 
 float pv_search(C_Session &session, float alpha, float beta, int depth_left)
@@ -246,7 +257,7 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left)
         push_move(session.board_state, m, session.move_list_stack[depth + 1]);
 
         int score;
-        if(search_pv)
+        if (search_pv)
         {
             score = -pv_search(session, -beta, -alpha, depth_left - 1);
         }
@@ -259,20 +270,19 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left)
 
         if (depth == 0 && score * turn > best_score)
         {
-            best_score = score; 
+            best_score = score;
             session.alpha_beta_state.bestmove = m;
         }
 
         pop_move(session.board_state);
         session.move_list_stack[depth + 1].clear();
 
-        if(score >= beta)
+        if (score >= beta)
             return beta;
 
-        if(score > alpha)
+        if (score > alpha)
             alpha = score;
-            search_pv = false;
-        
+        search_pv = false;
     }
 
     return alpha;
@@ -343,7 +353,7 @@ std::string bestmove_benchmark(int max_depth, Board board, int color, EnPassants
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     float best_score = -infty;
     std::string uci_best_move;
-    
+
     do
     {
         float score = get_best_move(session, session.alpha_beta_state.current_max_depth);
