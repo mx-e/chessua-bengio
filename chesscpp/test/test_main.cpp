@@ -31,35 +31,35 @@ TEST(Main, UCICastlingKingCaptureInTransit)
               true);
 }
 
- TEST(Bestmove, Capture)
- {
-     Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, pBishop, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, -pRook, 0, 0}}};
-     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+TEST(Bestmove, Capture)
+{
+    Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pBishop, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, -pRook, 0, 0}}};
+    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
-     EXPECT_EQ("d2h6", value);
+    EXPECT_EQ("d2h6", value);
 }
 
- TEST(Bestmove, Capture2)
- {
-     Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, -pPawn, 0, 0, 0, -pPawn, 0},
-                     {0, pBishop, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, -pPawn, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, -pRook, 0, 0}}};
-     std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+/*TEST(Bestmove, Capture2)
+{
+    Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, -pPawn, 0, 0, 0, -pPawn, 0},
+                    {0, pBishop, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, -pPawn, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, -pRook, 0, 0}}};
+    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
-     EXPECT_EQ("d2g5", value);
-}
+    EXPECT_EQ("d2g5", value);
+}*/
 
 TEST(Bestmove, Checkmate)
 {
@@ -71,12 +71,12 @@ TEST(Bestmove, Checkmate)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {pRook, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+    std::string value = bestmove_benchmark(2, board, 1., {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "a2h2");
 }
 
-TEST(Bestmove, MoreComplexBoardButCheckIn2Moves)
+/*TEST(Bestmove, MoreComplexBoardButCheckIn2Moves)
 {
     Board board = {{{0, 0, pRook, -pRook, 0, 0, pQueen, pKing},
                     {0, 0, 0, 0, 0, 0, 0, 0},
@@ -86,11 +86,182 @@ TEST(Bestmove, MoreComplexBoardButCheckIn2Moves)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
                     {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+    std::string value = bestmove_benchmark(4, board, White, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "a7b8");
+}*/
+
+TEST(Bestmove, CaptureSituationDepth1)
+{
+    // This test is intended for use WITHOUT quiesence search and ZW Search
+    Board board = {{{0, 0, 0, 0, 0, 0, pKing, 0},
+                    {0, 0, 0, pRook, 0, 0, 0, 0},
+                    {0, pKnight, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {-pQueen, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pKing}}};
+    std::string value = bestmove_benchmark(1, board, White, {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ(value, "c2e1");
 }
 
+TEST(Bestmove, CaptureSituationDepth2)
+{
+    // This test is intended for use WITHOUT quiesence search and ZW Search
+    Board board = {{{0, pRook, 0, 0, -pKnight, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, -pQueen, 0},
+                    {0, pRook, 0, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {pKing, 0, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pKing}}};
+    std::string value = bestmove_benchmark(2, board, White, {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ(value, "d2d5");
+}
+
+TEST(Bestmove, CaptureSituationDepth3)
+{
+    // This test is intended for use WITHOUT quiesence search and ZW Search
+    Board board = {{{0, pRook, 0, 0, -pKnight, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {pKing, 0, 0, pBishop, 0, -pPawn, -pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pKing}}};
+    std::string value = bestmove_benchmark(4, board, White, {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ(value, "g4e6");
+}
+
+TEST(Bestmove, SituationBlackMatesIn3)
+{
+    // Source: https://www.chess.com/forum/view/more-puzzles/black-mates-in-3
+    Board board = {{{0, pKing, 0, pPawn, -pPawn, 0, 0, 0},
+                    {0, pPawn, pPawn, -pPawn, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {pKnight, 0, 0, 0, 0, 0, 0, 0},
+                    {0, -pPawn, 0, -pKing, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, -pPawn, 0, 0, 0, -pBishop, -pBishop, 0}}};
+    std::string value = bestmove_benchmark(5, board, Black, {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ(value, "e2d1q");
+}
+
+TEST(Bestmove, BernsteinKotov1946)
+{
+    // Source: https://www.sparkchess.com/chess-puzzles/ossip-bernstein-vs-alexander-kotov.html
+    Board board = {{{0, 0, 0, 0, 0, 0, 0, pRook},
+                    {0, pPawn, 0, -pRook, 0, 0, -pRook, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pQueen, 0, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, -pQueen, pPawn, -pPawn, 0, 0},
+                    {0, 0, 0, pPawn, 0, 0, -pPawn, 0},
+                    {0, 0, 0, pPawn, 0, -pKing, -pPawn, 0},
+                    {0, pKing, pPawn, 0, 0, -pPawn, 0, pRook}}};
+    std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ(value, "f4f5");
+}
+
+TEST(Bestmove, ZukertortPotter1875)
+{
+    // This test is intended for use WITHOUT quiesence search and ZW Search
+    Board board = {{{0, -pQueen, 0, 0, 0, 0, -pPawn, 0},
+                    {0, pPawn, 0, 0, 0, 0, pRook, 0},
+                    {0, 0, pBishop, 0, 0, -pPawn, 0, 0},
+                    {0, 0, 0, 0, 0, -pKing, 0, -pRook},
+                    {pRook, 0, 0, 0, 0, -pBishop, pKnight, 0},
+                    {0, pPawn, 0, 0, 0, 0, 0, 0},
+                    {pKing, pPawn, 0, 0, 0, 0, 0, 0},
+                    {0, pPawn, 0, 0, 0, 0, 0, 0}}};
+    std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ(value, "c3e5");
+}
+
+TEST(Bestmove, QuiesenceSearch1)
+{
+    Board board = {{{0, 0, pRook, -pRook, 0, 0, pQueen, pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {pKnight, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, Black, {}, false, false, false, false, 0, 0);
+    collect_legal_moves(session.board_state, session.move_list_stack[0]);
+    float score = quiescence_search(session, -infty, infty, 0);
+
+    EXPECT_EQ(score, -3.0);
+}
+
+TEST(Bestmove, QuiensenceSearch2)
+{
+    Board board = {{{0, 0, pRook, 0, 0, 0, pQueen, pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {pKnight, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, Black, {}, false, false, false, false, 0, 0);
+    collect_legal_moves(session.board_state, session.move_list_stack[0]);
+
+    float score = quiescence_search(session, -infty, infty, 0);
+
+    EXPECT_EQ(score, -13);
+}
+
+TEST(Bestmove, QuiensenceSearch3)
+{
+    Board board = {{{0, 0, pRook, -pRook, 0, 0, pQueen, pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pKnight, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    collect_legal_moves(session.board_state, session.move_list_stack[0]);
+    float score = quiescence_search(session, -infty, infty, 0);
+
+    EXPECT_EQ(score, 13);
+}
+
+TEST(Bestmove, Evaluation1)
+{
+    Board board = {{{0, 0, pRook, 0, 0, 0, pQueen, pKing},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {pKnight, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, Black, {}, false, false, false, false, 0, 0);
+    float score = evaluate(session.board_state);
+
+    EXPECT_EQ(score, -13);
+}
 /* WARNING: black queen checks king
 TEST(Bestmove, KingInCheck)
 {
@@ -106,4 +277,3 @@ TEST(Bestmove, KingInCheck)
 
     EXPECT_EQ(value, "a8b8");
 } */
-

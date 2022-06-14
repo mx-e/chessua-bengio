@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 const float infty = std::numeric_limits<float>::max();
+const float high_value = 999999.;
 const float discount_factor = 0.90;
 const int expected_moves_per_game = 25;
 const int max_quiesence_depth = 5;
