@@ -46,21 +46,6 @@ TEST(Bestmove, Capture)
     EXPECT_EQ("d2h6", value);
 }
 
-/*TEST(Bestmove, Capture2)
-{
-    Board board = {{{pKing, 0, 0, 0, 0, 0, 0, -pKing},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, -pPawn, 0, 0, 0, -pPawn, 0},
-                    {0, pBishop, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, -pPawn, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, -pRook, 0, 0}}};
-    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
-
-    EXPECT_EQ("d2g5", value);
-}*/
-
 TEST(Bestmove, Checkmate)
 {
     Board board = {{{0, pRook, 0, 0, 0, 0, 0, pKing},
@@ -75,21 +60,6 @@ TEST(Bestmove, Checkmate)
 
     EXPECT_EQ(value, "a2h2");
 }
-
-/*TEST(Bestmove, MoreComplexBoardButCheckIn2Moves)
-{
-    Board board = {{{0, 0, pRook, -pRook, 0, 0, pQueen, pKing},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, pKnight, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {-pQueen, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
-                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(4, board, White, {}, false, false, false, false, 0, 0);
-
-    EXPECT_EQ(value, "a7b8");
-}*/
 
 TEST(Bestmove, CaptureSituationDepth1)
 {
@@ -155,7 +125,75 @@ TEST(Bestmove, SituationBlackMatesIn3)
     EXPECT_EQ(value, "e2d1q");
 }
 
-TEST(Bestmove, BernsteinKotov1946)
+TEST(BestMoveMateIn2, TaraschKurschner1893)
+{
+    // https://www.sparkchess.com/chess-puzzles/siegbert-tarrash-vs-max-kurschner.html
+    Board board = {{{pRook, 0, 0, -pPawn, 0, 0, -pPawn, -pRook},
+                    {pKnight, 0, 0, 0, 0, -pKnight, -pBishop, 0},
+                    {0, pBishop, pPawn, -pPawn, pBishop, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pQueen},
+                    {pRook, 0, 0, 0, 0, pPawn, 0, -pKing},
+                    {0, pPawn, 0, 0, pQueen, -pBishop, 0, 0},
+                    {pKing, pPawn, 0, 0, 0, 0, -pPawn, 0},
+                    {0, pPawn, 0, 0, 0, 0, -pPawn, -pRook}}};
+    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ("f5g6", value);
+}
+
+
+TEST(BestMoveMateIn2, MasonMarko1894)
+{
+
+    // https://www.sparkchess.com/chess-puzzles/james-mason-vs-georg-marco.html
+    Board board = {{{0, 0, pPawn, 0, 0, 0, -pPawn, 0},
+                    {0, pPawn, 0, 0, 0, 0, -pPawn, 0},
+                    {pBishop, 0, 0, 0, -pBishop, -pPawn, 0, 0},
+                    {pRook, 0, 0, 0, -pPawn, 0, 0, 0},
+                    {pRook, 0, 0, 0, 0, 0, 0, 0},
+                    {pKnight, -pRook, 0, 0, 0, 0, 0, 0},
+                    {0, -pRook, pPawn, 0, 0, 0, -pPawn, -pKing},
+                    {pKing, pPawn, -pBishop, 0, 0, 0, 0, 0}}};
+    std::string value = bestmove_benchmark(4, board, -1., {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ("g2g1", value);
+}
+
+TEST(BestMoveMateIn2, PaoliFoltys1949)
+{
+
+    // https://www.sparkchess.com/chess-puzzles/enrico-paoli-vs-jan-foltys.html
+    Board board = {{{pRook, 0, 0, 0, pPawn, 0, 0, 0},
+                    {0, 0, pPawn, -pPawn, 0, 0, 0, 0},
+                    {0, 0, 0, 0, -pPawn, -pBishop, -pKing, 0},
+                    {0, 0, pKing, 0, 0, 0, 0, 0},
+                    {pRook, 0, 0, 0, pKnight, 0, 0, 0},
+                    {0, -pRook, 0, -pBishop, -pPawn, 0, -pPawn, 0},
+                    {0, 0, 0, 0, 0, -pPawn, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0}}};
+    std::string value = bestmove_benchmark(4, board, -1., {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ("c6b5", value);
+}
+
+TEST(BestMoveMateIn2, VidmarEuwe1929)
+{
+
+    // https://www.sparkchess.com/chess-puzzles/milan-vidmar-vs-max-euwe.html
+    Board board = {{{0, pPawn, pQueen, 0, -pPawn, 0, 0, 0},
+                    {0, pPawn, 0, 0, 0, -pPawn, 0, 0},
+                    {0, -pRook, 0, 0, 0, 0, 0, 0},
+                    {pRook, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, -pQueen, pKnight, 0, -pPawn, 0},
+                    {0, 0, 0, 0, -pPawn, 0, 0, -pKing},
+                    {pKing, 0, pPawn, 0, 0, -pPawn, 0, 0}}};
+    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+
+    EXPECT_EQ("a3f8", value);
+}
+
+TEST(BestMoveMateIn3, BernsteinKotov1946)
 {
     // Source: https://www.sparkchess.com/chess-puzzles/ossip-bernstein-vs-alexander-kotov.html
     Board board = {{{0, 0, 0, 0, 0, 0, 0, pRook},
@@ -171,9 +209,9 @@ TEST(Bestmove, BernsteinKotov1946)
     EXPECT_EQ(value, "Wf4f5");
 }
 
-TEST(Bestmove, ZukertortPotter1875)
+TEST(BestMoveMateIn3, ZukertortPotter1875)
 {
-    // This test is intended for use WITHOUT quiesence search and ZW Search
+    // https://www.sparkchess.com/chess-puzzles/johannes-zukertort-vs-william-norwood-potter.html
     Board board = {{{0, -pQueen, 0, 0, 0, 0, -pPawn, 0},
                     {0, pPawn, 0, 0, 0, 0, pRook, 0},
                     {0, 0, pBishop, 0, 0, -pPawn, 0, 0},
@@ -262,18 +300,3 @@ TEST(Bestmove, Evaluation1)
 
     EXPECT_EQ(score, -13);
 }
-/* WARNING: black queen checks king
-TEST(Bestmove, KingInCheck)
-{
-    Board board = {{{0, pRook, 0, -pRook, 0, 0, pQueen, pKing},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, pKnight, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, -pQueen, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
-                    {0, 0, -pBishop, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(3, board, 1., {}, false, false, false, false, 0, 0);
-
-    EXPECT_EQ(value, "a8b8");
-} */
