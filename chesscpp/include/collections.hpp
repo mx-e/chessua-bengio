@@ -12,30 +12,24 @@ inline bool get_castling_possible(C_BoardState &board, castling c_type)
     return (state_mask & board.castling_rights) && ((get_all_pieces(board) & castling_free) == 0);
 }
 
-inline void collect_pawn_moves_and_captures(C_BoardState &board_state, MoveList &legal_moves)
+inline void collect_pawn_moves(C_BoardState &board_state, MoveList &legal_moves)
 {
-    uint64_t promotion_row = board_state.turn == 1. ? row_8 : row_1;
-
+    uint64_t promotion_row = color_to_promotion_row.at(board_state.turn);
     uint64_t pawn_single_moves = get_pawn_single_moves(board_state, board_state.turn);
 
-    extract_moves_with_offset(pawn_single_moves & ~promotion_row, legal_moves, -pawn_shift_map.at(single) * board_state.turn);
     extract_promotions(pawn_single_moves & promotion_row, legal_moves, -pawn_shift_map.at(single) * board_state.turn);
-
     extract_pawn_double_moves(get_pawn_double_moves(board_state, pawn_single_moves, board_state.turn), legal_moves, board_state.turn);
+    extract_moves_with_offset(pawn_single_moves & ~promotion_row, legal_moves, -pawn_shift_map.at(single) * board_state.turn);
+}
 
+inline void collect_pawn_captures(C_BoardState &board_state, MoveList &legal_moves)
+{
+    uint64_t promotion_row = color_to_promotion_row.at(board_state.turn);
     uint64_t pawn_attacks_left = get_pawn_attacks(board_state, attack_left, board_state.turn);
     uint64_t pawn_attacks_right = get_pawn_attacks(board_state, attack_right, board_state.turn);
 
     float left_offset = -pawn_shift_map.at(attack_left) * board_state.turn;
     float right_offset = -pawn_shift_map.at(attack_right) * board_state.turn;
-    extract_captures_with_offset(board_state,
-                                 pawn_attacks_left & (~promotion_row) & get_enemy_fields(board_state, board_state.turn),
-                                 legal_moves,
-                                 left_offset);
-    extract_captures_with_offset(board_state,
-                                 pawn_attacks_right & (~promotion_row) & get_enemy_fields(board_state, board_state.turn),
-                                 legal_moves,
-                                 right_offset);
     extract_promotion_captures(board_state,
                                pawn_attacks_left & promotion_row & get_enemy_fields(board_state, board_state.turn),
                                legal_moves,
@@ -44,6 +38,14 @@ inline void collect_pawn_moves_and_captures(C_BoardState &board_state, MoveList 
                                pawn_attacks_right & promotion_row & get_enemy_fields(board_state, board_state.turn),
                                legal_moves,
                                right_offset);
+    extract_captures_with_offset(board_state,
+                                 pawn_attacks_left & (~promotion_row) & get_enemy_fields(board_state, board_state.turn),
+                                 legal_moves,
+                                 left_offset);
+    extract_captures_with_offset(board_state,
+                                 pawn_attacks_right & (~promotion_row) & get_enemy_fields(board_state, board_state.turn),
+                                 legal_moves,
+                                 right_offset);
 
     uint64_t ep_fields = set_board_1_at_idx(empty_board, board_state.en_passant) & ep_zone;
     extract_ep_captures(ep_fields & pawn_attacks_left, legal_moves, left_offset);
@@ -129,15 +131,14 @@ inline void collect_queen_moves_and_captures(C_BoardState &board_state, MoveList
 
 inline void collect_legal_moves(C_BoardState &board_state, MoveList &legal_moves)
 {
-    if (get_king(board_state, board_state.turn) == 0)
-        return;
     board_state.all_attacks = empty_board;
-    collect_pawn_moves_and_captures(board_state, legal_moves);
+    collect_pawn_captures(board_state, legal_moves);
     collect_knight_moves_and_captures(board_state, legal_moves);
-    collect_king_moves_and_captures(board_state, legal_moves);
-    collect_bishop_moves_and_captures(board_state, legal_moves);
-    collect_rook_moves_and_captures(board_state, legal_moves);
     collect_queen_moves_and_captures(board_state, legal_moves);
+    collect_rook_moves_and_captures(board_state, legal_moves);
+    collect_bishop_moves_and_captures(board_state, legal_moves);
+    collect_pawn_moves(board_state, legal_moves);
+    collect_king_moves_and_captures(board_state, legal_moves);
 }
 
 #endif

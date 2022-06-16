@@ -168,7 +168,7 @@ TEST(Bestmove, BernsteinKotov1946)
                     {0, pKing, pPawn, 0, 0, -pPawn, 0, pRook}}};
     std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
 
-    EXPECT_EQ(value, "f4f5");
+    EXPECT_EQ(value, "Wf4f5");
 }
 
 TEST(Bestmove, ZukertortPotter1875)
@@ -184,7 +184,7 @@ TEST(Bestmove, ZukertortPotter1875)
                     {0, pPawn, 0, 0, 0, 0, 0, 0}}};
     std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
 
-    EXPECT_EQ(value, "c3e5");
+    EXPECT_EQ(value, "Wc3e5");
 }
 
 TEST(Bestmove, QuiesenceSearch1)

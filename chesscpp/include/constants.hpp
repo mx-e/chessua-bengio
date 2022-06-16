@@ -109,6 +109,8 @@ const uint64_t b_qs_castling_free = 0x0001010100000000LL;
 
 const uint64_t ep_zone = row_3 | row_6;
 
+const std::map<float, uint64_t> color_to_promotion_row = {{1., row_8}, {-1., row_1}};
+
 const std::map<float, std::array<uint64_t, 2>> color_to_castling_mask =
     {{1., {w_ks_castling_mask, w_qs_castling_mask}}, {-1., {b_ks_castling_mask, b_qs_castling_mask}}};
 

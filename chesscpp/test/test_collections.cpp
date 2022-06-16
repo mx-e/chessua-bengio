@@ -82,7 +82,7 @@ TEST(Collections, PawnFreeMove)
     set_pieces(board_state, White, pPawn, fill_bitboard({{3, 3}, {5, 7}}));
 
     MoveList move_list;
-    collect_pawn_moves_and_captures(board_state, move_list);
+    collect_pawn_moves(board_state, move_list);
 
     EXPECT_EQ(exists<move>(
                   move_list, [](move move)
@@ -107,7 +107,7 @@ TEST(Collections, PawnBlocked)
         board_state.turn = turn;
 
         MoveList move_list;
-        collect_pawn_moves_and_captures(board_state, move_list);
+        collect_pawn_moves(board_state, move_list);
 
         EXPECT_EQ(move_list.size(), 0);
     }
@@ -120,7 +120,7 @@ TEST(Collections, PawnDoubleMoveWhite)
     set_pieces(board_state, White, pPawn, fill_bitboard({{3, 1}}));
 
     MoveList move_list;
-    collect_pawn_moves_and_captures(board_state, move_list);
+    collect_pawn_moves(board_state, move_list);
 
     EXPECT_EQ(exists<move>(
                   move_list, [](move move)
@@ -135,7 +135,7 @@ TEST(Collections, PawnDoubleMoveBlack)
     set_pieces(board_state, Black, pPawn, fill_bitboard({{3, 6}}));
 
     MoveList move_list;
-    collect_pawn_moves_and_captures(board_state, move_list);
+    collect_pawn_moves(board_state, move_list);
 
     EXPECT_EQ(exists<move>(
                   move_list, [](move move)
@@ -150,7 +150,7 @@ TEST(Collections, PawnPromotionWhite)
     set_pieces(board_state, White, pPawn, fill_bitboard({{3, 6}}));
 
     MoveList move_list;
-    collect_pawn_moves_and_captures(board_state, move_list);
+    collect_pawn_moves(board_state, move_list);
 
     for (auto promotion_piece : {pQueen, pKnight, pRook, pBishop})
     {
@@ -168,7 +168,7 @@ TEST(Collections, PawnPromotionBlack)
     set_pieces(board_state, Black, pPawn, fill_bitboard({{3, 1}}));
 
     MoveList move_list;
-    collect_pawn_moves_and_captures(board_state, move_list);
+    collect_pawn_moves(board_state, move_list);
 
     for (auto promotion_piece : {pQueen, pKnight, pRook, pBishop})
     {
@@ -188,7 +188,7 @@ TEST(Collections, PawnCaptureWhite)
     set_pieces(board_state, Black, pRook, fill_bitboard({{3, 5}}));
 
     MoveList move_list;
-    collect_pawn_moves_and_captures(board_state, move_list);
+    collect_pawn_captures(board_state, move_list);
 
     EXPECT_EQ(exists<move>(
                   move_list, [](move move)
@@ -210,7 +210,7 @@ TEST(Collections, PawnCaptureBlack)
     set_pieces(board_state, White, pRook, fill_bitboard({{3, 3}}));
 
     MoveList move_list;
-    collect_pawn_moves_and_captures(board_state, move_list);
+    collect_pawn_captures(board_state, move_list);
 
     EXPECT_EQ(exists<move>(
                   move_list, [](move move)
@@ -236,7 +236,7 @@ TEST(Collections, PawnEnPassantCaptureWhite)
         board_state.en_passant = en_passant;
 
         MoveList move_list;
-        collect_pawn_moves_and_captures(board_state, move_list);
+        collect_pawn_captures(board_state, move_list);
 
         EXPECT_EQ(exists<move>(
                       move_list, [&en_passant](move move)
@@ -258,7 +258,7 @@ TEST(Collections, PawnEnPassantCaptureBlack)
         board_state.en_passant = en_passant;
 
         MoveList move_list;
-        collect_pawn_moves_and_captures(board_state, move_list);
+        collect_pawn_captures(board_state, move_list);
 
         EXPECT_EQ(exists<move>(
                       move_list, [&en_passant](move move)

@@ -1,6 +1,7 @@
 #include "transforms.hpp"
 #include "collections.hpp"
 #include "constants.hpp"
+#include "evaluations.hpp"
 #include <chrono>
 
 typedef std::pair<int, int> Position;
@@ -128,17 +129,6 @@ int min(int a, int b)
     return b;
 }
 
-// https://en.wikipedia.org/wiki/Hamming_weight
-int count_pieces(const C_BoardState &board, const float color, const uint8_t piece_type)
-{
-    uint64_t x = get_pieces(board, color, piece_type);
-    int count = 0;
-    for (count = 0; x; count++)
-        x &= x - 1;
-
-    return count;
-}
-
 void print_optimal_move_sequence(MoveList &move_list)
 {
     for (move m : move_list)
@@ -147,29 +137,6 @@ void print_optimal_move_sequence(MoveList &move_list)
     }
 
     printf("\n");
-}
-
-inline float evaluate(C_BoardState &board_state)
-{
-
-    float score = 0;
-
-    score += count_pieces(board_state, White, b_pawns);
-    score += -count_pieces(board_state, Black, b_pawns);
-
-    score += 3 * count_pieces(board_state, White, b_bishops);
-    score += -3 * count_pieces(board_state, Black, b_bishops);
-
-    score += 3 * count_pieces(board_state, White, b_knights);
-    score += -3 * count_pieces(board_state, Black, b_knights);
-
-    score += 5 * count_pieces(board_state, White, b_rooks);
-    score += -5 * count_pieces(board_state, Black, b_rooks);
-
-    score += 9 * count_pieces(board_state, White, b_queens);
-    score += -9 * count_pieces(board_state, Black, b_queens);
-
-    return board_state.turn * score;
 }
 
 float q_search_dummy(C_Session &session, float alpha, float beta, int depth)
@@ -273,7 +240,7 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left)
         else
         {
             score = -zw_search(session, -alpha, depth_left - 1);
-            if (score > alpha)
+            if (score > alpha & score < beta)
                 score = -pv_search(session, -beta, -alpha, depth_left - 1);
         }
 
