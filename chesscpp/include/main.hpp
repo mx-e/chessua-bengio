@@ -115,20 +115,6 @@ inline void runtime_benchmark(Board board, int color, EnPassants enpassant, bool
     }
 }
 
-int max(int a, int b)
-{
-    if (a >= b)
-        return a;
-    return b;
-}
-
-int min(int a, int b)
-{
-    if (a <= b)
-        return a;
-    return b;
-}
-
 void print_optimal_move_sequence(MoveList &move_list)
 {
     for (move m : move_list)
@@ -137,6 +123,15 @@ void print_optimal_move_sequence(MoveList &move_list)
     }
 
     printf("\n");
+}
+
+void print_optimal_line(C_Session &session, Line &line)
+{
+    for (int i = 0; i < session.alpha_beta_state.current_max_depth; i++)
+    {
+        printf("%s -> ", move_to_uci_str(line.argmove[i]).c_str());
+    }
+    std::cout << "\n";
 }
 
 float q_search_dummy(C_Session &session, float alpha, float beta, int depth)
@@ -214,65 +209,68 @@ bool check_check_mate(C_Session &session, int depth)
     return is_check_mate;
 }
 
-float pv_search(C_Session &session, float alpha, float beta, int depth_left)
+float pv_search(C_Session &session, float alpha, float beta, int depth_left, Line &pline)
 {
+    Line line;
     int depth = session.alpha_beta_state.current_max_depth - depth_left;
     if (session.board_state.king_attack || session.board_state.castling_move_illegal)
         return high_value;
     if (depth_left == 0)
+    {
+        pline.n_moves = 0;
         return quiescence_search(session, alpha, beta, depth);
+    }
 
     MoveList &move_list = session.move_list_stack[depth];
 
     bool search_pv = true;
-    float best_score = -high_value;
+    float score;
 
     for (move m : move_list)
     {
         ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
         push_move(session.board_state, m, session.move_list_stack[depth + 1]);
 
-        float score;
         if (search_pv)
         {
-            score = -pv_search(session, -beta, -alpha, depth_left - 1);
+            score = -pv_search(session, -beta, -alpha, depth_left - 1, line);
         }
         else
         {
             score = -zw_search(session, -alpha, depth_left - 1);
-            if (score > alpha & score < beta)
-                score = -pv_search(session, -beta, -alpha, depth_left - 1);
+            if (score > alpha)
+                score = -pv_search(session, -beta, -alpha, depth_left - 1, line);
         }
-
         pop_move(session.board_state);
         session.move_list_stack[depth + 1].clear();
 
         if (score >= beta)
             return beta;
 
-        if (score > best_score)
-            best_score = score;
-
         if (score > alpha)
         {
-            if (depth == 0)
-                session.alpha_beta_state.bestmove = m;
+            pline.argmove[0] = m;
+            ::memcpy(pline.argmove + 1, line.argmove, line.n_moves * sizeof(move));
+            pline.n_moves = line.n_moves + 1;
             alpha = score;
+            search_pv = false;
         }
-        search_pv = false;
     }
     return alpha;
 }
 
-int alphabeta(C_Session &session, int max_depth)
+inline int alphabeta(C_Session &session, int max_depth)
 {
     collect_legal_moves(session.board_state, session.move_list_stack[0]);
-    float best_move_score = pv_search(session, -infty, infty, max_depth);
+    float best_move_score = pv_search(session, -infty, infty, max_depth, session.alpha_beta_state.current_best_line);
     session.move_list_stack[0].clear();
+    session.alpha_beta_state.bestmove = session.alpha_beta_state.current_best_line.argmove[0];
+    print_optimal_line(session, session.alpha_beta_state.current_best_line);
+
     return best_move_score;
 }
 
-float get_best_move(C_Session &session, int max_depth)
+inline float get_best_move(C_Session &session, int max_depth)
 {
     printf("Alpha-Beta at depth %i:", max_depth);
     float best_move_score = alphabeta(session, max_depth);
@@ -285,7 +283,7 @@ float get_best_move(C_Session &session, int max_depth)
     return best_move_score;
 }
 
-float get_expected_computation_time(C_Session &session)
+inline float get_expected_computation_time(C_Session &session)
 {
     int current_depth = session.alpha_beta_state.current_max_depth;
     float branching_factor = session.alpha_beta_state.nodes_at_depth[current_depth - 1] / session.alpha_beta_state.nodes_at_depth[current_depth - 2];
@@ -296,9 +294,8 @@ std::string bestmove(float remaining_time, int max_depth, Board board, int color
 {
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
-    int expected_remaining_moves = max(expected_moves_per_game - fullMove, 6);
+    int expected_remaining_moves = std::max(expected_moves_per_game - fullMove, 6);
     float move_time_budget = remaining_time / expected_remaining_moves;
-    float best_score = -infty;
     std::string uci_best_move;
 
     do
@@ -311,7 +308,6 @@ std::string bestmove(float remaining_time, int max_depth, Board board, int color
         move_time_budget -= time_elapsed;
         ++session.alpha_beta_state.current_max_depth;
 
-        best_score = score;
         uci_best_move = move_to_uci_str(session.alpha_beta_state.bestmove);
 
     } while (session.alpha_beta_state.current_max_depth < max_depth && (session.alpha_beta_state.current_max_depth < 5 || get_expected_computation_time(session) < move_time_budget));
@@ -322,14 +318,12 @@ std::string bestmove_benchmark(int max_depth, Board board, int color, EnPassants
 {
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
-    float best_score = -infty;
     std::string uci_best_move;
 
     do
     {
         float score = get_best_move(session, session.alpha_beta_state.current_max_depth);
         ++session.alpha_beta_state.current_max_depth;
-        best_score = score;
         uci_best_move = move_to_uci_str(session.alpha_beta_state.bestmove);
 
     } while (session.alpha_beta_state.current_max_depth <= max_depth);

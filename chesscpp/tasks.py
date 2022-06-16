@@ -22,7 +22,7 @@ FetchContent_MakeAvailable(googletest)
 G_COMPILE_OPTIONS = """
 add_compile_options(
 -g
--O3
+-O2
 )
 enable_testing()
 """

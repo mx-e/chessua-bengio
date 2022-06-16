@@ -40,6 +40,8 @@ class TestBenchmarks(unittest.TestCase):
         start = time.time()
         move = bestmove(time_left, max_depth, board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
         end = time.time()
+        print(f"took {end - start} seconds, best move {move}")
+
 
 
 

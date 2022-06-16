@@ -50,22 +50,27 @@ inline bool is_move_empty(move m)
     return m.src == m.dest;
 }
 
+typedef std::vector<move>
+    MoveList;
+
 struct C_BoardState
 {
     uint64_t pieces[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     uint8_t castling_rights = UINT8_C(0x0F);
     uint8_t en_passant = UINT8_C(0x00);
     uint64_t all_attacks = empty_board;
-    std::vector<move> move_stack;
+    MoveList move_stack;
     float turn = 1.;
     float moves = 0.;
     float half_moves = 0.;
     bool king_attack = false;
     bool castling_move_illegal = false;
 };
-
-typedef std::vector<move>
-    MoveList;
+struct Line
+{
+    int n_moves = 0;  // Number of moves in the line.
+    move argmove[25]; // The line.
+};
 
 struct AlphaBetaState
 {
@@ -74,6 +79,7 @@ struct AlphaBetaState
     move bestmove;
     std::vector<float> runtimes_at_depth = {};
     std::vector<uint32_t> nodes_at_depth = {};
+    Line current_best_line = Line();
 };
 
 typedef std::vector<MoveList> MoveListStack;
@@ -98,7 +104,7 @@ inline void reserve_move_list_stack(MoveListStack &move_list_stack, int depth)
 
 inline void reserve_board_state(C_BoardState &board_state, int depth)
 {
-    board_state.move_stack.reserve(depth + 1);
+    board_state.move_stack.reserve(depth + max_quiesence_depth + 1);
 }
 
 inline C_Session construct_session(int max_depth)

@@ -141,7 +141,6 @@ TEST(BestMoveMateIn2, TaraschKurschner1893)
     EXPECT_EQ("f5g6", value);
 }
 
-
 TEST(BestMoveMateIn2, MasonMarko1894)
 {
 
@@ -206,7 +205,7 @@ TEST(BestMoveMateIn3, BernsteinKotov1946)
                     {0, pKing, pPawn, 0, 0, -pPawn, 0, pRook}}};
     std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
 
-    EXPECT_EQ(value, "Wf4f5");
+    EXPECT_EQ(value, "f4f5");
 }
 
 TEST(BestMoveMateIn3, ZukertortPotter1875)
@@ -222,7 +221,7 @@ TEST(BestMoveMateIn3, ZukertortPotter1875)
                     {0, pPawn, 0, 0, 0, 0, 0, 0}}};
     std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
 
-    EXPECT_EQ(value, "Wc3e5");
+    EXPECT_EQ(value, "c3e5");
 }
 
 TEST(Bestmove, QuiesenceSearch1)
@@ -299,4 +298,70 @@ TEST(Bestmove, Evaluation1)
     float score = evaluate(session.board_state);
 
     EXPECT_EQ(score, -13);
+}
+
+TEST(MoveGen, SpeedTest)
+{
+    Board board = {{{0, 0, 0, 0, 0, 0, 0, pRook},
+                    {0, pPawn, 0, -pRook, 0, 0, -pRook, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pQueen, 0, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, -pQueen, pPawn, -pPawn, 0, 0},
+                    {0, 0, 0, pPawn, 0, 0, -pPawn, 0},
+                    {0, 0, 0, pPawn, 0, -pKing, -pPawn, 0},
+                    {0, pKing, pPawn, 0, 0, -pPawn, 0, pRook}}};
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, Black, {}, false, false, false, false, 0, 0);
+    for (int i = 0; i < 10000000; ++i)
+    {
+        collect_legal_moves(session.board_state, session.move_list_stack[0]);
+        session.move_list_stack[0].clear();
+    }
+    EXPECT_EQ(true, true);
+}
+
+TEST(MoveGen, SpeedTestPushPop)
+{
+    Board board = {{{0, 0, 0, 0, 0, 0, 0, pRook},
+                    {0, pPawn, 0, -pRook, 0, 0, -pRook, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pQueen, 0, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, -pQueen, pPawn, -pPawn, 0, 0},
+                    {0, 0, 0, pPawn, 0, 0, -pPawn, 0},
+                    {0, 0, 0, pPawn, 0, -pKing, -pPawn, 0},
+                    {0, pKing, pPawn, 0, 0, -pPawn, 0, pRook}}};
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, Black, {}, false, false, false, false, 0, 0);
+    collect_legal_moves(session.board_state, session.move_list_stack[0]);
+
+    for (int i = 0; i < 10000000; ++i)
+    {
+        int move_no = i % 20;
+        move m = session.move_list_stack[0][move_no];
+        push_move(session.board_state, m, session.move_list_stack[1]);
+        pop_move(session.board_state);
+        session.move_list_stack[1].clear();
+    }
+    EXPECT_EQ(true, true);
+}
+
+TEST(MoveGen, SpeedTestEval)
+{
+    Board board = {{{0, 0, 0, 0, 0, 0, 0, pRook},
+                    {0, pPawn, 0, -pRook, 0, 0, -pRook, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pQueen, 0, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, -pQueen, pPawn, -pPawn, 0, 0},
+                    {0, 0, 0, pPawn, 0, 0, -pPawn, 0},
+                    {0, 0, 0, pPawn, 0, -pKing, -pPawn, 0},
+                    {0, pKing, pPawn, 0, 0, -pPawn, 0, pRook}}};
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, Black, {}, false, false, false, false, 0, 0);
+    collect_legal_moves(session.board_state, session.move_list_stack[0]);
+
+    for (int i = 0; i < 10000000; ++i)
+    {
+        evaluate(session.board_state);
+    }
+    EXPECT_EQ(true, true);
 }

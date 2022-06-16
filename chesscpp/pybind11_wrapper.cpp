@@ -12,5 +12,5 @@ PYBIND11_MODULE(chesscpp, m)
     m.def("bestmove", &bestmove, "");
     m.def("bestmove_benchmark", &bestmove_benchmark, "");
     m.def("evaluate", &evaluate, "");
-    m.def("evaluate_benchmark", &evaluate_benchmark, "");
+    // m.def("evaluate_benchmark", &evaluate_benchmark, "");
 }

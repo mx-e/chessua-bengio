@@ -1,57 +1,57 @@
 #include <gtest/gtest.h>
 #include "test_utils.hpp"
 
-TEST(Transforms, SetSingleField)
-{
-    // set
-    C_Session session = construct_session(10);
-    C_BoardState board = session.board_state;
+// TEST(Transforms, SetSingleField)
+// {
+//     // set
+//     C_Session session = construct_session(10);
+//     C_BoardState board = session.board_state;
 
-    set_single_piece(board, White, pPawn, flat(0, 0));
-    std::vector<int> w_pawns = scan_board(get_pawns(board, White));
-    std::vector<int> white_pieces = scan_board(get_pieces_of_color(board, White));
+//     set_single_piece(board, White, pPawn, flat(0, 0));
+//     std::vector<int> w_pawns = scan_board(get_pawns(board, White));
+//     std::vector<int> white_pieces = scan_board(get_pieces_of_color(board, White));
 
-    EXPECT_EQ(exists<int>(w_pawns, [](int pos)
-                          { return pos == 0; }),
-              true);
-    EXPECT_EQ(exists<int>(white_pieces, [](int pos)
-                          { return pos == 0; }),
-              true);
+//     EXPECT_EQ(exists<int>(w_pawns, [](int pos)
+//                           { return pos == 0; }),
+//               true);
+//     EXPECT_EQ(exists<int>(white_pieces, [](int pos)
+//                           { return pos == 0; }),
+//               true);
 
-    set_single_piece(board, Black, pQueen, flat(1, 1));
-    std::vector<int> b_queen = scan_board(get_queen(board, Black));
-    std::vector<int> black_pieces = scan_board(get_pieces_of_color(board, Black));
+//     set_single_piece(board, Black, pQueen, flat(1, 1));
+//     std::vector<int> b_queen = scan_board(get_queen(board, Black));
+//     std::vector<int> black_pieces = scan_board(get_pieces_of_color(board, Black));
 
-    EXPECT_EQ(exists<int>(b_queen, [](int pos)
-                          { return pos == 9; }),
-              true);
-    EXPECT_EQ(exists<int>(black_pieces, [](int pos)
-                          { return pos == 9; }),
-              true);
+//     EXPECT_EQ(exists<int>(b_queen, [](int pos)
+//                           { return pos == 9; }),
+//               true);
+//     EXPECT_EQ(exists<int>(black_pieces, [](int pos)
+//                           { return pos == 9; }),
+//               true);
 
-    // unset
-    unset_single_piece(board, White, pPawn, flat(0, 0));
-    w_pawns = scan_board(get_pawns(board, White));
-    white_pieces = scan_board(get_pieces_of_color(board, White));
+//     // unset
+//     unset_single_piece(board, White, pPawn, flat(0, 0));
+//     w_pawns = scan_board(get_pawns(board, White));
+//     white_pieces = scan_board(get_pieces_of_color(board, White));
 
-    EXPECT_EQ(exists<int>(w_pawns, [](int pos)
-                          { return pos == 0; }),
-              false);
-    EXPECT_EQ(exists<int>(white_pieces, [](int pos)
-                          { return pos == 0; }),
-              false);
+//     EXPECT_EQ(exists<int>(w_pawns, [](int pos)
+//                           { return pos == 0; }),
+//               false);
+//     EXPECT_EQ(exists<int>(white_pieces, [](int pos)
+//                           { return pos == 0; }),
+//               false);
 
-    unset_single_piece(board, Black, pQueen, flat(1, 1));
-    b_queen = scan_board(get_queen(board, Black));
-    black_pieces = scan_board(get_pieces_of_color(board, Black));
+//     unset_single_piece(board, Black, pQueen, flat(1, 1));
+//     b_queen = scan_board(get_queen(board, Black));
+//     black_pieces = scan_board(get_pieces_of_color(board, Black));
 
-    EXPECT_EQ(exists<int>(b_queen, [](int pos)
-                          { return pos == 9; }),
-              false);
-    EXPECT_EQ(exists<int>(black_pieces, [](int pos)
-                          { return pos == 9; }),
-              false);
-}
+//     EXPECT_EQ(exists<int>(b_queen, [](int pos)
+//                           { return pos == 9; }),
+//               false);
+//     EXPECT_EQ(exists<int>(black_pieces, [](int pos)
+//                           { return pos == 9; }),
+//               false);
+// }
 
 TEST(Transforms, SetPieces)
 {
