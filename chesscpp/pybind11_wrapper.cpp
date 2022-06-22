@@ -11,6 +11,7 @@ PYBIND11_MODULE(chesscpp, m)
     m.def("runtime_benchmark", &runtime_benchmark, "Runs runtime benchmark for bitboard move generation n times.");
     m.def("bestmove", &bestmove, "");
     m.def("bestmove_benchmark", &bestmove_benchmark, "");
+    m.def("bestmove_benchmark_marshal", &bestmove_benchmark_marshal, "");
     m.def("evaluate", &evaluate, "");
     // m.def("evaluate_benchmark", &evaluate_benchmark, "");
 }
