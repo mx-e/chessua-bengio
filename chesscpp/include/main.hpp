@@ -157,7 +157,7 @@ float quiescence_search(C_Session &session, float alpha, float beta, int depth)
     if (session.board_state.king_attack || session.board_state.castling_move_illegal)
         return high_value;
     float current_score = evaluate(session.board_state);
-    if (depth >= max_quiesence_depth)
+    if (depth >= session.alpha_beta_state.current_max_depth + max_quiesence_depth)
         return current_score;
     if (current_score >= beta)
         return beta;
@@ -344,7 +344,7 @@ std::string bestmove_benchmark(int max_depth, Board board, int color, EnPassants
 
 std::string bestmove_benchmark_marshal(int max_depth, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
 {
-    C_Session session = construct_session(max_depth);
+    C_Session session = construct_session(max_depth + 5);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     std::string uci_best_move;
 

@@ -1,356 +1,4 @@
 {
-  "depth-8": {
-    "rnbqkbnr/1pppppp1/p6p/8/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3": [
-      {
-        "depth": 1,
-        "length": 6.890296936035156e-5,
-        "bestmove": "g8f6",
-        "reached_nodes": 23
-      },
-      {
-        "depth": 2,
-        "length": 8.296966552734375e-5,
-        "bestmove": "g8f6",
-        "reached_nodes": 154
-      },
-      {
-        "depth": 3,
-        "length": 0.0002701282501220703,
-        "bestmove": "g8f6",
-        "reached_nodes": 753
-      },
-      {
-        "depth": 4,
-        "length": 0.0016901493072509766,
-        "bestmove": "g8f6",
-        "reached_nodes": 5500
-      },
-      {
-        "depth": 5,
-        "length": 0.007440805435180664,
-        "bestmove": "g8f6",
-        "reached_nodes": 23230
-      },
-      {
-        "depth": 6,
-        "length": 0.06480288505554199,
-        "bestmove": "g8f6",
-        "reached_nodes": 233049
-      },
-      {
-        "depth": 7,
-        "length": 0.5275919437408447,
-        "bestmove": "b8c6",
-        "reached_nodes": 1840522
-      },
-      {
-        "depth": 8,
-        "length": 2.6141157150268555,
-        "bestmove": "g8f6",
-        "reached_nodes": 8437108
-      }
-    ],
-    "r3kb1r/1p1nqp1p/p2p1np1/P1p1p3/2P1P3/2N1K1PP/1P1P1P2/R1BQ1B1R w kq - 1 11": [
-      {
-        "depth": 1,
-        "length": 4.363059997558594e-5,
-        "bestmove": "c3e2",
-        "reached_nodes": 38
-      },
-      {
-        "depth": 2,
-        "length": 9.393692016601562e-5,
-        "bestmove": "c3e2",
-        "reached_nodes": 198
-      },
-      {
-        "depth": 3,
-        "length": 0.00044918060302734375,
-        "bestmove": "c3e2",
-        "reached_nodes": 1517
-      },
-      {
-        "depth": 4,
-        "length": 0.008153200149536133,
-        "bestmove": "d1f3",
-        "reached_nodes": 30548
-      },
-      {
-        "depth": 5,
-        "length": 0.05071902275085449,
-        "bestmove": "d1f3",
-        "reached_nodes": 183329
-      },
-      {
-        "depth": 6,
-        "length": 0.12030911445617676,
-        "bestmove": "c3e2",
-        "reached_nodes": 257065
-      },
-      {
-        "depth": 7,
-        "length": 0.6730530261993408,
-        "bestmove": "c3e2",
-        "reached_nodes": 2382307
-      },
-      {
-        "depth": 8,
-        "length": 3.8500638008117676,
-        "bestmove": "c3e2",
-        "reached_nodes": 13089407
-      }
-    ],
-    "1r6/8/2pbk1p1/p4p2/2KPnP2/4P3/PB4PP/5R2 w - - 0 1": [
-      {
-        "depth": 1,
-        "length": 5.507469177246094e-5,
-        "bestmove": "f1b1",
-        "reached_nodes": 46
-      },
-      {
-        "depth": 2,
-        "length": 0.0001251697540283203,
-        "bestmove": "f1b1",
-        "reached_nodes": 364
-      },
-      {
-        "depth": 3,
-        "length": 0.0007460117340087891,
-        "bestmove": "b2c3",
-        "reached_nodes": 2971
-      },
-      {
-        "depth": 4,
-        "length": 0.004693031311035156,
-        "bestmove": "b2c3",
-        "reached_nodes": 20880
-      },
-      {
-        "depth": 5,
-        "length": 0.021284103393554688,
-        "bestmove": "b2c3",
-        "reached_nodes": 83221
-      },
-      {
-        "depth": 6,
-        "length": 0.19685125350952148,
-        "bestmove": "b2c3",
-        "reached_nodes": 926962
-      },
-      {
-        "depth": 7,
-        "length": 0.9717779159545898,
-        "bestmove": "b2c3",
-        "reached_nodes": 3949838
-      },
-      {
-        "depth": 8,
-        "length": 6.426532030105591,
-        "bestmove": "b2c3",
-        "reached_nodes": 29741172
-      }
-    ],
-    "r1bqkb1r/p2p1ppp/np3n2/8/8/NP1QPN2/P4PPP/R1B1KB1R w KQkq - 0 7": [
-      {
-        "depth": 1,
-        "length": 7.486343383789062e-5,
-        "bestmove": "f3h4",
-        "reached_nodes": 72
-      },
-      {
-        "depth": 2,
-        "length": 0.00043702125549316406,
-        "bestmove": "f3h4",
-        "reached_nodes": 1284
-      },
-      {
-        "depth": 3,
-        "length": 0.001920938491821289,
-        "bestmove": "f3h4",
-        "reached_nodes": 5630
-      },
-      {
-        "depth": 4,
-        "length": 0.03542304039001465,
-        "bestmove": "a3c4",
-        "reached_nodes": 120006
-      },
-      {
-        "depth": 5,
-        "length": 0.24766898155212402,
-        "bestmove": "a3c4",
-        "reached_nodes": 827965
-      },
-      {
-        "depth": 6,
-        "length": 1.6120171546936035,
-        "bestmove": "f3d2",
-        "reached_nodes": 5142664
-      },
-      {
-        "depth": 7,
-        "length": 22.281980991363525,
-        "bestmove": "d3f5",
-        "reached_nodes": 79674716
-      },
-      {
-        "depth": 8,
-        "length": 145.57058310508728,
-        "bestmove": "a3c4",
-        "reached_nodes": 462734432
-      }
-    ],
-    "6k1/B5q1/KR6/8/8/8/6p1/8 b - - 0 1": [
-      {
-        "depth": 1,
-        "length": 4.673004150390625e-5,
-        "bestmove": "g2g1q",
-        "reached_nodes": 29
-      },
-      {
-        "depth": 2,
-        "length": 8.893013000488281e-5,
-        "bestmove": "g2g1q",
-        "reached_nodes": 262
-      },
-      {
-        "depth": 3,
-        "length": 0.0004909038543701172,
-        "bestmove": "g7a1",
-        "reached_nodes": 2246
-      },
-      {
-        "depth": 4,
-        "length": 0.0037980079650878906,
-        "bestmove": "g7a1",
-        "reached_nodes": 18020
-      },
-      {
-        "depth": 5,
-        "length": 0.02882695198059082,
-        "bestmove": "g7a1",
-        "reached_nodes": 146311
-      },
-      {
-        "depth": 6,
-        "length": 0.0992581844329834,
-        "bestmove": "g7a1",
-        "reached_nodes": 377291
-      },
-      {
-        "depth": 7,
-        "length": 0.8674609661102295,
-        "bestmove": "g7a1",
-        "reached_nodes": 4471555
-      },
-      {
-        "depth": 8,
-        "length": 5.749017000198364,
-        "bestmove": "g7a1",
-        "reached_nodes": 26088616
-      }
-    ],
-    "krr3rr/pp6/8/8/8/3K4/8/8 b - - 0 1": [
-      {
-        "depth": 1,
-        "length": 3.910064697265625e-5,
-        "bestmove": "h8h7",
-        "reached_nodes": 31
-      },
-      {
-        "depth": 2,
-        "length": 5.125999450683594e-5,
-        "bestmove": "h8h7",
-        "reached_nodes": 78
-      },
-      {
-        "depth": 3,
-        "length": 0.00021886825561523438,
-        "bestmove": "h8h7",
-        "reached_nodes": 1222
-      },
-      {
-        "depth": 4,
-        "length": 0.0008709430694580078,
-        "bestmove": "h8h7",
-        "reached_nodes": 3232
-      },
-      {
-        "depth": 5,
-        "length": 0.007290840148925781,
-        "bestmove": "h8h7",
-        "reached_nodes": 48738
-      },
-      {
-        "depth": 6,
-        "length": 0.0189669132232666,
-        "bestmove": "h8h7",
-        "reached_nodes": 65213
-      },
-      {
-        "depth": 7,
-        "length": 0.0639650821685791,
-        "bestmove": "h8h7",
-        "reached_nodes": 325097
-      },
-      {
-        "depth": 8,
-        "length": 0.20032501220703125,
-        "bestmove": "h8h7",
-        "reached_nodes": 725191
-      }
-    ],
-    "4krn1/1r1p3b/6q1/8/1PR1P3/8/2K5/2B2BN1 w - - 0 30": [
-      {
-        "depth": 1,
-        "length": 5.2928924560546875e-5,
-        "bestmove": "c4c8",
-        "reached_nodes": 55
-      },
-      {
-        "depth": 2,
-        "length": 0.00016498565673828125,
-        "bestmove": "c4c8",
-        "reached_nodes": 488
-      },
-      {
-        "depth": 3,
-        "length": 0.0008149147033691406,
-        "bestmove": "c4c8",
-        "reached_nodes": 2673
-      },
-      {
-        "depth": 4,
-        "length": 0.005688190460205078,
-        "bestmove": "c4c8",
-        "reached_nodes": 20687
-      },
-      {
-        "depth": 5,
-        "length": 0.0355069637298584,
-        "bestmove": "c4c8",
-        "reached_nodes": 120516
-      },
-      {
-        "depth": 6,
-        "length": 0.5498030185699463,
-        "bestmove": "c4c8",
-        "reached_nodes": 2443055
-      },
-      {
-        "depth": 7,
-        "length": 2.9256908893585205,
-        "bestmove": "g1h3",
-        "reached_nodes": 9509494
-      },
-      {
-        "depth": 8,
-        "length": 38.15038704872131,
-        "bestmove": "c4c8",
-        "reached_nodes": 166393708
-      }
-    ]
-  },
   "no-pvs": {
     "rnbqkbnr/1pppppp1/p6p/8/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3": [
       {
@@ -1052,6 +700,358 @@
         "length": 38.3013870716095,
         "bestmove": "c4c8",
         "reached_nodes": 166393708
+      }
+    ]
+  },
+  "with-q-search": {
+    "rnbqkbnr/1pppppp1/p6p/8/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3": [
+      {
+        "depth": 1,
+        "length": 7.200241088867188e-5,
+        "bestmove": "g8f6",
+        "reached_nodes": 23
+      },
+      {
+        "depth": 2,
+        "length": 9.298324584960938e-5,
+        "bestmove": "g8f6",
+        "reached_nodes": 174
+      },
+      {
+        "depth": 3,
+        "length": 0.0003039836883544922,
+        "bestmove": "g8f6",
+        "reached_nodes": 797
+      },
+      {
+        "depth": 4,
+        "length": 0.0025391578674316406,
+        "bestmove": "g8f6",
+        "reached_nodes": 8086
+      },
+      {
+        "depth": 5,
+        "length": 0.012269020080566406,
+        "bestmove": "g8f6",
+        "reached_nodes": 36762
+      },
+      {
+        "depth": 6,
+        "length": 0.11055588722229004,
+        "bestmove": "g8f6",
+        "reached_nodes": 356864
+      },
+      {
+        "depth": 7,
+        "length": 0.460784912109375,
+        "bestmove": "g8f6",
+        "reached_nodes": 1320210
+      },
+      {
+        "depth": 8,
+        "length": 4.0857460498809814,
+        "bestmove": "g8f6",
+        "reached_nodes": 13251216
+      }
+    ],
+    "r3kb1r/1p1nqp1p/p2p1np1/P1p1p3/2P1P3/2N1K1PP/1P1P1P2/R1BQ1B1R w kq - 1 11": [
+      {
+        "depth": 1,
+        "length": 5.1021575927734375e-5,
+        "bestmove": "c3e2",
+        "reached_nodes": 38
+      },
+      {
+        "depth": 2,
+        "length": 0.00010395050048828125,
+        "bestmove": "c3e2",
+        "reached_nodes": 207
+      },
+      {
+        "depth": 3,
+        "length": 0.0004582405090332031,
+        "bestmove": "c3e2",
+        "reached_nodes": 1549
+      },
+      {
+        "depth": 4,
+        "length": 0.002390146255493164,
+        "bestmove": "c3e2",
+        "reached_nodes": 7476
+      },
+      {
+        "depth": 5,
+        "length": 0.015280961990356445,
+        "bestmove": "c3e2",
+        "reached_nodes": 54810
+      },
+      {
+        "depth": 6,
+        "length": 0.08664917945861816,
+        "bestmove": "c3e2",
+        "reached_nodes": 278679
+      },
+      {
+        "depth": 7,
+        "length": 0.5158908367156982,
+        "bestmove": "c3e2",
+        "reached_nodes": 1782977
+      },
+      {
+        "depth": 8,
+        "length": 3.2162859439849854,
+        "bestmove": "c3e2",
+        "reached_nodes": 10372022
+      }
+    ],
+    "1r6/8/2pbk1p1/p4p2/2KPnP2/4P3/PB4PP/5R2 w - - 0 1": [
+      {
+        "depth": 1,
+        "length": 7.891654968261719e-5,
+        "bestmove": "f1b1",
+        "reached_nodes": 46
+      },
+      {
+        "depth": 2,
+        "length": 0.000125885009765625,
+        "bestmove": "f1b1",
+        "reached_nodes": 361
+      },
+      {
+        "depth": 3,
+        "length": 0.0008339881896972656,
+        "bestmove": "b2c3",
+        "reached_nodes": 3359
+      },
+      {
+        "depth": 4,
+        "length": 0.004638195037841797,
+        "bestmove": "b2c3",
+        "reached_nodes": 19997
+      },
+      {
+        "depth": 5,
+        "length": 0.02913689613342285,
+        "bestmove": "b2c3",
+        "reached_nodes": 117105
+      },
+      {
+        "depth": 6,
+        "length": 0.16437005996704102,
+        "bestmove": "b2c3",
+        "reached_nodes": 714003
+      },
+      {
+        "depth": 7,
+        "length": 1.2200326919555664,
+        "bestmove": "b2c3",
+        "reached_nodes": 5192165
+      },
+      {
+        "depth": 8,
+        "length": 6.77161717414856,
+        "bestmove": "b2c3",
+        "reached_nodes": 29559153
+      }
+    ],
+    "r1bqkb1r/p2p1ppp/np3n2/8/8/NP1QPN2/P4PPP/R1B1KB1R w KQkq - 0 7": [
+      {
+        "depth": 1,
+        "length": 6.699562072753906e-5,
+        "bestmove": "f3h4",
+        "reached_nodes": 72
+      },
+      {
+        "depth": 2,
+        "length": 0.00044536590576171875,
+        "bestmove": "f3h4",
+        "reached_nodes": 1325
+      },
+      {
+        "depth": 3,
+        "length": 0.0027599334716796875,
+        "bestmove": "f3h4",
+        "reached_nodes": 8311
+      },
+      {
+        "depth": 4,
+        "length": 0.04283905029296875,
+        "bestmove": "f3h4",
+        "reached_nodes": 138254
+      },
+      {
+        "depth": 5,
+        "length": 0.30417490005493164,
+        "bestmove": "f3h4",
+        "reached_nodes": 925435
+      },
+      {
+        "depth": 6,
+        "length": 3.185883045196533,
+        "bestmove": "f3h4",
+        "reached_nodes": 9822670
+      },
+      {
+        "depth": 7,
+        "length": 29.196892261505127,
+        "bestmove": "f3h4",
+        "reached_nodes": 87776541
+      },
+      {
+        "depth": 8,
+        "length": 242.70306992530823,
+        "bestmove": "f3h4",
+        "reached_nodes": 720862528
+      }
+    ],
+    "6k1/B5q1/KR6/8/8/8/6p1/8 b - - 0 1": [
+      {
+        "depth": 1,
+        "length": 7.224082946777344e-5,
+        "bestmove": "g2g1q",
+        "reached_nodes": 29
+      },
+      {
+        "depth": 2,
+        "length": 9.298324584960938e-5,
+        "bestmove": "g2g1q",
+        "reached_nodes": 262
+      },
+      {
+        "depth": 3,
+        "length": 0.00048613548278808594,
+        "bestmove": "g7a1",
+        "reached_nodes": 2246
+      },
+      {
+        "depth": 4,
+        "length": 0.003129720687866211,
+        "bestmove": "g7a1",
+        "reached_nodes": 14558
+      },
+      {
+        "depth": 5,
+        "length": 0.0213320255279541,
+        "bestmove": "g7a1",
+        "reached_nodes": 103265
+      },
+      {
+        "depth": 6,
+        "length": 0.14626312255859375,
+        "bestmove": "g7a1",
+        "reached_nodes": 667778
+      },
+      {
+        "depth": 7,
+        "length": 0.8706166744232178,
+        "bestmove": "g7a1",
+        "reached_nodes": 4139490
+      },
+      {
+        "depth": 8,
+        "length": 5.682276964187622,
+        "bestmove": "g7a1",
+        "reached_nodes": 25670575
+      }
+    ],
+    "krr3rr/pp6/8/8/8/3K4/8/8 b - - 0 1": [
+      {
+        "depth": 1,
+        "length": 7.915496826171875e-5,
+        "bestmove": "h8h7",
+        "reached_nodes": 31
+      },
+      {
+        "depth": 2,
+        "length": 9.703636169433594e-5,
+        "bestmove": "h8h7",
+        "reached_nodes": 78
+      },
+      {
+        "depth": 3,
+        "length": 0.00021719932556152344,
+        "bestmove": "h8h7",
+        "reached_nodes": 1222
+      },
+      {
+        "depth": 4,
+        "length": 0.0008840560913085938,
+        "bestmove": "h8h7",
+        "reached_nodes": 3232
+      },
+      {
+        "depth": 5,
+        "length": 0.00733494758605957,
+        "bestmove": "h8h7",
+        "reached_nodes": 48738
+      },
+      {
+        "depth": 6,
+        "length": 0.019189119338989258,
+        "bestmove": "h8h7",
+        "reached_nodes": 65213
+      },
+      {
+        "depth": 7,
+        "length": 0.06407928466796875,
+        "bestmove": "h8h7",
+        "reached_nodes": 325097
+      },
+      {
+        "depth": 8,
+        "length": 0.2060258388519287,
+        "bestmove": "h8h7",
+        "reached_nodes": 725191
+      }
+    ],
+    "4krn1/1r1p3b/6q1/8/1PR1P3/8/2K5/2B2BN1 w - - 0 30": [
+      {
+        "depth": 1,
+        "length": 6.699562072753906e-5,
+        "bestmove": "c4c8",
+        "reached_nodes": 55
+      },
+      {
+        "depth": 2,
+        "length": 0.00025391578674316406,
+        "bestmove": "c4c8",
+        "reached_nodes": 693
+      },
+      {
+        "depth": 3,
+        "length": 0.0013799667358398438,
+        "bestmove": "c4c8",
+        "reached_nodes": 4449
+      },
+      {
+        "depth": 4,
+        "length": 0.011345863342285156,
+        "bestmove": "c4c8",
+        "reached_nodes": 40000
+      },
+      {
+        "depth": 5,
+        "length": 0.250399112701416,
+        "bestmove": "c4c8",
+        "reached_nodes": 840375
+      },
+      {
+        "depth": 6,
+        "length": 0.9327778816223145,
+        "bestmove": "c4c8",
+        "reached_nodes": 3115079
+      },
+      {
+        "depth": 7,
+        "length": 13.201112270355225,
+        "bestmove": "c4c8",
+        "reached_nodes": 50245145
+      },
+      {
+        "depth": 8,
+        "length": 61.452391147613525,
+        "bestmove": "c4c8",
+        "reached_nodes": 219120861
       }
     ]
   }
