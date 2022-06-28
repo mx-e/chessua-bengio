@@ -26,7 +26,7 @@ class TestBenchmarks(unittest.TestCase):
 
                 enpassant = [tuple(board.en_passant_tile)] if not (board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
 
-                depth = 5
+                depth = 8
                 best_move = bestmove_benchmark(depth, board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
                 log.debug(f"current depth: {depth}; time: {time.time() - start} seconds. bestmove: {best_move}")
                     

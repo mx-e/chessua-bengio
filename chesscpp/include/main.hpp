@@ -116,25 +116,6 @@ inline void runtime_benchmark(Board board, int color, EnPassants enpassant, bool
     }
 }
 
-void print_optimal_move_sequence(MoveList &move_list)
-{
-    for (move m : move_list)
-    {
-        printf("%s -> ", move_to_uci_str(m).c_str());
-    }
-
-    printf("\n");
-}
-
-void print_optimal_line(C_Session &session, Line &line)
-{
-    for (int i = 0; i < session.alpha_beta_state.current_max_depth; i++)
-    {
-        printf("%s -> ", move_to_uci_str(line.argmove[i]).c_str());
-    }
-    std::cout << "\n";
-}
-
 inline float get_best_move(C_Session &session, int max_depth)
 {
     printf("Alpha-Beta at depth %i:", max_depth);
@@ -163,11 +144,11 @@ std::string bestmove(float remaining_time, int max_depth, Board board, int color
     int expected_remaining_moves = std::max(expected_moves_per_game - fullMove, 6);
     float move_time_budget = remaining_time / expected_remaining_moves;
     std::string uci_best_move;
-
+    float score;
     do
     {
         auto ts_start = std::chrono::steady_clock::now();
-        float score = get_best_move(session, session.alpha_beta_state.current_max_depth);
+        score = get_best_move(session, session.alpha_beta_state.current_max_depth);
         auto ts_end = std::chrono::steady_clock::now();
         float time_elapsed = (std::chrono::duration_cast<std::chrono::microseconds>(ts_end - ts_start).count()) / 1000000.0;
         session.alpha_beta_state.runtimes_at_depth[session.alpha_beta_state.current_max_depth] = time_elapsed;
@@ -185,10 +166,11 @@ std::string bestmove_benchmark(int max_depth, Board board, int color, EnPassants
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     std::string uci_best_move;
+    float score;
 
     do
     {
-        float score = get_best_move(session, session.alpha_beta_state.current_max_depth);
+        score = get_best_move(session, session.alpha_beta_state.current_max_depth);
         ++session.alpha_beta_state.current_max_depth;
         uci_best_move = move_to_uci_str(session.alpha_beta_state.bestmove);
 
