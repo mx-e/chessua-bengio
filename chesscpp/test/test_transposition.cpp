@@ -1,13 +1,30 @@
 #include <gtest/gtest.h>
 #include "../include/transposition.hpp"
 #include "../include/conversions.hpp"
+#include <optional>
+
+u_int64_t hash_4_board(Board board, float color, std::optional<move> move)
+{
+    HashState hash_state;
+    construct_hash(hash_state);
+
+    C_BoardState board_state;
+    marshall_board_state(
+        board_state, board, color, {}, false, false, false, false, 0, 0);
+
+    compute_hash(hash_state, board_state);
+
+    if (move)
+        update_hash(hash_state, board_state, *move);
+    return hash_state.hash;
+}
 
 TEST(ZobristHashing, InitHashState)
 {
     HashState hash_state;
     construct_hash(hash_state);
 
-    for(int i = 0; i < FEATURES; i++)
+    for (int i = 0; i < FEATURES; i++)
     {
         EXPECT_NE(hash_state.features[i], 0);
     }
@@ -15,260 +32,262 @@ TEST(ZobristHashing, InitHashState)
 
 TEST(ZobristHashing, ComputeHashEqualForSameBoard)
 {
-    HashState hash_state;
-    construct_hash(hash_state);
+    for (auto color : {White, Black})
+    {
+        Board board = {{{0, 0, 0, 0, 0, 0, pKing, 0},
+                        {0, 0, 0, pRook, 0, 0, 0, 0},
+                        {0, pKnight, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0},
+                        {-pQueen, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
+                        {0, 0, 0, 0, 0, 0, 0, -pKing}}};
 
-    C_BoardState board_state;
-    Board board = {{{0, 0, 0, 0, 0, 0, pKing, 0},
-                    {0, 0, 0, pRook, 0, 0, 0, 0},
-                    {0, pKnight, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {-pQueen, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
-                    {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    marshall_board_state(
-        board_state, board, White, {}, false, false, false, false, 0, 0);
-
-    compute_hash(hash_state, board_state);
-    u_int64_t hash = hash_state.hash;
-    compute_hash(hash_state, board_state);
-
-    EXPECT_EQ(hash_state.hash, hash);
+        EXPECT_EQ(
+            hash_4_board(board, color, {}),
+            hash_4_board(board, color, {}));
+    }
 }
 
 TEST(ZobristHashing, ComputeHashUnequalForDifferentBoard)
 {
-    HashState hash_state;
-    construct_hash(hash_state);
+    for (auto color : {White, Black})
+    {
+        EXPECT_NE(
+            hash_4_board({{{0, 0, 0, 0, 0, pKing, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, -pKing, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0}}},
+                         color, {}),
 
-    C_BoardState board_state1;
-    Board board1 = {{{0, 0, 0, 0, 0, pKing, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state1, board1, White, {}, false, false, false, false, 0, 0);
-
-    C_BoardState board_state2;
-    Board board2 = {{{0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state2, board2, White, {}, false, false, false, false, 0, 0);
-
-    compute_hash(hash_state, board_state1);
-    u_int64_t hash = hash_state.hash;
-    compute_hash(hash_state, board_state2);
-
-    EXPECT_NE(hash_state.hash, hash);
+            hash_4_board({{{0, 0, 0, 0, 0, 0, pKing, 0},
+                           {0, pPawn, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0},
+                           {0, 0, 0, -pPawn, 0, 0, 0, 0},
+                           {0, 0, 0, 0, 0, 0, 0, 0}}},
+                         color, {}));
+    }
 }
 
 TEST(ZobristHashing, ComputeHashUnequalForDifferentToMove)
 {
-    HashState hash_state;
-    construct_hash(hash_state);
+    EXPECT_NE(
+        hash_4_board({{{0, 0, 0, 0, 0, pKing, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, {}),
 
-    C_BoardState board_state1;
-    Board board1 = {{{0, 0, 0, 0, 0, pKing, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state1, board1, White, {}, false, false, false, false, 0, 0);
-
-    C_BoardState board_state2;
-    Board board2 = {{{0, 0, 0, 0, 0, pKing, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state2, board2, Black, {}, false, false, false, false, 0, 0);
-
-    compute_hash(hash_state, board_state1);
-    u_int64_t hash = hash_state.hash;
-    compute_hash(hash_state, board_state2);
-
-    EXPECT_NE(hash_state.hash, hash);
+        hash_4_board({{{0, 0, 0, 0, 0, 0, pKing, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, {}));
 }
 
-TEST(ZobristHashing, UpdateHashBasicMove)
+TEST(ZobristHashing, UpdateHashBasicMoveWhite)
 {
-    HashState hash_state;
-    construct_hash(hash_state);
+    EXPECT_EQ(
+        hash_4_board({{{0, 0, 0, 0, 0, pKing, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, move{.src = 5, .dest = 6}),
 
-    C_BoardState board_state1;
-    Board board1 = {{{0, 0, 0, 0, 0, pKing, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state1, board1, White, {}, false, false, false, false, 0, 0);
-
-    C_BoardState board_state2;
-    Board board2 = {{{0, 0, 0, 0, 0, 0, pKing, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state2, board2, White, {}, false, false, false, false, 0, 0);
-    compute_hash(hash_state, board_state1);
-
-    move move{.src = 5, .dest = 6};
-    update_hash(hash_state, board_state1, move);
-    u_int64_t hash = hash_state.hash;
-
-    HashState hash_state2;
-    construct_hash(hash_state2);
-    compute_hash(hash_state2, board_state2);
-
-    EXPECT_EQ(hash_state.hash, hash_state2.hash);
+        hash_4_board({{{0, 0, 0, 0, 0, 0, pKing, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, {}));
 }
 
-TEST(ZobristHashing, UpdateHashCapture)
+TEST(ZobristHashing, UpdateHashBasicMoveBlack)
 {
-    HashState hash_state;
-    construct_hash(hash_state);
+    EXPECT_EQ(
+        hash_4_board({{{0, 0, 0, 0, 0, -pKing, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, move{.src = 5, .dest = 6}),
 
-    C_BoardState board_state1;
-    Board board1 = {{{0, 0, 0, 0, 0, pKing, -pPawn, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state1, board1, White, {}, false, false, false, false, 0, 0);
+        hash_4_board({{{0, 0, 0, 0, 0, 0, -pKing, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, {}));
+}
 
-    C_BoardState board_state2;
-    Board board2 = {{{0, 0, 0, 0, 0, 0, pKing, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state2, board2, White, {}, false, false, false, false, 0, 0);
-    compute_hash(hash_state, board_state1);
+TEST(ZobristHashing, UpdateHashCaptureWhite)
+{
+    EXPECT_EQ(
+        hash_4_board({{{0, 0, 0, 0, 0, pKing, -pPawn, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, move{.src = 5, .dest = 6, .capture = pPawn}),
 
-    move move{.src = 5, .dest = 6, .capture = pPawn};
-    update_hash(hash_state, board_state1, move);
-    u_int64_t hash = hash_state.hash;
+        hash_4_board({{{0, 0, 0, 0, 0, 0, pKing, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, {}));
+}
 
-    HashState hash_state2;
-    construct_hash(hash_state2);
-    compute_hash(hash_state2, board_state2);
+TEST(ZobristHashing, UpdateHashCaptureBlack)
+{
+    EXPECT_EQ(
+        hash_4_board({{{0, pPawn, -pKing, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, move{.src = 2, .dest = 1, .capture = pPawn}),
 
-    EXPECT_EQ(hash_state.hash, hash_state2.hash);
+        hash_4_board({{{0, -pKing, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, {}));
+}
+
+TEST(ZobristHashing, UpdateHashEnPassantCaptureWhite)
+{
+    EXPECT_EQ(
+        hash_4_board({{{0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, -pPawn, 0, 0},
+                       {0, 0, 0, 0, 0, pPawn, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, move{.src = 21, .dest = 14, .ep = true}),
+
+        hash_4_board({{{0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, pPawn, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, {}));
 }
 
 TEST(ZobristHashing, UpdateHashEnPassantCapture)
 {
-    HashState hash_state;
-    construct_hash(hash_state);
+    EXPECT_EQ(
+        hash_4_board({{{0, 0, -pPawn, 0, 0, 0, 0, 0},
+                       {0, 0, pPawn, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, move{.src = 2, .dest = 9, .ep = true}),
 
-    C_BoardState board_state1;
-    Board board1 = {{{0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, -pPawn, 0, 0},
-                    {0, 0, 0, 0, 0, pPawn, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state1, board1, White, {}, false, false, false, false, 0, 0);
-
-    C_BoardState board_state2;
-    Board board2 = {{{0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, pPawn, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state2, board2, White, {}, false, false, false, false, 0, 0);
-    compute_hash(hash_state, board_state1);
-
-    move move{.src = 21, .dest = 14, .ep = true};
-    update_hash(hash_state, board_state1, move);
-    u_int64_t hash = hash_state.hash;
-
-    HashState hash_state2;
-    construct_hash(hash_state2);
-    compute_hash(hash_state2, board_state2);
-
-    EXPECT_EQ(hash_state.hash, hash_state2.hash);
+        hash_4_board({{{0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, -pPawn, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, {}));
 }
 
-TEST(ZobristHashing, UpdateHashPromotionCapture)
+TEST(ZobristHashing, UpdateHashPromotionCaptureWhite)
 {
-    HashState hash_state;
-    construct_hash(hash_state);
+    EXPECT_EQ(
+        hash_4_board({{{0, 0, 0, 0, 0, 0, pPawn, 0},
+                       {0, 0, 0, 0, 0, 0, 0, -pRook},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, move{.src = 6, .dest = 15, .capture = pRook, .promotion = pQueen}),
 
-    C_BoardState board_state1;
-    Board board1 = {{{0, 0, 0, 0, 0, 0, pPawn, 0},
-                    {0, 0, 0, 0, 0, 0, 0, -pRook},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state1, board1, White, {}, false, false, false, false, 0, 0);
+        hash_4_board({{{0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, pQueen},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     White, {}));
+}
 
-    C_BoardState board_state2;
-    Board board2 = {{{0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, pQueen},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0}}};
-    marshall_board_state(
-        board_state2, board2, White, {}, false, false, false, false, 0, 0);
-    compute_hash(hash_state, board_state1);
+TEST(ZobristHashing, UpdateHashPromotionCaptureBlack)
+{
+    EXPECT_EQ(
+        hash_4_board({{{0, -pPawn, 0, 0, 0, 0, 0, 0},
+                       {pRook, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, move{.src = 1, .dest = 8, .capture = pRook, .promotion = pQueen}),
 
-    move move{.src = 6, .dest = 15, .capture = pRook, .promotion = pQueen};
-    update_hash(hash_state, board_state1, move);
-    u_int64_t hash = hash_state.hash;
-
-    HashState hash_state2;
-    construct_hash(hash_state2);
-    compute_hash(hash_state2, board_state2);
-
-    EXPECT_EQ(hash_state.hash, hash_state2.hash);
+        hash_4_board({{{0, 0, 0, 0, 0, 0, 0, 0},
+                       {-pQueen, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0}}},
+                     Black, {}));
 }
