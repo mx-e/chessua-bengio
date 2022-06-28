@@ -90,6 +90,29 @@ def clean(c):
         c.run(f'rm -rf {TEST_TARGET}/build')
 
 @task
+def build(c, remake=False, bot_mode=False):
+    cmd = Cmd(c, bot_mode)
+    cmd.add(f"cd {TEST_TARGET}")
+
+    if not os.path.exists(f'{TEST_TARGET}/build'):
+        cmd.add("mkdir build")
+
+    if not os.path.exists(f'{TEST_TARGET}/CMakeLists.txt') or remake:
+        files = [f'../{file}' for file in glob(os.path.join(SOURCE, '*.cpp'))]
+        files += [file.split('/')[-1] for file in glob(os.path.join(TEST_TARGET,'*.c*'))]
+        cmd.add(f"cat > CMakeLists.txt << {configure_cmake(files, includeGTest=True)}")
+    
+    cmd = cmd()
+    cmd.add(f"cd {TEST_TARGET}/build")
+
+    if not os.path.exists(f'{TEST_TARGET}/build') or remake:
+        cmd.add("cmake ../")
+    
+    cmd.add("cmake --build .")
+    cmd(verbose=True)
+
+
+@task
 def test(c, debugger='', remake=False, bot_mode=False, output_on_failure=False, rerun_failed=False):
     cmd = Cmd(c, bot_mode)
     cmd.add(f"cd {TEST_TARGET}")
