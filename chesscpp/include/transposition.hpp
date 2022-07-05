@@ -1,6 +1,7 @@
 #ifndef TRANSPOSIITON
 #define TRANSPOSIITON
 #include "utils.hpp"
+#include "constants.hpp"
 #include <unordered_map>
 
 struct TT_Entry
@@ -8,12 +9,6 @@ struct TT_Entry
     int depth;
     move best_move;
 };
-
-#ifdef CUSTOM_UMH
-const bool USE_MOVE_HASHING = true;
-#else
-const bool USE_MOVE_HASHING = false;
-#endif
 
 typedef std::unordered_map<u_int64_t, TT_Entry> TT_HashTable;
 
@@ -131,7 +126,7 @@ inline std::optional<TT_Entry> find_tt_entry(HashState &hash_state)
 
 inline void hash_move(HashState &hash_state, move m)
 {
-    if (USE_MOVE_HASHING)
+    if (MV_HASH_ENABLED)
         hash_state.tt_ht[hash_state.hash] = TT_Entry{.best_move = m};
 }
 

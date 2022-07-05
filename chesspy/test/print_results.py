@@ -6,12 +6,14 @@ from prettytable import PrettyTable
 def get_rounded_str(x):
     return "%.4f" % x
 
+
 def get_time(details):
-    time = details['length']
+    time = details["length"]
     return get_rounded_str(time)
 
+
 def get_nodes(details):
-    return details['reached_nodes']
+    return details["reached_nodes"]
 
 
 def print_times():
@@ -32,16 +34,15 @@ def print_times():
             avg = [0] * depth
             for position, details in values.items():
                 for index, detail in enumerate(details):
-                    avg[index] += detail['length']
+                    avg[index] += detail["length"]
             for i in range(len(avg)):
                 avg[i] = "=====" + get_rounded_str(avg[i] / len(values))
-            table.add_row([rowname + "  avg"] +  avg)
+            table.add_row([rowname + "  avg"] + avg)
             for position, details in values.items():
-                table.add_row([position] + list(map( get_time, details)))
+                table.add_row([position] + list(map(get_time, details)))
 
     table.align = "r"
-    print(table.get_string(fields=["row", "depth 1",  "depth 6",  "depth 7", "depth 8"]))
-
+    print(table.get_string(fields=["row", "depth 1", "depth 6", "depth 7", "depth 8"]))
 
 
 def print_nodes():
@@ -62,15 +63,16 @@ def print_nodes():
             avg = [0] * depth
             for position, details in values.items():
                 for index, detail in enumerate(details):
-                    avg[index] += detail['reached_nodes']
+                    avg[index] += detail["reached_nodes"]
             for i in range(len(avg)):
                 avg[i] = get_rounded_str(avg[i] / len(values))
-            table.add_row([rowname + "  avg"] +  avg)
+            table.add_row([rowname + "  avg"] + avg)
             for position, details in values.items():
-                table.add_row([position] + list(map( get_nodes, details)))
+                table.add_row([position] + list(map(get_nodes, details)))
 
     table.align = "r"
-    print(table.get_string(fields=["row", "depth 1",  "depth 6",  "depth 7", "depth 8"]))
+    print(table.get_string(fields=["row", "depth 1", "depth 6", "depth 7", "depth 8"]))
+
 
 def main():
     print_times()

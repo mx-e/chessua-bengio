@@ -26,13 +26,6 @@ void print_optimal_line(C_Session &session, Line &line)
     std::cout << "\n";
 }
 
-float q_search_dummy(C_Session &session, float alpha, float beta, int depth)
-{
-    if (session.board_state.king_attack || session.board_state.castling_move_illegal)
-        return high_value;
-    return evaluate(session.board_state);
-}
-
 float quiescence_search(C_Session &session, float alpha, float beta, int depth)
 {
     if (session.board_state.king_attack || session.board_state.castling_move_illegal)
@@ -69,7 +62,7 @@ float zw_search(C_Session &session, float beta, int depth_left)
     if (session.board_state.king_attack || session.board_state.castling_move_illegal)
         return high_value;
     if (depth_left == 0)
-        return quiescence_search(session, beta - 1, beta, depth);
+        return Q_SEARCH_ENABLED ? quiescence_search(session, beta - 1, beta, depth) : evaluate(session.board_state);
 
     MoveList &move_list = session.move_list_stack[depth];
 
@@ -110,15 +103,16 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
     if (depth_left == 0)
     {
         pline.n_moves = 0;
-        return quiescence_search(session, alpha, beta, depth);
+        return Q_SEARCH_ENABLED ? quiescence_search(session, alpha, beta, depth) : evaluate(session.board_state);
     }
 
     MoveList &move_list = session.move_list_stack[depth];
 
-    bool search_pv = alpha == -infty;
+    bool search_pv = true;
     float score;
 
-    if(auto entry = find_tt_entry(session.hash_state)) {
+    if (auto entry = find_tt_entry(session.hash_state))
+    {
         move_list.insert(move_list.begin(), entry->best_move);
     }
 
@@ -142,7 +136,8 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
         session.move_list_stack[depth + 1].clear();
         reverse_hash(session.hash_state, session.board_state, m);
 
-        if (score >= beta) {
+        if (score >= beta)
+        {
             hash_move(session.hash_state, m);
             return beta;
         }
@@ -153,7 +148,8 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
             ::memcpy(pline.argmove + 1, line.argmove, line.n_moves * sizeof(move));
             pline.n_moves = line.n_moves + 1;
             alpha = score;
-            search_pv = false;
+            if (PV_SEARCH_ENABLED)
+                search_pv = false;
         }
     }
 
@@ -201,8 +197,8 @@ inline int alphabeta(C_Session &session, int max_depth)
             break;
         }
     }
-    session.alpha_beta_state.current_alpha = aspiration_search_enabled ? best_move_score + alpha_aspirations[0] : -infty;
-    session.alpha_beta_state.current_beta = aspiration_search_enabled ? best_move_score + beta_aspirations[0] : infty;
+    session.alpha_beta_state.current_alpha = ASP_SEARCH_ENABLED ? best_move_score + alpha_aspirations[0] : -infty;
+    session.alpha_beta_state.current_beta = ASP_SEARCH_ENABLED ? best_move_score + beta_aspirations[0] : infty;
 
     ::memcpy(session.alpha_beta_state.current_best_line.argmove, line.argmove, max_depth * sizeof(move));
     session.move_list_stack[0].clear();

@@ -9,43 +9,68 @@ class TestBenchmarks(unittest.TestCase):
         log = logging.getLogger("benchmarks.timeManagement")
         state = "5k1r/8/4B3/8/8/8/P7/KQ1N4 w - - 3 40"
         board = import_fen(state)
-        en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
+        en_passant = [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
 
         time_left = 180
         max_depth = 10
 
         start = time.time()
-        move = bestmove(time_left, max_depth, board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+        move = bestmove(
+            time_left,
+            max_depth,
+            board.board_state,
+            board.to_move,
+            en_passant,
+            *board.can_castle,
+            board.n_reversible_halfmoves,
+            board.n_moves,
+        )
         end = time.time()
 
         print(f"took {end - start} seconds, best move {move}")
 
         state = "1r6/8/2pbk1p1/p4p2/2KPnP2/4P3/PB4PP/5R2 w - - 0 1"
         board = import_fen(state)
-        en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
+        en_passant = [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
 
         time_left = 180
         max_depth = 10
 
         start = time.time()
-        move = bestmove(time_left, max_depth, board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+        move = bestmove(
+            time_left,
+            max_depth,
+            board.board_state,
+            board.to_move,
+            en_passant,
+            *board.can_castle,
+            board.n_reversible_halfmoves,
+            board.n_moves,
+        )
         end = time.time()
 
         print(f"took {end - start} seconds, best move {move}")
 
         state = "rnbqkbnr/1pppppp1/p6p/8/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3"
         board = import_fen(state)
-        en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
+        en_passant = [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
 
         time_left = 180
         max_depth = 10
 
         start = time.time()
-        move = bestmove(time_left, max_depth, board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+        move = bestmove(
+            time_left,
+            max_depth,
+            board.board_state,
+            board.to_move,
+            en_passant,
+            *board.can_castle,
+            board.n_reversible_halfmoves,
+            board.n_moves,
+        )
         end = time.time()
         print(f"took {end - start} seconds, best move {move}")
-
-
 
 
 if __name__ == "__main__":

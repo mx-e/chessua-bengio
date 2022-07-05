@@ -29,8 +29,7 @@ class TestBenchmarks(unittest.TestCase):
     #             depth = 7
     #             best_move = bestmove_benchmark(depth, board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
     #             log.debug(f"current depth: {depth}; time: {time.time() - start} seconds. bestmove: {best_move}")
-                    
-                
+
     #             end = time.time()
     #             times.append(end - start)
 
@@ -55,19 +54,33 @@ class TestBenchmarks(unittest.TestCase):
 
                 for depth in range(1, max_depth + 1):
                     start = time.time()
-                    en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
-                    best_move, nodes_reached = bestmove_benchmark_marshal(depth, board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+                    en_passant = (
+                        [board.en_passant_tile]
+                        if len(board.en_passant_tile) > 0
+                        else []
+                    )
+                    best_move, nodes_reached = bestmove_benchmark_marshal(
+                        depth,
+                        board.board_state,
+                        board.to_move,
+                        en_passant,
+                        *board.can_castle,
+                        board.n_reversible_halfmoves,
+                        board.n_moves,
+                    )
                     length = time.time() - start
-                    log.debug(f"current depth: {depth}; time: {length} seconds. bestmove: {best_move}. reached nodes: {nodes_reached}")
+                    log.debug(
+                        f"current depth: {depth}; time: {length} seconds. bestmove: {best_move}. reached nodes: {nodes_reached}"
+                    )
                     result = {
                         "depth": depth,
                         "length": length,
                         "bestmove": best_move,
-                        "reached_nodes": nodes_reached
+                        "reached_nodes": nodes_reached,
                     }
                     results[state].append(result)
                     depth += 1
-        
+
         with open(f"{test_dir}/data/results.json", "r+") as f:
             all_results = json.loads(f.read())
             all_results[str(uuid.uuid4())] = results

@@ -111,7 +111,6 @@ def extract_en_passant_tile(ep_str: str) -> list:
     return [abc_to_num(col) - 1, int(row) - 1]
 
 
-
 def export_en_passant_tile(ep_arr: np.array) -> str:
     if len(ep_arr) == 0:
         return "-"

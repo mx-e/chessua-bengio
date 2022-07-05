@@ -1,5 +1,5 @@
 from pickle import BUILD
-from invoke import task 
+from invoke import task
 import invoke
 import os
 from dataclasses import dataclass
@@ -59,21 +59,29 @@ TEST_TARGET = CONFIG["TEST_TARGET"]
 DEV_TARGET = CONFIG["DEV_TARGET"]
 CXX = CONFIG["CXX"]
 
+
 def configure_cmake(files=list[str], includeGTest=False):
-    files_str = "\n".join([f'    {file}' for file in files])
+    files_str = "\n".join([f"    {file}" for file in files])
     print(files_str)
-    if includeGTest: return CMAKELISTS.format(CXX, G_TEST_FETCH, G_COMPILE_OPTIONS, files_str, G_TEST_LINK_LIBRARY, G_TEST_INCLUDE
-    )
-    return CMAKELISTS.format(CXX, '', '', files_str, '', '')
+    if includeGTest:
+        return CMAKELISTS.format(
+            CXX,
+            G_TEST_FETCH,
+            G_COMPILE_OPTIONS,
+            files_str,
+            G_TEST_LINK_LIBRARY,
+            G_TEST_INCLUDE,
+        )
+    return CMAKELISTS.format(CXX, "", "", files_str, "", "")
 
 
 @dataclass
-class Cmd: 
+class Cmd:
     c: "invoke.Context"
     bot_mode: "bool"
-    
+
     def add(self, cmd):
-        if not hasattr(self, 'cmd'):
+        if not hasattr(self, "cmd"):
             self.cmd = cmd
         else:
             self.cmd += f" && {cmd}"
@@ -84,33 +92,44 @@ class Cmd:
         self.c.run(self.cmd, pty=not self.bot_mode)
         return Cmd(self.c, self.bot_mode)
 
-@task 
-def clean(c):
-    if os.path.exists(f'{TEST_TARGET}/build'):
-        c.run(f'rm -rf {TEST_TARGET}/build')
 
 @task
-def test(c, debugger='', remake=False, bot_mode=False, output_on_failure=False, rerun_failed=False):
+def clean(c):
+    if os.path.exists(f"{TEST_TARGET}/build"):
+        c.run(f"rm -rf {TEST_TARGET}/build")
+
+
+@task
+def test(
+    c,
+    debugger="",
+    remake=False,
+    bot_mode=False,
+    output_on_failure=False,
+    rerun_failed=False,
+):
     cmd = Cmd(c, bot_mode)
     cmd.add(f"cd {TEST_TARGET}")
 
-    if not os.path.exists(f'{TEST_TARGET}/build'):
+    if not os.path.exists(f"{TEST_TARGET}/build"):
         cmd.add("mkdir build")
 
-    if not os.path.exists(f'{TEST_TARGET}/CMakeLists.txt') or remake:
-        files = [f'../{file}' for file in glob(os.path.join(SOURCE, '*.cpp'))]
-        files += [file.split('/')[-1] for file in glob(os.path.join(TEST_TARGET,'*.c*'))]
+    if not os.path.exists(f"{TEST_TARGET}/CMakeLists.txt") or remake:
+        files = [f"../{file}" for file in glob(os.path.join(SOURCE, "*.cpp"))]
+        files += [
+            file.split("/")[-1] for file in glob(os.path.join(TEST_TARGET, "*.c*"))
+        ]
         cmd.add(f"cat > CMakeLists.txt << {configure_cmake(files, includeGTest=True)}")
-    
+
     cmd = cmd()
     cmd.add(f"cd {TEST_TARGET}/build")
 
-    if not os.path.exists(f'{TEST_TARGET}/build') or remake:
+    if not os.path.exists(f"{TEST_TARGET}/build") or remake:
         cmd.add("cmake ../")
-    
+
     cmd.add("cmake --build .")
 
-    if debugger == '':
+    if debugger == "":
         ctest_cmd = "ctest"
         if output_on_failure:
             ctest_cmd += " --output-on-failure"
@@ -120,34 +139,44 @@ def test(c, debugger='', remake=False, bot_mode=False, output_on_failure=False, 
     else:
         cmd.add(f"{debugger} chesscpp")
     cmd(verbose=True)
-   
 
-@task 
-def cleandev(c):
-    if os.path.exists(f'{DEV_TARGET}/build'):
-        c.run(f'rm -rf {DEV_TARGET}/build')
 
 @task
-def dev(c, no_debugger=False, remake=False, bot_mode=False, output_on_failure=False, rerun_failed=False):
+def cleandev(c):
+    if os.path.exists(f"{DEV_TARGET}/build"):
+        c.run(f"rm -rf {DEV_TARGET}/build")
+
+
+@task
+def dev(
+    c,
+    no_debugger=False,
+    remake=False,
+    bot_mode=False,
+    output_on_failure=False,
+    rerun_failed=False,
+):
     cmd = Cmd(c, bot_mode)
     cmd.add(f"cd {DEV_TARGET}")
 
-    if not os.path.exists(f'{DEV_TARGET}/build'):
+    if not os.path.exists(f"{DEV_TARGET}/build"):
         cmd.add("mkdir build")
 
-    if not os.path.exists(f'{DEV_TARGET}/CMakeLists.txt') or remake:
-        files = [f'../{file}' for file in glob(os.path.join(SOURCE, '*.cpp'))]
-        files += [file.split('/')[-1] for file in glob(os.path.join(DEV_TARGET,'*.c*'))]
+    if not os.path.exists(f"{DEV_TARGET}/CMakeLists.txt") or remake:
+        files = [f"../{file}" for file in glob(os.path.join(SOURCE, "*.cpp"))]
+        files += [
+            file.split("/")[-1] for file in glob(os.path.join(DEV_TARGET, "*.c*"))
+        ]
         cmd.add(f"cat > CMakeLists.txt << {configure_cmake(files)}")
-    
+
     cmd = cmd()
     cmd.add(f"cd {DEV_TARGET}/build")
 
-    if not os.path.exists(f'{DEV_TARGET}/build') or remake:
+    if not os.path.exists(f"{DEV_TARGET}/build") or remake:
         cmd.add("cmake ../")
-    
+
     cmd.add("cmake --build .")
-    if (no_debugger):
+    if no_debugger:
         cmd.add(f"lldb chesscpp")
     else:
         cmd.add(f"./chesscpp")

@@ -15,8 +15,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_compile_options(
 -g
--O2
--DCUSTOM_UMH
+-O3
 )
 enable_testing()
 

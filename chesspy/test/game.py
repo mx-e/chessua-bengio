@@ -16,7 +16,7 @@ class TestGame(unittest.TestCase):
             log.debug(board)
             rt_fen = export_fen(board)
             self.assertEqual(fen, rt_fen)
-            assert(rt_fen == fen)
+            assert rt_fen == fen
 
 
 if __name__ == "__main__":

@@ -6,9 +6,27 @@
 #include <stdint.h>
 
 #ifdef CUSTOM_ASPI
-    const bool aspiration_search_enabled = true;
+const bool ASP_SEARCH_ENABLED = true;
 #else
-    const bool aspiration_search_enabled = false;
+const bool ASP_SEARCH_ENABLED = false;
+#endif
+
+#ifdef CUSTOM_MH
+const bool MV_HASH_ENABLED = true;
+#else
+const bool MV_HASH_ENABLED = false;
+#endif
+
+#ifdef CUSTOM_PVS
+const bool PV_SEARCH_ENABLED = true;
+#else
+const bool PV_SEARCH_ENABLED = false;
+#endif
+
+#ifdef CUSTOM_QS
+const bool Q_SEARCH_ENABLED = true;
+#else
+const bool Q_SEARCH_ENABLED = false;
 #endif
 
 const float infty = 9999999.;

@@ -21,8 +21,18 @@ class TestBenchmarks(unittest.TestCase):
                 board = import_fen(state)
                 start = time.time()
 
-                en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
-                evaluate_benchmark(board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves,  n_runs)
+                en_passant = (
+                    [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
+                )
+                evaluate_benchmark(
+                    board.board_state,
+                    board.to_move,
+                    en_passant,
+                    *board.can_castle,
+                    board.n_reversible_halfmoves,
+                    board.n_moves,
+                    n_runs,
+                )
                 end = time.time()
                 times.append(end - start)
 
@@ -31,23 +41,16 @@ class TestBenchmarks(unittest.TestCase):
 
             mean_time_million_runs = np.array(times).mean() * (1e6 / n_runs)
             mean_time_single_run_ms = np.array(times).mean() / n_runs * 1000
-            log.debug(
-                f"Speed Statistics:"
-            )
-            log.debug(
-                f"{mean_time_million_runs:.4f}s per million boards."
-            )
-            log.debug(
-                f"{mean_time_single_run_ms:.6f}ms per positions"
-            )
+            log.debug(f"Speed Statistics:")
+            log.debug(f"{mean_time_million_runs:.4f}s per million boards.")
+            log.debug(f"{mean_time_single_run_ms:.6f}ms per positions")
             configs_per_s = n_runs / np.array(times).mean()
-            log.debug(
-                f"{configs_per_s} boards per second."
-            )
+            log.debug(f"{configs_per_s} boards per second.")
             # moves_per_s = n_runs / (np.array(times) / np.array(n_moves)).mean()
             # log.debug(
             #     f"{moves_per_s} moves per second."
             # )
+
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr)
