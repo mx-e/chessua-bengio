@@ -15,7 +15,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_compile_options(
 -g
--O2
+-O3
 )
 enable_testing()
 
