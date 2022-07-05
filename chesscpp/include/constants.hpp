@@ -5,11 +5,16 @@
 #include <vector>
 #include <stdint.h>
 
-const float infty = std::numeric_limits<float>::max();
+const bool aspiration_search_enabled = true;
+
+const float infty = 9999999.;
 const float high_value = 999999.;
 const float discount_factor = 0.90;
 const int expected_moves_per_game = 25;
 const int max_quiesence_depth = 5;
+
+const std::vector<float> alpha_aspirations = {-1.01, -8.01};
+const std::vector<float> beta_aspirations = {1.01, 8.01};
 
 const uint8_t pKing = 1;
 const uint8_t pQueen = 2;

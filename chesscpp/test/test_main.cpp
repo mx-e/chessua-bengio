@@ -120,7 +120,7 @@ TEST(Bestmove, SituationBlackMatesIn3)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, -pPawn, 0, 0, 0, -pBishop, -pBishop, 0}}};
-    std::string value = bestmove_benchmark(5, board, Black, {}, false, false, false, false, 0, 0);
+    std::string value = bestmove_benchmark(6, board, Black, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "e2d1q");
 }

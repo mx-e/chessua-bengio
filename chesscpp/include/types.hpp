@@ -69,14 +69,16 @@ struct C_BoardState
 
 struct Line
 {
-    int n_moves = 0;  // Number of moves in the line.
-    move argmove[25]; // The line.
+    int n_moves = 0;        // Number of moves in the line.
+    move argmove[25] = {0}; // The line.
 };
 
 struct AlphaBetaState
 {
     int max_depth;
     int current_max_depth = 1;
+    float current_alpha = -infty;
+    float current_beta = infty;
     move bestmove;
     std::vector<float> runtimes_at_depth = {};
     std::vector<uint32_t> nodes_at_depth = {};
