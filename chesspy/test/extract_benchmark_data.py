@@ -3,7 +3,7 @@ import numpy as np
 from chesspy.game import import_fen
 from chesscpp import bestmove_benchmark
 
-MAX_DEPTH = 8
+MAX_DEPTH = 6
 
 if __name__ == "__main__":
     test_dir = pathlib.Path(__file__).parent.resolve()
@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     RunName = sys.argv[1]
     assert(type(RunName) is str)
-    overwrite_csv = False if len(sys.argv) == 2 else sys.argv[2]
+    overwrite_csv = False if len(sys.argv) == 2 else bool(sys.argv[2])
     assert(type(overwrite_csv) is bool)
 
     SearchDepths = np.arange(MAX_DEPTH) + 1
@@ -30,7 +30,7 @@ if __name__ == "__main__":
             result = [RunName, position, depth, time_passed, best_move, nodes_visited]
             results.append(result)
 
-    with open(f"{test_dir}/data/results.csv", "r+") as f:
+    with open(f"{test_dir}/data/results.csv", "a") as f:
         if(overwrite_csv):
             f.truncate(0)
         writer = csv.writer(f)
