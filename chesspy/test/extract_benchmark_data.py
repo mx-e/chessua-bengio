@@ -3,7 +3,7 @@ import numpy as np
 from chesspy.game import import_fen
 from chesscpp import bestmove_benchmark
 
-MAX_DEPTH = 6
+MAX_DEPTH = 7
 
 if __name__ == "__main__":
     test_dir = pathlib.Path(__file__).parent.resolve()
