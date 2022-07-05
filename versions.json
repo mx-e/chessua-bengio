@@ -1,0 +1,7 @@
+{
+    "aspiration-search": {
+        "flags": [
+            "-DCUSTOM_ASPI"
+        ]
+    }
+}
