@@ -1,7 +1,38 @@
 {
-    "aspiration-search": {
+    "bare": {
+        "flags": []
+    },
+    "pvs": {
         "flags": [
+            "-DCUSTOM_PVS"
+        ]
+    },
+    "pvs+qs": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS"
+        ]
+    },
+    "aspiration": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
             "-DCUSTOM_ASPI"
+        ]
+    },
+    "hash": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_HASH"
+        ]
+    },
+    "hash+aspiration": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_HASH"
         ]
     }
 }
