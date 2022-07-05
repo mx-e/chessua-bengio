@@ -21,7 +21,7 @@ class CPPIntegration(unittest.TestCase):
             log.debug(f"Testing Case {i+1}/{n_test_cases}: {fen}")
             board = import_fen(fen)
             
-            en_passant = [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
+            en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
             uci_moves = generate_moves(board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
             
             uci_moves_list = sorted(uci_moves)

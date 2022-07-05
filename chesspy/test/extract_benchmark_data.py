@@ -24,8 +24,8 @@ if __name__ == "__main__":
         for position in Positions:
             board = import_fen(position)
             start = time.time()
-            en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
-            best_move, nodes_visited =  (depth, board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
+            en_passant = [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
+            best_move, nodes_visited = bestmove_benchmark(depth, board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
             time_passed = time.time() - start
             result = [RunName, position, depth, time_passed, best_move, nodes_visited]
             results.append(result)
