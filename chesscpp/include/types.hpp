@@ -66,6 +66,7 @@ struct C_BoardState
     bool king_attack = false;
     bool castling_move_illegal = false;
 };
+
 struct Line
 {
     int n_moves = 0;        // Number of moves in the line.
