@@ -116,25 +116,6 @@ inline void runtime_benchmark(Board board, int color, EnPassants enpassant, bool
     }
 }
 
-void print_optimal_move_sequence(MoveList &move_list)
-{
-    for (move m : move_list)
-    {
-        printf("%s -> ", move_to_uci_str(m).c_str());
-    }
-
-    printf("\n");
-}
-
-void print_optimal_line(C_Session &session, Line &line)
-{
-    for (int i = 0; i < session.alpha_beta_state.current_max_depth; i++)
-    {
-        printf("%s -> ", move_to_uci_str(line.argmove[i]).c_str());
-    }
-    std::cout << "\n";
-}
-
 inline void evaluate_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
 {
     C_BoardState board_state = C_BoardState();
