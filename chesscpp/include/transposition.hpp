@@ -3,18 +3,9 @@
 #include "utils.hpp"
 #include <unordered_map>
 
-enum class Bound
-{
-    Lower,
-    Upper,
-    Exact
-};
-
 struct TT_Entry
 {
     int depth;
-    float score;
-    Bound bound;
     move best_move;
 };
 
