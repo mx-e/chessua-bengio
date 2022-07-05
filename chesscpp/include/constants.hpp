@@ -5,7 +5,7 @@
 #include <vector>
 #include <stdint.h>
 
-#ifdef ASPI
+#ifdef CUSTOM_ASPI
     const bool aspiration_search_enabled = true;
 #else
     const bool aspiration_search_enabled = false;
