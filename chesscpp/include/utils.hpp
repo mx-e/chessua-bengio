@@ -23,6 +23,15 @@ inline uint8_t get_piece_type_of_field(const C_BoardState &board_state, int posi
     return piece;
 }
 
+inline float get_color_of_field(const C_BoardState &board_state, int position_idx)
+{
+    float color = 0;
+    uint64_t mask = most_sig_bit >> position_idx;
+    color += Black * (bool)(mask & board_state.pieces[b_black]);
+    color += White * (bool)(mask & board_state.pieces[b_white]);
+    return color;
+}
+
 inline void print_move(move m)
 {
     std::cout << "src: " << (int)m.src << "\n";

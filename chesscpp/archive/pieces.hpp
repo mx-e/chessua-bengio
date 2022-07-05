@@ -1,6 +1,7 @@
 #ifndef PIECES_H
 #define PIECES_H
 #include "types.hpp"
+#include "session.hpp"
 #include "moves.hpp"
 #include <memory>
 #include <map>

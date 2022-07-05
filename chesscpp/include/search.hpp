@@ -2,8 +2,10 @@
 #define SEARCH
 
 #include "types.hpp"
+#include "session.hpp"
 #include "evaluations.hpp"
 #include "transforms.hpp"
+#include "transposition.hpp"
 
 void print_optimal_move_sequence(MoveList &move_list)
 {
@@ -116,10 +118,15 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
     bool search_pv = alpha == -infty;
     float score;
 
+    if(auto entry = find_tt_entry(session.hash_state)) {
+        move_list.insert(move_list.begin(), entry->best_move);
+    }
+
     for (move m : move_list)
     {
         ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
         push_move(session.board_state, m, session.move_list_stack[depth + 1]);
+        update_hash(session.hash_state, session.board_state, m);
 
         if (search_pv)
         {
@@ -133,9 +140,12 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
         }
         pop_move(session.board_state);
         session.move_list_stack[depth + 1].clear();
+        reverse_hash(session.hash_state, session.board_state, m);
 
-        if (score >= beta)
+        if (score >= beta) {
+            hash_move(session.hash_state, m);
             return beta;
+        }
 
         if (score > alpha)
         {
@@ -146,6 +156,8 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
             search_pv = false;
         }
     }
+
+    hash_move(session.hash_state, pline.argmove[0]);
     return alpha;
 }
 

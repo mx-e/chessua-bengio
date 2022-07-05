@@ -2,6 +2,7 @@
 #define EXPRESSIONS
 
 #include "types.hpp"
+#include "session.hpp"
 #include "constants.hpp"
 #include "utils.hpp"
 

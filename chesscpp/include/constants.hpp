@@ -5,7 +5,11 @@
 #include <vector>
 #include <stdint.h>
 
-const bool aspiration_search_enabled = true;
+#ifdef CUSTOM_ASPI
+    const bool aspiration_search_enabled = true;
+#else
+    const bool aspiration_search_enabled = false;
+#endif
 
 const float infty = 9999999.;
 const float high_value = 999999.;

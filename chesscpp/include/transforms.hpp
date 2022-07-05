@@ -3,6 +3,7 @@
 
 #include "constants.hpp"
 #include "types.hpp"
+#include "session.hpp"
 #include "expressions.hpp"
 #include "utils.hpp"
 #include "collections.hpp"
