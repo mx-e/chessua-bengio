@@ -3,6 +3,7 @@
 #include "constants.hpp"
 #include "utils.hpp"
 #include "search.hpp"
+#include "session.hpp"
 #include "conversions.hpp"
 #include <chrono>
 
@@ -89,6 +90,8 @@ std::string bestmove(float remaining_time, int max_depth, Board board, int color
 {
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
+    compute_hash(session.hash_state, session.board_state);
+    
     int expected_remaining_moves = std::max(expected_moves_per_game - fullMove, 6);
     float move_time_budget = remaining_time / expected_remaining_moves;
     std::string uci_best_move;
@@ -113,6 +116,8 @@ std::string bestmove_benchmark(int max_depth, Board board, int color, EnPassants
 {
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
+    compute_hash(session.hash_state, session.board_state);
+    
     std::string uci_best_move;
 
     do

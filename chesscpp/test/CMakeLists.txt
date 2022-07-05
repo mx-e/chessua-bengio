@@ -15,12 +15,19 @@ FetchContent_MakeAvailable(googletest)
 
 add_compile_options(
 -g
+-O2
 )
 enable_testing()
 
 add_executable(
-    chesscpp
+    chesscpp 
+    test_transforms.cpp
+    test_main.cpp
     test_transposition.cpp
+    test_expressions.cpp
+    test_utils.cpp
+    test_collections.cpp
+    test_extractions.cpp
 )
 target_link_libraries(
   chesscpp

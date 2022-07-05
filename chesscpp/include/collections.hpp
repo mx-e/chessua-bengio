@@ -2,6 +2,7 @@
 #define COLLECTIONS
 
 #include "types.hpp"
+#include "session.hpp"
 #include "expressions.hpp"
 #include "extractions.hpp"
 
