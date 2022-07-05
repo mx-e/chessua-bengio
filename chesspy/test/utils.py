@@ -64,6 +64,6 @@ class TestUtils(unittest.TestCase):
             self.assertListEqual(list(can_castle_string_to_arr(input)), output)
 
     def test_extract_en_passant_tile(self):
-        pairs = [["-", [-1, -1]], ["e5", [4, 4]], ["c8", [2, 7]]]
+        pairs = [["-", []], ["e5", [4, 4]], ["c8", [2, 7]]]
         for input, output in pairs:
             self.assertListEqual(list(extract_en_passant_tile(input)), output)

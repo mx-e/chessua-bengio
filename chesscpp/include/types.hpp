@@ -3,10 +3,13 @@
 
 #include <stdint.h>
 #include <map>
+#include <string>
+#include <tuple>
 #include "constants.hpp"
 
 typedef std::array<std::array<int, 8>, 8> Board;
 typedef std::vector<std::string> UCIStrings;
+typedef std::tuple<std::string, uint32_t> RunInfo;
 
 const std::map<u_int8_t, char>
     piece_code_to_char = {{0, ' '}, {2, 'q'}, {3, 'b'}, {4, 'n'}, {5, 'r'}};

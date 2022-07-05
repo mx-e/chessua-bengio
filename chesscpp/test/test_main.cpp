@@ -41,7 +41,7 @@ TEST(Bestmove, Capture)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, -pRook, 0, 0}}};
-    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ("d2h6", value);
 }
@@ -56,7 +56,7 @@ TEST(Bestmove, Checkmate)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {pRook, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(2, board, 1., {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(2, board, 1., {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "a2h2");
 }
@@ -72,7 +72,7 @@ TEST(Bestmove, CaptureSituationDepth1)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, -pPawn, 0, 0, 0, 0, -pPawn, 0},
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(1, board, White, {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(1, board, White, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "c2e1");
 }
@@ -88,7 +88,7 @@ TEST(Bestmove, CaptureSituationDepth2)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {pKing, 0, 0, 0, 0, 0, -pPawn, 0},
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(2, board, White, {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(2, board, White, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "d2d5");
 }
@@ -104,7 +104,7 @@ TEST(Bestmove, CaptureSituationDepth3)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {pKing, 0, 0, pBishop, 0, -pPawn, -pPawn, 0},
                     {0, 0, 0, 0, 0, 0, 0, -pKing}}};
-    std::string value = bestmove_benchmark(4, board, White, {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(4, board, White, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "g4e6");
 }
@@ -120,7 +120,7 @@ TEST(Bestmove, SituationBlackMatesIn3)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, -pPawn, 0, 0, 0, -pBishop, -pBishop, 0}}};
-    std::string value = bestmove_benchmark(6, board, Black, {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(6, board, Black, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "e2d1q");
 }
@@ -136,7 +136,7 @@ TEST(BestMoveMateIn2, TaraschKurschner1893)
                     {0, pPawn, 0, 0, pQueen, -pBishop, 0, 0},
                     {pKing, pPawn, 0, 0, 0, 0, -pPawn, 0},
                     {0, pPawn, 0, 0, 0, 0, -pPawn, -pRook}}};
-    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ("f5g6", value);
 }
@@ -153,7 +153,7 @@ TEST(BestMoveMateIn2, MasonMarko1894)
                     {pKnight, -pRook, 0, 0, 0, 0, 0, 0},
                     {0, -pRook, pPawn, 0, 0, 0, -pPawn, -pKing},
                     {pKing, pPawn, -pBishop, 0, 0, 0, 0, 0}}};
-    std::string value = bestmove_benchmark(4, board, -1., {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(4, board, -1., {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ("g2g1", value);
 }
@@ -170,7 +170,7 @@ TEST(BestMoveMateIn2, PaoliFoltys1949)
                     {0, -pRook, 0, -pBishop, -pPawn, 0, -pPawn, 0},
                     {0, 0, 0, 0, 0, -pPawn, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0}}};
-    std::string value = bestmove_benchmark(4, board, -1., {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(4, board, -1., {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ("c6b5", value);
 }
@@ -187,7 +187,7 @@ TEST(BestMoveMateIn2, VidmarEuwe1929)
                     {0, 0, 0, -pQueen, pKnight, 0, -pPawn, 0},
                     {0, 0, 0, 0, -pPawn, 0, 0, -pKing},
                     {pKing, 0, pPawn, 0, 0, -pPawn, 0, 0}}};
-    std::string value = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(4, board, 1., {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ("a3f8", value);
 }
@@ -203,7 +203,7 @@ TEST(BestMoveMateIn3, BernsteinKotov1946)
                     {0, 0, 0, pPawn, 0, 0, -pPawn, 0},
                     {0, 0, 0, pPawn, 0, -pKing, -pPawn, 0},
                     {0, pKing, pPawn, 0, 0, -pPawn, 0, pRook}}};
-    std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "f4f5");
 }
@@ -219,7 +219,7 @@ TEST(BestMoveMateIn3, ZukertortPotter1875)
                     {0, pPawn, 0, 0, 0, 0, 0, 0},
                     {pKing, pPawn, 0, 0, 0, 0, 0, 0},
                     {0, pPawn, 0, 0, 0, 0, 0, 0}}};
-    std::string value = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
+    auto [value, _] = bestmove_benchmark(6, board, White, {}, false, false, false, false, 0, 0);
 
     EXPECT_EQ(value, "c3e5");
 }

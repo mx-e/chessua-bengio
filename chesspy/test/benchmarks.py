@@ -48,9 +48,8 @@ class TestBenchmarks(unittest.TestCase):
                 board = import_fen(state)
                 start = time.time()
 
-                enpassant = [tuple(board.en_passant_tile)] if not (
-                    board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
-                runtime_benchmark(board.board_state, board.to_move, enpassant, *
+                en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
+                runtime_benchmark(board.board_state, board.to_move,en_passant, *
                                   board.can_castle, board.n_reversible_halfmoves, board.n_moves, n_runs)
                 end = time.time()
                 times.append(end - start)

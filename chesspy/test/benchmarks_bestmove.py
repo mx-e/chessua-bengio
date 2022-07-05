@@ -52,19 +52,18 @@ class TestBenchmarks(unittest.TestCase):
             for state in states:
                 results[state] = []
                 board = import_fen(state)
-                enpassant = [tuple(board.en_passant_tile)] if not (board.en_passant_tile[0] == -1 and board.en_passant_tile[1] == -1) else []
 
                 for depth in range(1, max_depth + 1):
                     start = time.time()
-                    best_move = bestmove_benchmark_marshal(depth, board.board_state, board.to_move, enpassant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
-                    bestmove_result = json.loads(best_move)
+                    en_passant = board.en_passant_tile if len(board.en_passant_tile) > 0 else []
+                    best_move, nodes_reached = bestmove_benchmark_marshal(depth, board.board_state, board.to_move, en_passant, *board.can_castle, board.n_reversible_halfmoves, board.n_moves)
                     length = time.time() - start
-                    log.debug(f"current depth: {depth}; time: {length} seconds. bestmove: {bestmove_result['bestmove']}. reached nodes: {bestmove_result['reachedNodes']}")
+                    log.debug(f"current depth: {depth}; time: {length} seconds. bestmove: {best_move}. reached nodes: {nodes_reached}")
                     result = {
                         "depth": depth,
                         "length": length,
-                        "bestmove": bestmove_result['bestmove'],
-                        "reached_nodes": bestmove_result['reachedNodes']
+                        "bestmove": best_move,
+                        "reached_nodes": nodes_reached
                     }
                     results[state].append(result)
                     depth += 1

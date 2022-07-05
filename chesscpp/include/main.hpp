@@ -148,7 +148,7 @@ inline float get_expected_computation_time(C_Session &session)
     return session.alpha_beta_state.runtimes_at_depth[current_depth - 1] * branching_factor;
 }
 
-std::string bestmove(float remaining_time, int max_depth, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
+RunInfo bestmove(float remaining_time, int max_depth, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
 {
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
@@ -169,10 +169,11 @@ std::string bestmove(float remaining_time, int max_depth, Board board, int color
         uci_best_move = move_to_uci_str(session.alpha_beta_state.bestmove);
 
     } while (session.alpha_beta_state.current_max_depth < max_depth && (session.alpha_beta_state.current_max_depth < 5 || get_expected_computation_time(session) < move_time_budget));
-    return uci_best_move;
+    RunInfo results = {uci_best_move.c_str(), session.alpha_beta_state.nodes_at_depth[max_depth]};
+    return results;
 }
 
-std::string bestmove_benchmark(int max_depth, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
+RunInfo bestmove_benchmark(int max_depth, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
 {
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
@@ -187,25 +188,6 @@ std::string bestmove_benchmark(int max_depth, Board board, int color, EnPassants
 
     } while (session.alpha_beta_state.current_max_depth <= max_depth);
 
-    return uci_best_move;
-}
-
-std::string bestmove_benchmark_marshal(int max_depth, Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove)
-{
-    C_Session session = construct_session(max_depth + 5);
-    marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
-    std::string uci_best_move;
-
-    do
-    {
-        float score = get_best_move(session, session.alpha_beta_state.current_max_depth);
-        ++session.alpha_beta_state.current_max_depth;
-        uci_best_move = move_to_uci_str(session.alpha_beta_state.bestmove);
-
-    } while (session.alpha_beta_state.current_max_depth <= max_depth);
-
-    char buffer[100];
-    snprintf(buffer, 100, "{\"bestmove\":\"%s\", \"reachedNodes\":%zu}", uci_best_move.c_str(), session.alpha_beta_state.nodes_at_depth[max_depth]);
-
-    return buffer;
+    RunInfo results = {uci_best_move.c_str(), session.alpha_beta_state.nodes_at_depth[max_depth]};
+    return results;
 }

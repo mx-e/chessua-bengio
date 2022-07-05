@@ -18,7 +18,7 @@ class GameState:
     board_state: np.array
     to_move: bool
     can_castle: np.array
-    en_passant_tile: np.array
+    en_passant_tile: list
     n_reversible_halfmoves: int
     n_moves: int
 
