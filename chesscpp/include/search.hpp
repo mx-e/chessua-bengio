@@ -149,52 +149,39 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
     return alpha;
 }
 
-template <class T>
-inline bool exists_(std::vector<T> iterable, std::function<bool(T)> condition)
-{
-    bool found;
-    for (auto item : iterable)
-    {
-        found = found || condition(item);
-    }
-    return found;
-}
-
-void undo_all_moves(C_Session &session)
-{
-    int depth = session.board_state.move_stack.size();
-    for (int i = 0; i < depth; i++)
-    {
-        session.move_list_stack[i + 1].clear();
-    }
-    while (session.board_state.move_stack.size() > 0)
-    {
-        pop_move(session.board_state);
-    }
-}
-
 inline int alphabeta(C_Session &session, int max_depth)
 {
     Line line;
-    int window_idx = 0;
+    int window_idx_alpha = 0;
+    int window_idx_beta = 0;
     collect_legal_moves(session.board_state, session.move_list_stack[0]);
 
     float best_move_score;
     while (true)
     {
         best_move_score = pv_search(session, session.alpha_beta_state.current_alpha, session.alpha_beta_state.current_beta, max_depth, line);
-        if ((best_move_score <= session.alpha_beta_state.current_alpha) || (best_move_score >= session.alpha_beta_state.current_beta))
+        if (best_move_score <= session.alpha_beta_state.current_alpha)
         {
-            ++window_idx;
-            if (window_idx >= max_n_fallbacks)
+            ++window_idx_alpha;
+            if (window_idx_alpha >= alpha_aspirations.size())
             {
                 session.alpha_beta_state.current_alpha = -infty;
+            }
+            else
+            {
+                session.alpha_beta_state.current_alpha += alpha_aspirations[window_idx_alpha];
+            }
+        }
+        else if (best_move_score >= session.alpha_beta_state.current_beta)
+        {
+            ++window_idx_beta;
+            if (window_idx_beta >= beta_aspirations.size())
+            {
                 session.alpha_beta_state.current_beta = infty;
             }
             else
             {
-                session.alpha_beta_state.current_alpha -= alpha_aspirations[window_idx];
-                session.alpha_beta_state.current_beta += alpha_aspirations[window_idx];
+                session.alpha_beta_state.current_beta += alpha_aspirations[window_idx_beta];
             }
         }
         else
@@ -202,8 +189,8 @@ inline int alphabeta(C_Session &session, int max_depth)
             break;
         }
     }
-    session.alpha_beta_state.current_alpha = best_move_score - alpha_aspirations[window_idx];
-    session.alpha_beta_state.current_beta = best_move_score + alpha_aspirations[window_idx];
+    session.alpha_beta_state.current_alpha = aspiration_search_enabled ? best_move_score + alpha_aspirations[0] : -infty;
+    session.alpha_beta_state.current_beta = aspiration_search_enabled ? best_move_score + beta_aspirations[0] : infty;
 
     ::memcpy(session.alpha_beta_state.current_best_line.argmove, line.argmove, max_depth * sizeof(move));
     session.move_list_stack[0].clear();
