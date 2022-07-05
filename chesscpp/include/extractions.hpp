@@ -2,6 +2,7 @@
 #define EXTRACTIONS
 
 #include "types.hpp"
+#include "session.hpp"
 #include "utils.hpp"
 
 inline void extract_moves_with_offset(uint64_t move_board, MoveList &move_list, float source_offset)

@@ -12,7 +12,6 @@ class BuildExt(build_ext):
             with open("versions.json", "r") as f:
                 versions = json.load(f)
             ext.extra_compile_args += versions[version]["flags"]
-
         return super().build_extension(ext)
 
 setup(
