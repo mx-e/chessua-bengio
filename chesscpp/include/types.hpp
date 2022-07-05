@@ -3,12 +3,9 @@
 
 #include <stdint.h>
 #include <map>
-<<<<<<< HEAD
 #include <string>
 #include <tuple>
-=======
 #include <random>
->>>>>>> 7a93789353af307032be4060f45b0210b4ebd6d8
 #include "constants.hpp"
 
 typedef std::array<std::array<int, 8>, 8> Board;
