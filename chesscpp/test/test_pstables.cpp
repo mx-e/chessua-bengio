@@ -33,7 +33,7 @@ void _update_score(
 
 TEST(PSTables, WhiteMoveIsBlackMove)
 {
-    float white_score = -40;
+    float white_score = -30;
     float other_score = 0;
     _update_score({{{0, 0, 0, 0, 0, 0, pKing, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
@@ -46,7 +46,7 @@ TEST(PSTables, WhiteMoveIsBlackMove)
                   EarlyGame,
                   White, move{.src = 6, .dest = 7}, white_score, other_score);
 
-    float black_score = -40;
+    float black_score = -30;
     _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
@@ -63,7 +63,7 @@ TEST(PSTables, WhiteMoveIsBlackMove)
 
 TEST(PSTables, WhiteMoveEarly)
 {
-    float score = -40;
+    float score = -30;
     float other_score = 0;
     _update_score({{{0, 0, 0, 0, 0, 0, pKing, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
@@ -74,15 +74,15 @@ TEST(PSTables, WhiteMoveEarly)
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0}}},
                   EarlyGame,
-                  White, move{.src = 6, .dest = 7}, score, other_score);
+                  White, move{.src = 6, .dest = 15}, score, other_score);
 
-    EXPECT_EQ(score, -30);
+    EXPECT_EQ(score, -40);
     EXPECT_EQ(other_score, 0);
 }
 
 TEST(PSTables, WhiteMoveLate)
 {
-    float score = -40;
+    float score = -30;
     float other_score = 0;
     _update_score({{{0, 0, 0, 0, 0, 0, pKing, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
@@ -101,19 +101,190 @@ TEST(PSTables, WhiteMoveLate)
 
 TEST(PSTables, WhiteMoveCapture)
 {
-    float score = -40;
-    float other_score = 0;
-    _update_score({{{0, 0, 0, 0, 0, 0, pKing, -pPawn},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
+    float score = -30;
+    float other_score = 10;
+    _update_score({{{0, 0, 0, 0, 0, 0, pKing, 0},
+                    {0, 0, 0, 0, 0, 0, -pPawn, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0}}},
-                  LateGame,
-                  White, move{.src = 6, .dest = 7, .capture = pPawn}, score, other_score);
+                  EarlyGame,
+                  White, move{.src = 6, .dest = 14, .capture = pPawn}, score, other_score);
 
-    EXPECT_EQ(score, -50);
+    EXPECT_EQ(score, -40);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, WhiteMoveEnPassant)
+{
+    float score = 20;
+    float other_score = -5;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, -pPawn, 0, 0},
+                     {0, 0, 0, 0, 0, pPawn, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   White, move{.src = 21, .dest = 14, .ep = true}, score, other_score);
+
+    EXPECT_EQ(score, 50);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, WhiteMoveQueenSideCastling)
+{
+    float score = 20;
+    float other_score = 0;
+    _update_score({{{pRook, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {pKing, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   White, move{.src = 32, .dest = 16, .castling = 2}, score, other_score);
+
+    EXPECT_EQ(score, 25);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, BlackMoveQueenSideCastling)
+{
+    float score = 20;
+    float other_score = 0;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, -pRook},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, -pKing},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   Black, move{.src = 39, .dest = 23, .castling = 2}, score, other_score);
+
+    EXPECT_EQ(score, 25);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, WhiteMoveKingSideCastling)
+{
+    float score = 20;
+    float other_score = 0;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {pKing, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {pRook, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   White, move{.src = 32, .dest = 48, .castling = 1}, score, other_score);
+
+    EXPECT_EQ(score, 35);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, BlackMoveKingSideCastling)
+{
+    float score = 20;
+    float other_score = 0;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, -pKing},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, -pRook}}},
+                    EarlyGame,
+                   Black, move{.src = 39, .dest = 55, .castling = 1}, score, other_score);
+
+    EXPECT_EQ(score, 35);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, WhitePromotion)
+{
+    float score = 50;
+    float other_score = 0;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, pPawn, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   White, move{.src = 30, .dest = 31, .promotion = pQueen}, score, other_score);
+
+    EXPECT_EQ(score, -5);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, BlackPromotion)
+{
+    float score = 50;
+    float other_score = 0;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, -pPawn, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   Black, move{.src = 25, .dest = 24, .promotion = pQueen}, score, other_score);
+
+    EXPECT_EQ(score, -5);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, WhitePromotionCapture)
+{
+    float score = 50;
+    float other_score = -10;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, -pQueen},
+                     {0, 0, 0, 0, 0, 0, pPawn, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   White, move{.src = 30, .dest = 23, .promotion = pQueen, .capture = true}, score, other_score);
+
+    EXPECT_EQ(score, -10);
+    EXPECT_EQ(other_score, 0);
+}
+
+TEST(PSTables, BlackPromotionCapture)
+{
+    float score = 50;
+    float other_score = -10;
+    _update_score({{{0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {pQueen, 0, 0, 0, 0, 0, 0, 0},
+                     {0, -pPawn, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 0, 0, 0}}},
+                    EarlyGame,
+                   Black, move{.src = 25, .dest = 16, .promotion = pQueen, .capture = true}, score, other_score);
+
+    EXPECT_EQ(score, -10);
     EXPECT_EQ(other_score, 0);
 }
