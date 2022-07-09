@@ -91,4 +91,6 @@ struct AlphaBetaState
 
 typedef std::vector<MoveList> MoveListStack;
 
+typedef std::array<float, 2> Scores;
+
 #endif

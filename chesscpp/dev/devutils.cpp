@@ -2,8 +2,9 @@
 #include <string>
 #include <iostream>
 #include <inttypes.h>
-#include "../include/bitboard_constants.hpp"
-#include "../include/bitboard.hpp"
+#include "../include/constants.hpp"
+#include "../include/types.hpp"
+#include "../include/session.hpp"
 
 void print_bitboard(uint64_t bb)
 {
@@ -31,57 +32,22 @@ void print_bitboard_hex(uint64_t bb)
     printf("0x%" PRIx64 "LL,\n", bb);
 }
 
-C_Board get_new_game_board()
+void bitboard_table_from_logic(bool(logic)(int col, int row, int c, int r, float color), float color)
 {
-    C_Board board = C_Board();
-    board.set_pieces(White, pPawn, white_pawns_starting_config);
-    board.set_pieces(Black, pPawn, black_pawns_starting_config);
-    board.set_pieces(White, pRook, white_rooks_starting_config);
-    board.set_pieces(Black, pRook, black_rooks_starting_config);
-    board.set_pieces(White, pKnight, white_knights_starting_config);
-    board.set_pieces(Black, pKnight, black_knights_starting_config);
-    board.set_pieces(White, pBishop, white_bishops_starting_config);
-    board.set_pieces(Black, pBishop, black_bishops_starting_config);
-    board.set_pieces(White, pQueen, white_queen_starting_config);
-    board.set_pieces(Black, pQueen, black_queen_starting_config);
-    board.set_pieces(White, pKing, white_king_starting_config);
-    board.set_pieces(Black, pKing, black_king_starting_config);
-    return board;
-}
-
-C_Board get_empty_board()
-{
-    C_Board board = C_Board();
-    return board;
-}
-
-Board get_example_board()
-{
-    Board board = Board();
-    board[0] = {5, 6, 0, 0, 0, 0, -6, -5};
-    board[1] = {4, 6, 0, 0, 0, 0, -6, -4};
-    board[2] = {3, 6, 0, 0, 0, 0, -6, -3};
-    board[3] = {2, 6, 0, 0, 0, 0, -6, -2};
-    board[4] = {1, 6, 0, 0, 0, 0, -6, -1};
-    board[5] = {3, 6, 0, 0, 0, 0, -6, -3};
-    board[6] = {4, 6, 0, 0, 0, 0, -6, -4};
-    board[7] = {5, 6, 0, 0, 0, 0, -6, -5};
-    return board;
-}
-
-void print_all_knight_move_boards()
-{
-    C_Board board = get_empty_board();
     for (int i = 0; i < 64; i++)
     {
-        board.set_pieces(White, pKnight, set_board_1_at_idx(empty_board, i));
-        uint64_t knight_moves = empty_board;
-        for (knight_direction d : all_knight_directions)
+        uint64_t bb = 0;
+        uint8_t row = i % 8;
+        uint8_t col = (uint8_t)i / 8;
+        for (int j = 0; j < 64; j++)
         {
-            knight_moves |= board.get_knight_attacks(White, d);
+            uint8_t r = j % 8;
+            uint8_t c = (uint8_t)j / 8;
+            if (logic(col, row, c, r, color))
+            {
+                bb = set_board_1_at_idx(bb, j);
+            }
         }
-        // std::cout << i << "\n";
-        //  print_bitboard(knight_moves);
-        print_bitboard_hex(knight_moves);
+        print_bitboard_hex(bb);
     }
 }

@@ -159,6 +159,16 @@ inline std::vector<int> scan_board_reverse(uint64_t bb)
     return idx_list;
 }
 
+// https://en.wikipedia.org/wiki/Hamming_weight
+inline int bb_pop_count(uint64_t bb)
+{
+    int count = 0;
+    for (count = 0; bb; count++)
+        bb &= bb - 1;
+
+    return count;
+}
+
 inline std::string field_id_to_string(uint8_t idx)
 {
     std::array<uint8_t, 2> col_row = position_idx_to_col_row_idx(idx);
