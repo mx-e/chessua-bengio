@@ -1,22 +1,14 @@
-
-#ifndef PAWN_STRUCT
-#define PAWN_STRUCT
-
-#include <stdint.h>
-#include <map>
+#ifndef EVAL_CONSTANTS
+#define EVAL_CONSTANTS
 
 #include "constants.hpp"
-#include "types.hpp"
-#include "expressions.hpp"
-#include "utils.hpp"
 
 enum Phase
 {
     OPENING,
     ENDGAME
 };
-
-// from https://github.com/GunshipPenguin/shallow-blue/blob/master/src/eval.h
+// evaluations values from https://github.com/GunshipPenguin/shallow-blue/blob/master/src/eval.h
 const int passed_pawn_bonus[2] = {[OPENING] = 10, [ENDGAME] = 70};
 const int doubled_pawn_penalty[2] = {[OPENING] = -20, [ENDGAME] = -30};
 const int isolated_pawn_penalty[2] = {[OPENING] = -15, [ENDGAME] = -30};
@@ -30,6 +22,182 @@ const uint64_t isolated_pawn_mask[8] = {
     col_e | col_g,
     col_f | col_h,
     col_g};
+
+const int material_values[2][7] = {
+    [OPENING] = {
+        [pPawn] = 100,
+        [pRook] = 500,
+        [pKnight] = 320,
+        [pBishop] = 330,
+        [pQueen] = 900,
+        [pKing] = 0},
+    [ENDGAME] = {[pPawn] = 140, [pRook] = 500, [pKnight] = 300, [pBishop] = 300, [pQueen] = 900, [pKing] = 0}};
+
+const int phase_weights[7] = {
+    [b_pawns] = 0,
+    [b_rooks] = 2,
+    [b_knights] = 1,
+    [b_bishops] = 1,
+    [b_queens] = 4,
+    [b_kings] = 0};
+
+const int initial_phase_weights =
+    16 * phase_weights[b_pawns] +
+    4 * phase_weights[b_rooks] +
+    4 * phase_weights[b_knights] +
+    4 * phase_weights[b_bishops] +
+    2 * phase_weights[b_queens] +
+    2 * phase_weights[b_kings];
+
+const int rook_open_file_bonus[2] = {[OPENING] = 20, [ENDGAME] = 40};
+const int bishop_pair_bonus[2] = {[OPENING] = 45, [ENDGAME] = 55};
+const int king_pawn_shield_bonus[2] = {[OPENING] = 10, [ENDGAME] = 0};
+
+const int mobility_bonus[2][7] = {
+    [OPENING] = {
+        [pPawn] = 0,
+        [pRook] = 0,
+        [pKnight] = 4,
+        [pBishop] = 3,
+        [pQueen] = 0,
+        [pKing] = 0},
+    [ENDGAME] = {[pPawn] = 1, [pRook] = 1, [pKnight] = 6, [pBishop] = 2, [pQueen] = 1, [pKing] = 1}};
+
+const std::map<float, int> color_to_king_shield_idx = {{1., 0}, {-1, 1}};
+const uint64_t king_shield[2][64] =
+    {
+        {
+            0x6060000000000000LL,
+            0x3030000000000000LL,
+            0x1818000000000000LL,
+            0xc0c000000000000LL,
+            0x606000000000000LL,
+            0x303000000000000LL,
+            0x101000000000000LL,
+            0x0LL,
+            0x6060600000000000LL,
+            0x3030300000000000LL,
+            0x1818180000000000LL,
+            0xc0c0c0000000000LL,
+            0x606060000000000LL,
+            0x303030000000000LL,
+            0x101010000000000LL,
+            0x0LL,
+            0x60606000000000LL,
+            0x30303000000000LL,
+            0x18181800000000LL,
+            0xc0c0c00000000LL,
+            0x6060600000000LL,
+            0x3030300000000LL,
+            0x1010100000000LL,
+            0x0LL,
+            0x606060000000LL,
+            0x303030000000LL,
+            0x181818000000LL,
+            0xc0c0c000000LL,
+            0x60606000000LL,
+            0x30303000000LL,
+            0x10101000000LL,
+            0x0LL,
+            0x6060600000LL,
+            0x3030300000LL,
+            0x1818180000LL,
+            0xc0c0c0000LL,
+            0x606060000LL,
+            0x303030000LL,
+            0x101010000LL,
+            0x0LL,
+            0x60606000LL,
+            0x30303000LL,
+            0x18181800LL,
+            0xc0c0c00LL,
+            0x6060600LL,
+            0x3030300LL,
+            0x1010100LL,
+            0x0LL,
+            0x606060LL,
+            0x303030LL,
+            0x181818LL,
+            0xc0c0cLL,
+            0x60606LL,
+            0x30303LL,
+            0x10101LL,
+            0x0LL,
+            0x6060LL,
+            0x3030LL,
+            0x1818LL,
+            0xc0cLL,
+            0x606LL,
+            0x303LL,
+            0x101LL,
+            0x0LL,
+        },
+        {
+            0x0LL,
+            0x8080000000000000LL,
+            0xc0c0000000000000LL,
+            0x6060000000000000LL,
+            0x3030000000000000LL,
+            0x1818000000000000LL,
+            0xc0c000000000000LL,
+            0x606000000000000LL,
+            0x0LL,
+            0x8080800000000000LL,
+            0xc0c0c00000000000LL,
+            0x6060600000000000LL,
+            0x3030300000000000LL,
+            0x1818180000000000LL,
+            0xc0c0c0000000000LL,
+            0x606060000000000LL,
+            0x0LL,
+            0x80808000000000LL,
+            0xc0c0c000000000LL,
+            0x60606000000000LL,
+            0x30303000000000LL,
+            0x18181800000000LL,
+            0xc0c0c00000000LL,
+            0x6060600000000LL,
+            0x0LL,
+            0x808080000000LL,
+            0xc0c0c0000000LL,
+            0x606060000000LL,
+            0x303030000000LL,
+            0x181818000000LL,
+            0xc0c0c000000LL,
+            0x60606000000LL,
+            0x0LL,
+            0x8080800000LL,
+            0xc0c0c00000LL,
+            0x6060600000LL,
+            0x3030300000LL,
+            0x1818180000LL,
+            0xc0c0c0000LL,
+            0x606060000LL,
+            0x0LL,
+            0x80808000LL,
+            0xc0c0c000LL,
+            0x60606000LL,
+            0x30303000LL,
+            0x18181800LL,
+            0xc0c0c00LL,
+            0x6060600LL,
+            0x0LL,
+            0x808080LL,
+            0xc0c0c0LL,
+            0x606060LL,
+            0x303030LL,
+            0x181818LL,
+            0xc0c0cLL,
+            0x60606LL,
+            0x0LL,
+            0x8080LL,
+            0xc0c0LL,
+            0x6060LL,
+            0x3030LL,
+            0x1818LL,
+            0xc0cLL,
+            0x606LL,
+        }};
 
 // white, black
 const std::map<float, int> color_to_pawn_mask_idx = {{1., 0}, {-1, 1}};
@@ -165,61 +333,5 @@ const uint64_t passed_pawn_mask[2][64] = {{
                                               0xfcfcLL,
                                               0xfefeLL,
                                           }};
-
-int passed_pawns(const C_BoardState &board, float color)
-{
-    int passed = 0;
-    uint64_t pawns = get_pawns(board, color);
-
-    while (pawns != empty_board)
-    {
-        int field = forward_scan(pawns);
-        if ((get_pawns(board, -color) & passed_pawn_mask[color_to_pawn_mask_idx.at(color)][field]) == 0)
-            passed++;
-        pawns &= ~cols[(int)field / 8];
-    }
-    return passed;
-}
-
-int doubled_pawns(const C_BoardState &board, float color)
-{
-    int doubled = 0;
-    for (uint64_t col : cols)
-    {
-        int pawns_on_file = bb_pop_count(get_pawns(board, color) & col);
-        if (pawns_on_file > 1)
-            doubled += (pawns_on_file - 1);
-    }
-    return doubled;
-}
-
-int isolated_pawns(const C_BoardState &board, float color)
-{
-    int isolated = 0;
-    uint64_t pawns = get_pawns(board, color);
-    for (int col_idx = 0; col_idx < 8; col_idx++)
-    {
-        uint64_t mask = cols[col_idx];
-        uint64_t adj_mask = isolated_pawn_mask[col_idx];
-        if ((pawns & mask) && !(pawns & adj_mask))
-            isolated++;
-    }
-    return isolated;
-}
-
-void evaluate_pawn_structure(const C_BoardState &board, Scores &scores)
-{
-    int passed_pawn_diff = passed_pawns(board, White) - passed_pawns(board, Black);
-    scores[OPENING] += passed_pawn_bonus[OPENING] * passed_pawn_diff;
-    scores[ENDGAME] += passed_pawn_bonus[ENDGAME] * passed_pawn_diff;
-
-    int doubled_pawns_diff = doubled_pawns(board, White) - doubled_pawns(board, Black);
-    scores[OPENING] += doubled_pawn_penalty[OPENING] * doubled_pawns_diff;
-    scores[ENDGAME] += doubled_pawn_penalty[ENDGAME] * doubled_pawns_diff;
-
-    int isolated_pawn_diff = isolated_pawns(board, White) - isolated_pawns(board, Black);
-    scores[OPENING] += isolated_pawn_penalty[OPENING] * isolated_pawn_diff;
-    scores[ENDGAME] += isolated_pawn_penalty[ENDGAME] * isolated_pawn_diff;
-}
 
 #endif

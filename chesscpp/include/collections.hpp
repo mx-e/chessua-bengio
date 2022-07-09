@@ -22,8 +22,6 @@ inline void collect_pawn_moves(C_BoardState &board_state, MoveList &legal_moves)
     extract_promotions(pawn_single_moves & promotion_row, legal_moves, -pawn_shift_map.at(single) * board_state.turn);
     extract_pawn_double_moves(pawn_double_moves, legal_moves, board_state.turn);
     extract_moves_with_offset(pawn_single_moves & ~promotion_row, legal_moves, -pawn_shift_map.at(single) * board_state.turn);
-
-    board_state.n_current_moves[b_pawns] += bb_pop_count(pawn_single_moves | pawn_double_moves);
 }
 
 inline void collect_pawn_captures(C_BoardState &board_state, MoveList &legal_moves)

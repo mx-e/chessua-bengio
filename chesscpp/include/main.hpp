@@ -1,3 +1,6 @@
+#ifndef MAIN
+#define MAIN
+
 #include "transforms.hpp"
 #include "collections.hpp"
 #include "constants.hpp"
@@ -83,7 +86,7 @@ RunInfo bestmove(float remaining_time, int max_depth, Board board, int color, En
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     compute_hash(session.hash_state, session.board_state);
-    
+
     int expected_remaining_moves = std::max(expected_moves_per_game - fullMove, 6);
     float move_time_budget = remaining_time / expected_remaining_moves;
     std::string uci_best_move;
@@ -110,7 +113,7 @@ RunInfo bestmove_benchmark(int max_depth, Board board, int color, EnPassants enp
     C_Session session = construct_session(max_depth);
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     compute_hash(session.hash_state, session.board_state);
-    
+
     std::string uci_best_move;
     float score;
 
@@ -125,3 +128,5 @@ RunInfo bestmove_benchmark(int max_depth, Board board, int color, EnPassants enp
     RunInfo results = {uci_best_move.c_str(), session.alpha_beta_state.nodes_at_depth[max_depth]};
     return results;
 }
+
+#endif
