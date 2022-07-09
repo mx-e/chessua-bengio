@@ -6,6 +6,7 @@
 #include <string>
 #include <tuple>
 #include <random>
+#include "evaluation_constants.hpp"
 #include "constants.hpp"
 
 typedef std::array<std::array<int, 8>, 8> Board;
@@ -57,6 +58,7 @@ inline bool is_move_empty(move m)
 typedef std::vector<move>
     MoveList;
 
+typedef std::vector<std::vector<float>> PSScore;
 struct C_BoardState
 {
     uint64_t pieces[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -69,6 +71,7 @@ struct C_BoardState
     float half_moves = 0.;
     bool king_attack = false;
     bool castling_move_illegal = false;
+    PSScore ps_score = {{initial_ps_value[OPENING], initial_ps_value[OPENING]}, {initial_ps_value[ENDGAME], initial_ps_value[ENDGAME]}};
 };
 
 struct Line

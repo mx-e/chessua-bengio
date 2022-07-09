@@ -13,6 +13,8 @@ const int passed_pawn_bonus[2] = {[OPENING] = 10, [ENDGAME] = 70};
 const int doubled_pawn_penalty[2] = {[OPENING] = -20, [ENDGAME] = -30};
 const int isolated_pawn_penalty[2] = {[OPENING] = -15, [ENDGAME] = -30};
 
+const float initial_ps_value[2] = {[OPENING] = -75., [ENDGAME] = -295.};
+
 const uint64_t isolated_pawn_mask[8] = {
     col_b,
     col_a | col_c,

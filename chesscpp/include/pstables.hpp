@@ -2,9 +2,12 @@
 #define PSTABLES_H
 
 #include <vector>
+#include <map>
 #include "utils.hpp"
+#include "evaluation_constants.hpp"
 
 // Source: https://github.com/GunshipPenguin/shallow-blue/blob/master/src/psquaretable.cc
+const std::map<float, int> color_to_pstable_idx = {{1., 0}, {-1, 1}};
 const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
     // White
     {{// King
@@ -61,9 +64,8 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        0, 10, -10, 0, 10, 20, 50, 0,
        0, 10, -5, 0, 5, 10, 50, 0,
        0, 5, 5, 0, 5, 10, 50, 0}},
-     {
-       // King
-       {-50, -30, -30, -30, -30, -30, -30, -50,
+     {// King
+      {-50, -30, -30, -30, -30, -30, -30, -50,
        -30, -30, -10, -10, -10, -10, -20, -40,
        -30, 0, 20, 30, 30, 20, -10, -30,
        -30, 0, 30, 40, 40, 30, 0, -20,
@@ -71,7 +73,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -30, 0, 20, 30, 30, 20, -10, -30,
        -30, -30, -10, -10, -10, -10, -20, -40,
        -50, -30, -30, -30, -30, -30, -30, -50},
-       // Queen
+      // Queen
       {-20, -10, -10, 0, -5, -10, -10, -20,
        -10, 0, 5, 0, 0, 0, 0, -10,
        -10, 5, 5, 5, 5, 5, 0, -10,
@@ -80,7 +82,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -10, 0, 5, 5, 5, 5, 0, -10,
        -10, 0, 0, 0, 0, 0, 0, -10,
        -20, -10, -10, -5, -5, -10, -10, -20},
-       // Bishop
+      // Bishop
       {-20, -10, -10, -10, -10, -10, -10, -20,
        -10, 5, 10, 0, 5, 0, 0, -10,
        -10, 0, 10, 10, 5, 5, 0, -10,
@@ -89,7 +91,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -10, 0, 10, 10, 5, 5, 0, -10,
        -10, 5, 10, 0, 5, 0, 0, -10,
        -20, -10, -10, -10, -10, -10, -10, -20},
-       // Knight
+      // Knight
       {-50, -40, -30, -30, -30, -30, -40, -50,
        -40, -20, 5, 0, 5, 0, -20, -40,
        -30, 0, 10, 15, 15, 10, 0, -30,
@@ -98,7 +100,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -30, 0, 10, 15, 15, 10, 0, -30,
        -40, -20, 5, 0, 5, 0, -20, -40,
        -50, -40, -30, -30, -30, -30, -40, -50},
-       // Rook
+      // Rook
       {0, -5, -5, -5, -5, -5, -5, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
@@ -107,7 +109,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        0, 0, 0, 0, 0, 0, 0, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
        0, -5, -5, -5, -5, -5, -5, 0},
-       // Pawn
+      // Pawn
       {0, -20, 0, 20, 40, 60, 80, 0,
        0, -20, 0, 20, 40, 60, 80, 0,
        0, -20, 0, 20, 40, 60, 80, 0,
@@ -117,8 +119,8 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        0, -20, 0, 20, 40, 60, 80, 0,
        0, -20, 0, 20, 40, 60, 80, 0}}},
     // Black
-    {{//King
-        {-30, -30, -30, -30, -20, -10, 20, 30,
+    {{// King
+      {-30, -30, -30, -30, -20, -10, 20, 30,
        -40, -40, -40, -40, -30, -20, 20, 30,
        -40, -40, -40, -40, -30, -20, 0, 20,
        -50, -50, -50, -50, -40, -20, 0, 20,
@@ -126,7 +128,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -40, -40, -40, -40, -30, -20, 0, 30,
        -40, -40, -40, -40, -30, -20, 20, 30,
        -30, -30, -30, -30, -20, -10, 20, 30},
-       // Queen
+      // Queen
       {-20, -10, -10, -5, 0, -10, -10, -20,
        -10, 0, 0, 0, 0, 5, 0, -10,
        -10, 0, 5, 5, 5, 5, 5, -10,
@@ -135,7 +137,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -10, 0, 5, 5, 5, 5, 0, -10,
        -10, 0, 0, 0, 0, 0, 0, -10,
        -20, -10, -10, -5, -5, -10, -10, -20},
-       // Bishop
+      // Bishop
       {-20, -10, -10, -10, -10, -10, -10, -20,
        -10, 0, 0, 5, 0, 10, 5, -10,
        -10, 0, 5, 5, 10, 10, 0, -10,
@@ -144,7 +146,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -10, 0, 5, 5, 10, 10, 0, -10,
        -10, 0, 0, 5, 0, 10, 5, -10,
        -20, -10, -10, -10, -10, -10, -10, -20},
-       // Knight
+      // Knight
       {-50, -40, -30, -30, -30, -30, -40, -50,
        -40, -20, 0, 5, 0, 5, -20, -40,
        -30, 0, 10, 15, 15, 10, 0, -30,
@@ -153,7 +155,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -30, 0, 10, 15, 15, 10, 0, -30,
        -40, -20, 0, 5, 0, 5, -20, -40,
        -50, -40, -30, -30, -30, -30, -40, -50},
-       // Rook
+      // Rook
       {0, 5, -5, -5, -5, -5, -5, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
@@ -162,7 +164,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        0, 0, 0, 0, 0, 0, 0, 5,
        0, 0, 0, 0, 0, 0, 0, 0,
        0, 5, -5, -5, -5, -5, -5, 0},
-       // Pawn
+      // Pawn
       {0, 50, 10, 5, 0, 5, 5, 0,
        0, 50, 10, 5, 0, -5, 10, 0,
        0, 50, 20, 10, 0, -10, 10, 0,
@@ -172,7 +174,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        0, 50, 10, 5, 0, -5, 10, 0,
        0, 50, 10, 5, 0, 5, 5, 0}},
      {// King
-        {-50, -30, -30, -30, -30, -30, -30, -50,
+      {-50, -30, -30, -30, -30, -30, -30, -50,
        -40, -20, -10, -10, -10, -10, -30, -30,
        -30, -10, 20, 30, 30, 20, 0, -30,
        -20, 0, 30, 40, 40, 30, 0, -30,
@@ -180,7 +182,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -30, -10, 20, 30, 30, 20, 0, -30,
        -40, -20, -10, -10, -10, -10, -30, -30,
        -50, -30, -30, -30, -30, -30, -30, -50},
-       // Queen
+      // Queen
       {-20, -10, -10, -5, 0, -10, -10, -20,
        -10, 0, 0, 0, 0, 5, 0, -10,
        -10, 0, 5, 5, 5, 5, 5, -10,
@@ -189,7 +191,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -10, 0, 5, 5, 5, 5, 0, -10,
        -10, 0, 0, 0, 0, 0, 0, -10,
        -20, -10, -10, -5, -5, -10, -10, -20},
-       // Bishop
+      // Bishop
       {-20, -10, -10, -10, -10, -10, -10, -20,
        -10, 0, 0, 5, 0, 10, 5, -10,
        -10, 0, 5, 5, 10, 10, 0, -10,
@@ -198,7 +200,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -10, 0, 5, 5, 10, 10, 0, -10,
        -10, 0, 0, 5, 0, 10, 5, -10,
        -20, -10, -10, -10, -10, -10, -10, -20},
-       // Knight
+      // Knight
       {-50, -40, -30, -30, -30, -30, -40, -50,
        -40, -20, 0, 5, 0, 5, -20, -40,
        -30, 0, 10, 15, 15, 10, 0, -30,
@@ -207,7 +209,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        -30, 0, 10, 15, 15, 10, 0, -30,
        -40, -20, 0, 5, 0, 5, -20, -40,
        -50, -40, -30, -30, -30, -30, -40, -50},
-       // Rook
+      // Rook
       {0, -5, -5, -5, -5, -5, -5, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
@@ -216,7 +218,7 @@ const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
        0, 0, 0, 0, 0, 0, 0, 0,
        0, 0, 0, 0, 0, 0, 0, 0,
        0, -5, -5, -5, -5, -5, -5, 0},
-       // Pawn
+      // Pawn
       {0, 80, 60, 40, 20, 0, -20, 0,
        0, 80, 60, 40, 20, 0, -20, 0,
        0, 80, 60, 40, 20, 0, -20, 0,
@@ -232,47 +234,42 @@ enum PSMode
     Unmake = -1
 };
 
-enum GamePhase {
-    EarlyGame = 0,
-    LateGame = 1
-};
-
-inline float get_score_for_type(GamePhase phase, float color, uint8_t piece_type, uint8_t target)
+inline float get_score_for_type(Phase phase, float color, uint8_t piece_type, uint8_t target)
 {
-    return PSTABLES[color == White ? 0 : 1][phase][piece_type - 1][target];
+    return PSTABLES[color_to_pstable_idx.at(color)][phase][piece_type - 1][target];
 }
 
-inline float get_score(C_BoardState &board_state, GamePhase phase, float color, uint8_t at, uint8_t target)
+inline float get_score(C_BoardState &board_state, Phase phase, float color, uint8_t at, uint8_t target)
 {
     uint8_t piece_type = get_piece_type_of_field(board_state, at);
     return get_score_for_type(phase, color, piece_type, target);
 }
 
-inline void update_score(PSMode mode, GamePhase phase, float &score, float &other_score, C_BoardState &board_state, move &move)
+inline void update_score(PSMode mode, Phase phase, float &score, float &other_score, C_BoardState &board_state, move &move)
 {
-    score -= mode * get_score(board_state, phase, board_state.turn, move.src, move.src);
+    score -= 0.0001 * mode * get_score(board_state, phase, board_state.turn, move.src, move.src);
 
     if (move.promotion)
     {
-        score += mode * get_score_for_type(phase, board_state.turn, move.promotion, move.dest);
+        score += 0.0001 * mode * get_score_for_type(phase, board_state.turn, move.promotion, move.dest);
     }
     else
     {
-        score += mode * get_score(board_state, phase, board_state.turn, move.src, move.dest);
+        score += 0.0001 * mode * get_score(board_state, phase, board_state.turn, move.src, move.dest);
     }
 
     if (move.capture || move.ep)
     {
         uint8_t dest = move.ep ? move.dest - (int)board_state.turn : move.dest;
-        other_score -= mode * get_score(board_state, phase, -board_state.turn, dest, dest);
+        other_score -= 0.0001 * mode * get_score(board_state, phase, -board_state.turn, dest, dest);
     }
 
     if (move.castling)
     {
         uint8_t rook_src = 8 * (move.castling == KingSide ? 7 : 0) + (board_state.turn == White ? 0 : 7);
         uint8_t rook_dest = 8 * (move.castling == KingSide ? 5 : 3) + (board_state.turn == White ? 0 : 7);
-        score -= mode * get_score(board_state, phase, board_state.turn, rook_src, rook_src);
-        score += mode * get_score(board_state, phase, board_state.turn, rook_src, rook_dest);
+        score -= 0.0001 * mode * get_score(board_state, phase, board_state.turn, rook_src, rook_src);
+        score += 0.0001 * mode * get_score(board_state, phase, board_state.turn, rook_src, rook_dest);
     }
 }
 

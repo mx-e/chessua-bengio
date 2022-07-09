@@ -291,6 +291,15 @@ void evaluate_pawn_structure(const C_BoardState &board, Scores &scores)
     scores[ENDGAME] += isolated_pawn_penalty[ENDGAME] * isolated_pawn_diff;
 }
 
+void evaluate_ps_tables(const C_BoardState &board, Scores &scores)
+{
+    scores[OPENING] += board.ps_score[color_to_pstable_idx.at(White)][OPENING];
+    scores[OPENING] -= board.ps_score[color_to_pstable_idx.at(Black)][OPENING];
+
+    scores[ENDGAME] += board.ps_score[color_to_pstable_idx.at(White)][ENDGAME];
+    scores[ENDGAME] -= board.ps_score[color_to_pstable_idx.at(Black)][ENDGAME];
+}
+
 inline float evaluate(C_BoardState &board_state)
 {
     Scores score = {0., 0.};
@@ -301,6 +310,7 @@ inline float evaluate(C_BoardState &board_state)
     evaluate_has_bishop_pair(board_state, score);
     evaluate_king_shield(board_state, score);
     evaluate_mobility(board_state, score);
+    evaluate_ps_tables(board_state, score);
 
     return board_state.turn * interpolate_scores(board_state, score);
 }
