@@ -19,13 +19,11 @@ void _update_score(
     marshall_board_state(
         board_state, board, color, {}, false, false, false, false, 0, 0);
 
-    board_state.phase = phase;
-
-    update_score(Make, score, other_score, board_state, move);
+    update_score(Make, phase, score, other_score, board_state, move);
 
     float make_score = score;
     float make_other_score = other_score;
-    update_score(Unmake, make_score, make_other_score, board_state, move);
+    update_score(Unmake, phase, make_score, make_other_score, board_state, move);
 
     EXPECT_EQ(init_score, make_score);
     EXPECT_EQ(init_other_score, make_other_score);

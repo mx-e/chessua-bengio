@@ -232,42 +232,47 @@ enum PSMode
     Unmake = -1
 };
 
-inline float get_score_for_type(C_BoardState &board_state, float color, uint8_t piece_type, uint8_t target)
+enum GamePhase {
+    EarlyGame = 0,
+    LateGame = 1
+};
+
+inline float get_score_for_type(GamePhase phase, float color, uint8_t piece_type, uint8_t target)
 {
-    return PSTABLES[color == White ? 0 : 1][board_state.phase][piece_type - 1][target];
+    return PSTABLES[color == White ? 0 : 1][phase][piece_type - 1][target];
 }
 
-inline float get_score(C_BoardState &board_state, float color, uint8_t at, uint8_t target)
+inline float get_score(C_BoardState &board_state, GamePhase phase, float color, uint8_t at, uint8_t target)
 {
     uint8_t piece_type = get_piece_type_of_field(board_state, at);
-    return get_score_for_type(board_state, color, piece_type, target);
+    return get_score_for_type(phase, color, piece_type, target);
 }
 
-inline void update_score(PSMode mode, float &score, float &other_score, C_BoardState &board_state, move &move)
+inline void update_score(PSMode mode, GamePhase phase, float &score, float &other_score, C_BoardState &board_state, move &move)
 {
-    score -= mode * get_score(board_state, board_state.turn, move.src, move.src);
+    score -= mode * get_score(board_state, phase, board_state.turn, move.src, move.src);
 
     if (move.promotion)
     {
-        score += mode * get_score_for_type(board_state, board_state.turn, move.promotion, move.dest);
+        score += mode * get_score_for_type(phase, board_state.turn, move.promotion, move.dest);
     }
     else
     {
-        score += mode * get_score(board_state, board_state.turn, move.src, move.dest);
+        score += mode * get_score(board_state, phase, board_state.turn, move.src, move.dest);
     }
 
     if (move.capture || move.ep)
     {
         uint8_t dest = move.ep ? move.dest - (int)board_state.turn : move.dest;
-        other_score -= mode * get_score(board_state, -board_state.turn, dest, dest);
+        other_score -= mode * get_score(board_state, phase, -board_state.turn, dest, dest);
     }
 
     if (move.castling)
     {
         uint8_t rook_src = 8 * (move.castling == KingSide ? 7 : 0) + (board_state.turn == White ? 0 : 7);
         uint8_t rook_dest = 8 * (move.castling == KingSide ? 5 : 3) + (board_state.turn == White ? 0 : 7);
-        score -= mode * get_score(board_state, board_state.turn, rook_src, rook_src);
-        score += mode * get_score(board_state, board_state.turn, rook_src, rook_dest);
+        score -= mode * get_score(board_state, phase, board_state.turn, rook_src, rook_src);
+        score += mode * get_score(board_state, phase, board_state.turn, rook_src, rook_dest);
     }
 }
 
