@@ -24,6 +24,7 @@ add_executable(
     test_transforms.cpp
     test_main.cpp
     test_transposition.cpp
+    test_pstables.cpp
     test_expressions.cpp
     test_utils.cpp
     test_collections.cpp

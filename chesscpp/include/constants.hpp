@@ -48,6 +48,9 @@ const uint8_t pPawn = 6;
 const float Black = -1.;
 const float White = 1.;
 
+const uint8_t KingSide = 1;
+const uint8_t QueenSide = 2;
+
 enum board
 {
     b_black,
