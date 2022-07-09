@@ -54,6 +54,11 @@ inline bool is_move_empty(move m)
     return m.src == m.dest;
 }
 
+enum GamePhase {
+    EarlyGame = 0,
+    LateGame = 1
+};
+
 typedef std::vector<move>
     MoveList;
 
@@ -69,6 +74,7 @@ struct C_BoardState
     float half_moves = 0.;
     bool king_attack = false;
     bool castling_move_illegal = false;
+    GamePhase phase = EarlyGame;
 };
 
 struct Line
