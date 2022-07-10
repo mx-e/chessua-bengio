@@ -22,11 +22,14 @@ FetchContent_MakeAvailable(googletest)
 G_COMPILE_OPTIONS = """
 add_compile_options(
 -g
--O2
+-O3
 -DCUSTOM_PVS
--DCUSTOM_QS
 -DCUSTOM_ASPI
 -DCUSTOM_MH
+-DCUSTOM_QS
+
+
+
 )
 enable_testing()
 """
