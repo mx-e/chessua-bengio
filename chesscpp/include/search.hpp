@@ -62,7 +62,7 @@ float zw_search(C_Session &session, float beta, int depth_left)
     if (session.board_state.king_attack || session.board_state.castling_move_illegal)
         return high_value;
     if (depth_left == 0)
-        return Q_SEARCH_ENABLED ? quiescence_search(session, beta - 1, beta, depth) : evaluate(session.board_state);
+        return Q_SEARCH_ENABLED ? quiescence_search(session, beta - 1, beta, 0) : evaluate(session.board_state);
 
     MoveList &move_list = session.move_list_stack[depth];
 
@@ -103,7 +103,7 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
     if (depth_left == 0)
     {
         pline.n_moves = 0;
-        return Q_SEARCH_ENABLED ? quiescence_search(session, alpha, beta, depth) : evaluate(session.board_state);
+        return Q_SEARCH_ENABLED ? quiescence_search(session, alpha, beta, 0) : evaluate(session.board_state);
     }
 
     MoveList &move_list = session.move_list_stack[depth];

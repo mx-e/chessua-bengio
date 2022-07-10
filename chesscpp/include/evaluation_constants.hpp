@@ -2,12 +2,6 @@
 #define EVAL_CONSTANTS
 
 #include "constants.hpp"
-
-enum Phase
-{
-    OPENING,
-    ENDGAME
-};
 // evaluations values from https://github.com/GunshipPenguin/shallow-blue/blob/master/src/eval.h
 const int passed_pawn_bonus[2] = {[OPENING] = 10, [ENDGAME] = 70};
 const int doubled_pawn_penalty[2] = {[OPENING] = -20, [ENDGAME] = -30};

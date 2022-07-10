@@ -2,24 +2,24 @@ set -e
 
 rm -rf build
 CHESSAI_VERSION="bare" python -m pip install . --force-reinstall
-python chesspy/test/extract_benchmark_data.py bare true
+python chesspy/test/extract_benchmark_data.py bare 1
 
 rm -rf build
 CHESSAI_VERSION="pvs" python -m pip install . --force-reinstall
-python chesspy/test/extract_benchmark_data.py pvs false
+python chesspy/test/extract_benchmark_data.py pvs 
 
 rm -rf build
 CHESSAI_VERSION="pvs+qs" python -m pip install . --force-reinstall
-python chesspy/test/extract_benchmark_data.py pvs+qs false
+python chesspy/test/extract_benchmark_data.py pvs+qs 
 
 rm -rf build
 CHESSAI_VERSION="aspiration" python -m pip install . --force-reinstall
-python chesspy/test/extract_benchmark_data.py aspiration false
+python chesspy/test/extract_benchmark_data.py aspiration 
 
 rm -rf build
 CHESSAI_VERSION="hash" python -m pip install . --force-reinstall
-python chesspy/test/extract_benchmark_data.py hash false
+python chesspy/test/extract_benchmark_data.py hash 
 
 rm -rf build
 CHESSAI_VERSION="hash+aspiration" python -m pip install . --force-reinstall
-python chesspy/test/extract_benchmark_data.py hash+aspiration false
+python chesspy/test/extract_benchmark_data.py hash+aspiration 

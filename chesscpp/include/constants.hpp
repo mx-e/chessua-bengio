@@ -31,12 +31,10 @@ const bool Q_SEARCH_ENABLED = false;
 
 const float infty = 9999999.;
 const float high_value = 999999.;
-const float discount_factor = 0.90;
-const int expected_moves_per_game = 25;
 const int max_quiesence_depth = 5;
 
-const std::vector<float> alpha_aspirations = {-1.01, -8.01};
-const std::vector<float> beta_aspirations = {1.01, 8.01};
+const std::vector<float> alpha_aspirations = {-100.01, -320.01};
+const std::vector<float> beta_aspirations = {100.01, 320.01};
 
 const uint8_t pKing = 1;
 const uint8_t pQueen = 2;
@@ -69,6 +67,16 @@ enum castling
     b_kingside,
     b_queenside,
 };
+
+enum Phase
+{
+    OPENING,
+    ENDGAME
+};
+
+const float move_length_factor[2] = {
+    [OPENING] = 1 / 60.,
+    [ENDGAME] = 1 / 20.};
 
 const std::map<float, int>
     color_to_BB_index = {{-1., 0}, {1., 7}};

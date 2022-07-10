@@ -38,11 +38,11 @@ float get_total_score_of_starting_board(float color, Phase phase, C_BoardState &
 int main()
 {
     // bitboard_table_from_logic(passed_pawns, 1);
-    // bitboard_table_from_logic(is_king_shield, Black);
-    C_BoardState board = get_new_game_board();
-    printf("%f \n", get_total_score_of_starting_board(White, OPENING, board));
-    printf("%f \n", get_total_score_of_starting_board(Black, OPENING, board));
+    bitboard_table_from_logic(is_king_shield, White);
+    // C_BoardState board = get_new_game_board();
+    // printf("%f \n", get_total_score_of_starting_board(White, OPENING, board));
+    // printf("%f \n", get_total_score_of_starting_board(Black, OPENING, board));
 
-    printf("%f \n", get_total_score_of_starting_board(White, ENDGAME, board));
-    printf("%f \n", get_total_score_of_starting_board(Black, ENDGAME, board));
+    // printf("%f \n", get_total_score_of_starting_board(White, ENDGAME, board));
+    // printf("%f \n", get_total_score_of_starting_board(Black, ENDGAME, board));
 }

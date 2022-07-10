@@ -87,8 +87,9 @@ RunInfo bestmove(float remaining_time, int max_depth, Board board, int color, En
     marshall_board_state(session.board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
     compute_hash(session.hash_state, session.board_state);
 
-    int expected_remaining_moves = std::max(expected_moves_per_game - fullMove, 6);
-    float move_time_budget = remaining_time / expected_remaining_moves;
+    int phase = get_phase(session.board_state);
+    float timing_factor = ((initial_phase_weights - phase) * move_length_factor[OPENING] + (phase * move_length_factor[ENDGAME])) / initial_phase_weights;
+    float move_time_budget = remaining_time * timing_factor;
     std::string uci_best_move;
     float score;
     do

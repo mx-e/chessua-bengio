@@ -15,7 +15,11 @@ FetchContent_MakeAvailable(googletest)
 
 add_compile_options(
 -g
--O3
+-O2
+-DCUSTOM_PVS
+-DCUSTOM_QS
+-DCUSTOM_ASPI
+-DCUSTOM_MH
 )
 enable_testing()
 

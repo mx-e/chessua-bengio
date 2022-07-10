@@ -247,29 +247,29 @@ inline float get_score(C_BoardState &board_state, Phase phase, float color, uint
 
 inline void update_score(PSMode mode, Phase phase, float &score, float &other_score, C_BoardState &board_state, move &move)
 {
-    score -= 0.0001 * mode * get_score(board_state, phase, board_state.turn, move.src, move.src);
+    score -= mode * get_score(board_state, phase, board_state.turn, move.src, move.src);
 
     if (move.promotion)
     {
-        score += 0.0001 * mode * get_score_for_type(phase, board_state.turn, move.promotion, move.dest);
+        score += mode * get_score_for_type(phase, board_state.turn, move.promotion, move.dest);
     }
     else
     {
-        score += 0.0001 * mode * get_score(board_state, phase, board_state.turn, move.src, move.dest);
+        score += mode * get_score(board_state, phase, board_state.turn, move.src, move.dest);
     }
 
     if (move.capture || move.ep)
     {
         uint8_t dest = move.ep ? move.dest - (int)board_state.turn : move.dest;
-        other_score -= 0.0001 * mode * get_score(board_state, phase, -board_state.turn, dest, dest);
+        other_score -= mode * get_score(board_state, phase, -board_state.turn, dest, dest);
     }
 
     if (move.castling)
     {
         uint8_t rook_src = 8 * (move.castling == KingSide ? 7 : 0) + (board_state.turn == White ? 0 : 7);
         uint8_t rook_dest = 8 * (move.castling == KingSide ? 5 : 3) + (board_state.turn == White ? 0 : 7);
-        score -= 0.0001 * mode * get_score(board_state, phase, board_state.turn, rook_src, rook_src);
-        score += 0.0001 * mode * get_score(board_state, phase, board_state.turn, rook_src, rook_dest);
+        score -= mode * get_score(board_state, phase, board_state.turn, rook_src, rook_src);
+        score += mode * get_score(board_state, phase, board_state.turn, rook_src, rook_dest);
     }
 }
 

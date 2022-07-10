@@ -429,3 +429,210 @@ TEST(Evaluations, Mobility)
     EXPECT_EQ(score[OPENING], mobility_bonus[OPENING][pRook] + mobility_bonus[OPENING][pQueen] - mobility_bonus[OPENING][pPawn] * 2);
     EXPECT_EQ(score[ENDGAME], mobility_bonus[ENDGAME][pRook] + mobility_bonus[ENDGAME][pQueen] - mobility_bonus[ENDGAME][pPawn] * 2);
 }
+
+TEST(Evaluations, DoubledPawns)
+{
+    Board board = {{{0, 0, pPawn, 0, 0, 0, pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, pQueen, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pPawn},
+                    {pPawn, 0, 0, pPawn, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pPawn, 0, 0, 0, 0, -pPawn}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    int w_d_pawns = doubled_pawns(session.board_state, White);
+    int b_d_pawns = doubled_pawns(session.board_state, Black);
+
+    EXPECT_EQ(w_d_pawns, 2);
+    EXPECT_EQ(b_d_pawns, 1);
+}
+
+TEST(Evaluations, PassedPawns)
+{
+    Board board = {{{0, 0, pPawn, 0, 0, 0, pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, pQueen, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pPawn},
+                    {pPawn, 0, 0, pPawn, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pPawn, 0, 0, 0, 0, -pPawn}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    int w_p_pawns = passed_pawns(session.board_state, White);
+    int b_p_pawns = passed_pawns(session.board_state, Black);
+
+    EXPECT_EQ(w_p_pawns, 1);
+    EXPECT_EQ(b_p_pawns, 2);
+}
+
+TEST(Evaluations, IsolatedPawns)
+{
+    Board board = {{{0, 0, pPawn, 0, 0, 0, pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, pQueen, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pPawn},
+                    {pPawn, 0, 0, pPawn, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pPawn, 0, 0, 0, 0, -pPawn}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    int w_i_pawns = isolated_pawns(session.board_state, White);
+    int b_i_pawns = isolated_pawns(session.board_state, Black);
+
+    EXPECT_EQ(w_i_pawns, 2);
+    EXPECT_EQ(b_i_pawns, 1);
+}
+
+TEST(Evaluations, CompletePawnStructure)
+{
+    Board board = {{{0, 0, pPawn, 0, 0, 0, pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, pQueen, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pPawn},
+                    {pPawn, 0, 0, pPawn, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, -pPawn, 0, 0, 0, 0, -pPawn}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    Scores score = {0., 0.};
+    evaluate_pawn_structure(session.board_state, score);
+    float actual_pawn_structure_opening = 1 * doubled_pawn_penalty[OPENING] + 1 * isolated_pawn_penalty[OPENING] + -1 * passed_pawn_bonus[OPENING];
+    float actual_pawn_structure_endgame = 1 * doubled_pawn_penalty[ENDGAME] + 1 * isolated_pawn_penalty[ENDGAME] + -1 * passed_pawn_bonus[ENDGAME];
+
+    EXPECT_EQ(score[OPENING], actual_pawn_structure_opening);
+    EXPECT_EQ(score[ENDGAME], actual_pawn_structure_endgame);
+}
+
+TEST(Evaluations, KingShield)
+{
+    Board board = {{{0, pPawn, 0, 0, 0, 0, 0, 0},
+                    {0, pPawn, 0, 0, 0, 0, 0, 0},
+                    {0, 0, pPawn, 0, 0, 0, 0, 0},
+                    {pKing, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, -pPawn, 0, 0},
+                    {0, 0, 0, 0, -pPawn, -pKing, 0, 0},
+                    {0, 0, 0, 0, -pPawn, 0, 0, 0}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    Scores score = {0., 0.};
+    int w_king_shield = n_pawns_shielding_king(session.board_state, White);
+    int b_king_shield = n_pawns_shielding_king(session.board_state, Black);
+
+    EXPECT_EQ(w_king_shield, 1);
+    EXPECT_EQ(b_king_shield, 2);
+
+    evaluate_king_shield(session.board_state, score);
+    EXPECT_EQ(score[OPENING], -king_pawn_shield_bonus[OPENING]);
+    EXPECT_EQ(score[ENDGAME], -king_pawn_shield_bonus[ENDGAME]);
+}
+
+TEST(Evaluations, RooksOnOpenFile)
+{
+    Board board = {{{0, pRook, 0, 0, 0, 0, -pPawn, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pRook},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, pRook, pRook, 0, 0, 0, 0, 0},
+                    {0, pRook, 0, 0, 0, 0, -pRook, 0}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    Scores score = {0., 0.};
+
+    float w_open_file_rooks = rooks_on_open_file(session.board_state, White);
+    float b_open_file_rooks = rooks_on_open_file(session.board_state, Black);
+
+    EXPECT_EQ(w_open_file_rooks, 2);
+    EXPECT_EQ(b_open_file_rooks, 1);
+
+    evaluate_rooks_on_open_file(session.board_state, score);
+    EXPECT_EQ(score[OPENING], rook_open_file_bonus[OPENING]);
+    EXPECT_EQ(score[ENDGAME], rook_open_file_bonus[ENDGAME]);
+}
+
+TEST(Evaluations, BishopPair)
+{
+    Board board = {{{0, 0, 0, 0, 0, -pBishop, 0, 0},
+                    {0, 0, 0, 0, pBishop, 0, 0, 0},
+                    {pBishop, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, -pBishop},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    EXPECT_TRUE(has_bishop_pair(session.board_state, White));
+    EXPECT_TRUE(has_bishop_pair(session.board_state, Black));
+
+    board = {{{0, 0, 0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, pBishop, 0, 0, 0},
+              {pBishop, 0, 0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0, 0, -pBishop},
+              {0, 0, 0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+    session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    EXPECT_TRUE(has_bishop_pair(session.board_state, White));
+    EXPECT_FALSE(has_bishop_pair(session.board_state, Black));
+}
+
+TEST(Evaluations, GamePhaseInterpolationEndgame)
+{
+    Board board = {{{0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    Scores score = {300., -201.};
+    EXPECT_EQ(interpolate_scores(session.board_state, score), -201.);
+}
+
+TEST(Evaluations, GamePhaseInterpolationOpening)
+{
+    C_BoardState board = get_new_game_board();
+    Scores score = {300., -201.};
+    EXPECT_EQ(interpolate_scores(board, score), 300.);
+}
+
+TEST(Evaluations, GamePhaseInterpolationsIntermediate)
+{
+    Board board = {{{0, 0, 0, 0, 0, 0, pKing, 0},
+                    {0, 0, 0, 0, pQueen, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, -pRook, 0, 0, 0},
+                    {-pKing, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0}}};
+
+    C_Session session = construct_session(5);
+    marshall_board_state(session.board_state, board, White, {}, false, false, false, false, 0, 0);
+    Scores score = {300., -201.};
+    float phase = initial_phase_weights - 6;
+
+    EXPECT_EQ(interpolate_scores(session.board_state, score), (300 * (initial_phase_weights - phase) + (-201. * phase)) / initial_phase_weights);
+}

@@ -6,49 +6,6 @@
 #include "constants.hpp"
 #include "evaluation_constants.hpp"
 
-void evaluate_material(C_BoardState &board_state, Scores &score)
-{
-    uint64_t w_pawns = get_pawns(board_state, White);
-    uint64_t b_pawns = get_pawns(board_state, Black);
-    score[OPENING] += material_values[OPENING][pPawn] * bb_pop_count(w_pawns);
-    score[OPENING] += material_values[OPENING][pPawn] * -bb_pop_count(b_pawns);
-
-    score[ENDGAME] += material_values[ENDGAME][pPawn] * bb_pop_count(w_pawns);
-    score[ENDGAME] += material_values[ENDGAME][pPawn] * -bb_pop_count(b_pawns);
-
-    uint64_t w_knights = get_knights(board_state, White);
-    uint64_t b_knights = get_knights(board_state, Black);
-    score[OPENING] += material_values[OPENING][pKnight] * bb_pop_count(w_knights);
-    score[OPENING] += material_values[OPENING][pKnight] * -bb_pop_count(b_knights);
-
-    score[ENDGAME] += material_values[ENDGAME][pKnight] * bb_pop_count(w_knights);
-    score[ENDGAME] += material_values[ENDGAME][pKnight] * -bb_pop_count(b_knights);
-
-    uint64_t w_bishops = get_bishops(board_state, White);
-    uint64_t b_bishops = get_bishops(board_state, Black);
-    score[OPENING] += material_values[OPENING][pBishop] * bb_pop_count(w_bishops);
-    score[OPENING] += material_values[OPENING][pBishop] * -bb_pop_count(b_bishops);
-
-    score[ENDGAME] += material_values[ENDGAME][pBishop] * bb_pop_count(w_bishops);
-    score[ENDGAME] += material_values[ENDGAME][pBishop] * -bb_pop_count(b_bishops);
-
-    uint64_t w_rook = get_rooks(board_state, White);
-    uint64_t b_rook = get_rooks(board_state, Black);
-    score[OPENING] += material_values[OPENING][pRook] * bb_pop_count(w_rook);
-    score[OPENING] += material_values[OPENING][pRook] * -bb_pop_count(b_rook);
-
-    score[ENDGAME] += material_values[ENDGAME][pRook] * bb_pop_count(w_rook);
-    score[ENDGAME] += material_values[ENDGAME][pRook] * -bb_pop_count(b_rook);
-
-    uint64_t w_queen = get_queen(board_state, White);
-    uint64_t b_queen = get_queen(board_state, Black);
-    score[OPENING] += material_values[OPENING][pQueen] * bb_pop_count(w_queen);
-    score[OPENING] += material_values[OPENING][pQueen] * -bb_pop_count(b_queen);
-
-    score[ENDGAME] += material_values[ENDGAME][pQueen] * bb_pop_count(w_queen);
-    score[ENDGAME] += material_values[ENDGAME][pQueen] * -bb_pop_count(b_queen);
-}
-
 inline int rooks_on_open_file(C_BoardState &board_state, float color)
 {
     int n_rooks = 0;
@@ -70,10 +27,10 @@ inline bool has_bishop_pair(C_BoardState &board_state, float color)
 inline int n_pawns_shielding_king(C_BoardState &board_state, float color)
 {
     int king_field = forward_scan(get_king(board_state, color));
-    return bb_pop_count(king_shield[color_to_king_shield_idx.at(color)][king_field] && get_pawns(board_state, White));
+    return bb_pop_count(king_shield[color_to_king_shield_idx.at(color)][king_field] & get_pawns(board_state, color));
 }
 
-int passed_pawns(const C_BoardState &board, float color)
+inline int passed_pawns(const C_BoardState &board, float color)
 {
     int passed = 0;
     uint64_t pawns = get_pawns(board, color);
@@ -88,7 +45,7 @@ int passed_pawns(const C_BoardState &board, float color)
     return passed;
 }
 
-int doubled_pawns(const C_BoardState &board, float color)
+inline int doubled_pawns(const C_BoardState &board, float color)
 {
     int doubled = 0;
     for (uint64_t col : cols)
@@ -100,7 +57,7 @@ int doubled_pawns(const C_BoardState &board, float color)
     return doubled;
 }
 
-int isolated_pawns(const C_BoardState &board, float color)
+inline int isolated_pawns(const C_BoardState &board, float color)
 {
     int isolated = 0;
     uint64_t pawns = get_pawns(board, color);
@@ -181,6 +138,49 @@ inline int get_queen_move_count(C_BoardState &board_state, float color)
         queens &= queens - 1;
     }
     return n_queen_attacks;
+}
+
+inline void evaluate_material(C_BoardState &board_state, Scores &score)
+{
+    uint64_t w_pawns = get_pawns(board_state, White);
+    uint64_t b_pawns = get_pawns(board_state, Black);
+    score[OPENING] += material_values[OPENING][pPawn] * bb_pop_count(w_pawns);
+    score[OPENING] += material_values[OPENING][pPawn] * -bb_pop_count(b_pawns);
+
+    score[ENDGAME] += material_values[ENDGAME][pPawn] * bb_pop_count(w_pawns);
+    score[ENDGAME] += material_values[ENDGAME][pPawn] * -bb_pop_count(b_pawns);
+
+    uint64_t w_knights = get_knights(board_state, White);
+    uint64_t b_knights = get_knights(board_state, Black);
+    score[OPENING] += material_values[OPENING][pKnight] * bb_pop_count(w_knights);
+    score[OPENING] += material_values[OPENING][pKnight] * -bb_pop_count(b_knights);
+
+    score[ENDGAME] += material_values[ENDGAME][pKnight] * bb_pop_count(w_knights);
+    score[ENDGAME] += material_values[ENDGAME][pKnight] * -bb_pop_count(b_knights);
+
+    uint64_t w_bishops = get_bishops(board_state, White);
+    uint64_t b_bishops = get_bishops(board_state, Black);
+    score[OPENING] += material_values[OPENING][pBishop] * bb_pop_count(w_bishops);
+    score[OPENING] += material_values[OPENING][pBishop] * -bb_pop_count(b_bishops);
+
+    score[ENDGAME] += material_values[ENDGAME][pBishop] * bb_pop_count(w_bishops);
+    score[ENDGAME] += material_values[ENDGAME][pBishop] * -bb_pop_count(b_bishops);
+
+    uint64_t w_rook = get_rooks(board_state, White);
+    uint64_t b_rook = get_rooks(board_state, Black);
+    score[OPENING] += material_values[OPENING][pRook] * bb_pop_count(w_rook);
+    score[OPENING] += material_values[OPENING][pRook] * -bb_pop_count(b_rook);
+
+    score[ENDGAME] += material_values[ENDGAME][pRook] * bb_pop_count(w_rook);
+    score[ENDGAME] += material_values[ENDGAME][pRook] * -bb_pop_count(b_rook);
+
+    uint64_t w_queen = get_queen(board_state, White);
+    uint64_t b_queen = get_queen(board_state, Black);
+    score[OPENING] += material_values[OPENING][pQueen] * bb_pop_count(w_queen);
+    score[OPENING] += material_values[OPENING][pQueen] * -bb_pop_count(b_queen);
+
+    score[ENDGAME] += material_values[ENDGAME][pQueen] * bb_pop_count(w_queen);
+    score[ENDGAME] += material_values[ENDGAME][pQueen] * -bb_pop_count(b_queen);
 }
 
 inline void evaluate_mobility(C_BoardState &board_state, Scores &score)
@@ -264,19 +264,7 @@ inline void evaluate_king_shield(C_BoardState &board, Scores &score)
     score[ENDGAME] -= king_pawn_shield_b * king_pawn_shield_bonus[ENDGAME];
 }
 
-inline float interpolate_scores(C_BoardState &board, Scores &score)
-{
-    int phase_score = initial_phase_weights;
-    for (auto piece_type : {b_rooks, b_bishops, b_queens, b_knights})
-    {
-        phase_score -= bb_pop_count(board.pieces[piece_type]) * phase_weights[piece_type];
-        phase_score -= bb_pop_count(board.pieces[piece_type]) * phase_weights[piece_type];
-    }
-
-    return (score[OPENING] * (initial_phase_weights - phase_score) + score[ENDGAME] * phase_score) / initial_phase_weights;
-}
-
-void evaluate_pawn_structure(const C_BoardState &board, Scores &scores)
+inline void evaluate_pawn_structure(const C_BoardState &board, Scores &scores)
 {
     int passed_pawn_diff = passed_pawns(board, White) - passed_pawns(board, Black);
     scores[OPENING] += passed_pawn_bonus[OPENING] * passed_pawn_diff;
@@ -291,13 +279,29 @@ void evaluate_pawn_structure(const C_BoardState &board, Scores &scores)
     scores[ENDGAME] += isolated_pawn_penalty[ENDGAME] * isolated_pawn_diff;
 }
 
-void evaluate_ps_tables(const C_BoardState &board, Scores &scores)
+inline void evaluate_ps_tables(const C_BoardState &board, Scores &scores)
 {
     scores[OPENING] += board.ps_score[color_to_pstable_idx.at(White)][OPENING];
     scores[OPENING] -= board.ps_score[color_to_pstable_idx.at(Black)][OPENING];
 
     scores[ENDGAME] += board.ps_score[color_to_pstable_idx.at(White)][ENDGAME];
     scores[ENDGAME] -= board.ps_score[color_to_pstable_idx.at(Black)][ENDGAME];
+}
+
+inline int get_phase(C_BoardState &board)
+{
+    int phase_score = initial_phase_weights;
+    for (auto piece_type : {b_rooks, b_bishops, b_queens, b_knights})
+    {
+        phase_score -= bb_pop_count(board.pieces[piece_type]) * phase_weights[piece_type];
+    }
+    return phase_score;
+}
+
+inline float interpolate_scores(C_BoardState &board, Scores &score)
+{
+    int phase_score = get_phase(board);
+    return (score[OPENING] * (initial_phase_weights - phase_score) + score[ENDGAME] * phase_score) / initial_phase_weights;
 }
 
 inline float evaluate(C_BoardState &board_state)

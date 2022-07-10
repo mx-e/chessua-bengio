@@ -23,6 +23,10 @@ G_COMPILE_OPTIONS = """
 add_compile_options(
 -g
 -O2
+-DCUSTOM_PVS
+-DCUSTOM_QS
+-DCUSTOM_ASPI
+-DCUSTOM_MH
 )
 enable_testing()
 """

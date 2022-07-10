@@ -24,7 +24,7 @@
         "flags": [
             "-DCUSTOM_PVS",
             "-DCUSTOM_QS",
-            "-DCUSTOM_HASH"
+            "-DCUSTOM_MH"
         ]
     },
     "hash+aspiration": {
@@ -32,7 +32,7 @@
             "-DCUSTOM_PVS",
             "-DCUSTOM_QS",
             "-DCUSTOM_ASPI",
-            "-DCUSTOM_HASH"
+            "-DCUSTOM_MH"
         ]
     }
 }
