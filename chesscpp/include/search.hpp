@@ -31,7 +31,7 @@ float quiescence_search(C_Session &session, float alpha, float beta, int depth)
     if (session.board_state.king_attack || session.board_state.castling_move_illegal)
         return high_value;
     float current_score = evaluate(session.board_state);
-    if (depth >= max_quiesence_depth)
+    if (depth >= session.alpha_beta_state.current_max_depth + max_quiesence_depth)
         return current_score;
     if (current_score >= beta)
         return beta;
