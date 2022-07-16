@@ -31,9 +31,7 @@ async def board_state(data):
     if current_color != player_color and player_color != "":
         return
     print("received board, starting ai")
-    en_passant = (
-                    [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
-                )
+    en_passant = [board.en_passant_tile] if len(board.en_passant_tile) > 0 else []
     move, _ = bestmove(
         120.0,
         10,
@@ -63,4 +61,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-

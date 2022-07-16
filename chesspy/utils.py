@@ -101,6 +101,7 @@ def can_castle_arr_to_string(castle_arr: np.array) -> str:
         castle_str += get_idx_to_char_can_castle(i)
     return castle_str
 
+
 def extract_en_passant_tile(ep_str: str) -> list:
     if ep_str == "-":
         return []

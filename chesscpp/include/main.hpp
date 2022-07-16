@@ -37,7 +37,7 @@ inline UCIStrings generate_moves(Board board, int color, EnPassants enpassant, b
     return get_uci_moves(board_state);
 }
 
-inline void runtime_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
+inline void generate_moves_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
 {
     C_BoardState board_state = C_BoardState();
 
@@ -49,15 +49,16 @@ inline void runtime_benchmark(Board board, int color, EnPassants enpassant, bool
     }
 }
 
-inline void evaluate_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
+inline float evaluate_benchmark(Board board, int color, EnPassants enpassant, bool kingSideWhite, bool queenSideWhite, bool kingSideBlack, bool queenSideBlack, int halfMove, int fullMove, int runs)
 {
     C_BoardState board_state = C_BoardState();
 
     marshall_board_state(board_state, board, color, enpassant, kingSideWhite, queenSideWhite, kingSideBlack, queenSideBlack, halfMove, fullMove);
-    for (int _ = 0; _ < runs; _++)
+    for (int _ = 0; _ < runs - 1; _++)
     {
         evaluate(board_state);
     }
+    return evaluate(board_state);
 }
 
 inline float get_best_move(C_Session &session, int max_depth)
