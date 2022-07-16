@@ -31,7 +31,7 @@ const bool Q_SEARCH_ENABLED = false;
 
 const float infty = 9999999.;
 const float high_value = 999999.;
-const int max_quiesence_depth = 5;
+const int max_quiesence_depth = 4;
 
 const std::vector<float> alpha_aspirations = {-100.01, -320.01};
 const std::vector<float> beta_aspirations = {100.01, 320.01};

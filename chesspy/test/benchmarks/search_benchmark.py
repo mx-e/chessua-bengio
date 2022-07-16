@@ -5,7 +5,7 @@ from chesscpp import bestmove_benchmark
 from benchmark_utils import get_random_positions, write_benchmark_results
 
 MAX_DEPTH = 7
-N_POSITIONS = 500
+N_POSITIONS = 10
 RANDOM_SEED = 329
 OUTNAME = "results_search_benchmark.csv"
 
@@ -41,4 +41,4 @@ if __name__ == "__main__":
             time_passed = time.time() - start
             result = [RunName, position, depth, time_passed, best_move, nodes_visited]
             results.append(result)
-    write_benchmark_results(outname=OUTNAME, results=result, overwrite=overwrite_csv)
+    write_benchmark_results(outname=OUTNAME, results=results, overwrite=overwrite_csv)
