@@ -31,24 +31,34 @@ class GameState:
 
 
 def import_fen(fen_str: str):
-    assert len(fen_str.split(" ")) == 6
-    (
-        board_state,
-        to_move,
-        can_castle,
-        en_passant_tile,
-        n_reversible_halfmoves,
-        n_moves,
-    ) = fen_str.split()
-    assert n_reversible_halfmoves.isnumeric() and n_moves.isnumeric()
+    n_fen_elems = len(fen_str.split(" "))
+    assert n_fen_elems == 2 or n_fen_elems == 6
+    if(n_fen_elems == 6):
+        (
+            board_state,
+            to_move,
+            can_castle,
+            en_passant_tile,
+            n_reversible_halfmoves,
+            n_moves,
+        ) = fen_str.split(" ")
+        assert n_reversible_halfmoves.isnumeric() and n_moves.isnumeric()
+        arr_can_castle = can_castle_string_to_arr(can_castle)
+        coord_en_passant = extract_en_passant_tile(en_passant_tile)
+    else: 
+        (
+            board_state,
+            to_move,
+        )= fen_str.split(" ")
+        n_reversible_halfmoves, n_moves = 0, 0
+        arr_can_castle, coord_en_passant, = [True, True, True, True], []
+    
     assert len(board_state.split("/")) == 8
-
     int_board_state = np.array(
         [row_str_to_board_row(row_str) for row_str in board_state.split("/")], dtype=int
     )
     int_to_move = get_char_to_int_to_move(to_move)
-    arr_can_castle = can_castle_string_to_arr(can_castle)
-    coord_en_passant = extract_en_passant_tile(en_passant_tile)
+    
     return GameState(
         np.flip(int_board_state, axis=0).T,
         int_to_move,
@@ -57,7 +67,6 @@ def import_fen(fen_str: str):
         int(n_reversible_halfmoves),
         int(n_moves),
     )
-
 
 def export_fen(game_state: GameState):
     fen_str = ""

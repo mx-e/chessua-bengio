@@ -101,19 +101,17 @@ def can_castle_arr_to_string(castle_arr: np.array) -> str:
         castle_str += get_idx_to_char_can_castle(i)
     return castle_str
 
-
-# note col and row get swapped to match board indexing in GameState
 def extract_en_passant_tile(ep_str: str) -> list:
     if ep_str == "-":
         return []
     assert len(ep_str) == 2
     col, row = ep_str
-    return [abc_to_num(col) - 1, int(row) - 1]
+    return [[abc_to_num(col) - 1, int(row) - 1]]
 
 
 def export_en_passant_tile(ep_arr: np.array) -> str:
     if len(ep_arr) == 0:
         return "-"
-    col, row = ep_arr
+    col, row = ep_arr[0]
     ep_str = num_to_abc(col + 1) + str(row + 1)
     return ep_str
