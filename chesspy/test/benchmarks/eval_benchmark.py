@@ -35,7 +35,7 @@ if __name__ == "__main__":
             board.n_moves,
             N_REPEATS
         )
-        time_passed = (time.time() - start) * (nanoseconds_in_second/N_REPEATS)
+        time_passed = (time.time() - start) * (nanoseconds_in_second / N_REPEATS)
         result = [RunName, position, time_passed, eval]
         results.append(result)
     write_benchmark_results(outname=OUTNAME, results=results, overwrite=overwrite_csv)
