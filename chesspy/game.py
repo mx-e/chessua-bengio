@@ -13,7 +13,6 @@ from chesspy.utils import (
     get_int_to_char_to_move,
 )
 
-
 @dataclass
 class GameState:
     board_state: np.array

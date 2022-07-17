@@ -1,7 +1,5 @@
 import unittest, logging, sys, pathlib, json
-
 from chesspy.game import import_fen, export_fen
-
 
 class TestGame(unittest.TestCase):
     def test_fen_to_game_state_to_fen(self):
