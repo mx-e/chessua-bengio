@@ -5,7 +5,7 @@ from chesscpp import bestmove_benchmark
 from benchmark_utils import get_random_positions, write_benchmark_results
 
 MAX_DEPTH = 7
-N_POSITIONS = 10
+N_POSITIONS = 500
 RANDOM_SEED = 329
 OUTNAME = "results_search_benchmark.csv"
 

@@ -29,6 +29,32 @@ const bool Q_SEARCH_ENABLED = true;
 const bool Q_SEARCH_ENABLED = false;
 #endif
 
+#ifdef CUSTOM_EVMAT
+const bool MATERIAL_EVAL_ENABLED = true;
+#else
+const bool MATERIAL_EVAL_ENABLED = false;
+#endif
+#ifdef CUSTOM_EVMOB
+const bool MOBILITY_EVAL_ENABLED = true;
+#else
+const bool MOBILITY_EVAL_ENABLED = false;
+#endif
+#ifdef CUSTOM_EVPS
+const bool PAWN_STRUCT_EVAL_ENABLED = true;
+#else
+const bool PAWN_STRUCT_EVAL_ENABLED = false;
+#endif
+#ifdef CUSTOM_EVKS
+const bool KING_SHIELD_EVAL_ENABLED = true;
+#else
+const bool KING_SHIELD_EVAL_ENABLED = false;
+#endif
+#ifdef CUSTOM_EVREST
+const bool EVAL_REST_ENABLED = true;
+#else
+const bool EVAL_REST_ENABLED = false;
+#endif
+
 const float infty = 9999999.;
 const float high_value = 999999.;
 const int max_quiesence_depth = 4;

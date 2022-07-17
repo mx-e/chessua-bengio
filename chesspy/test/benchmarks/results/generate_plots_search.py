@@ -1,67 +1,75 @@
-import plotly.figure_factory as ff
-import plotly.express as px
-import pandas as pd, numpy as np
 import plotly.graph_objects as go
+from graph_utils import COLORS, rgb_to_rgba, read_results_file, save_image, get_run_data
 
-from matplotlib import pyplot as plt
+INFILE = "results_search_benchmark.csv"
+OUTFILE1 = "results_search_dist.pdf"
 
-MAX_DEPTH = 7
+SEARCH_DEPTH = 7
 
-data = pd.read_csv("./data/results_depth_7.csv")
+if __name__ == "__main__":
+    data = read_results_file(INFILE)
+    data = data[data["depth"] == SEARCH_DEPTH]
 
+    traces={
+        "Alpha/Beta": "bare", 
+        "Principle Variation Search": "pvs", 
+        "PV+Q Search (up to depth 11)": "pvs+qs",
+        "Previous + Aspiration Search": "aspiration",
+        "Previous + Transposition Table": "hash",
+        "Previous + Both": "hash+aspiration"
+        }
 
-print(data)
-print(data["depth"] == MAX_DEPTH)
-data = data[data["depth"] == MAX_DEPTH]
-data["time_passed"] = pd.to_numeric(data["time_passed"])
-print(data)
-r = (
-    data[["run_name", "time_passed"]]
-    .sort_values(by="time_passed")
-    .groupby("run_name")["time_passed"]
-    .apply(list)
-)
-r2 = (
-    data[["run_name", "time_passed", "nodes_visited"]]
-    .sort_values(by="time_passed")
-    .groupby("run_name")["nodes_visited"]
-    .apply(list)
-)
+    fig1 = go.Figure()
 
-fig = go.Figure()
-
-runs = ["bare", "pvs", "pvs+qs", "aspiration", "hash", "hash+aspiration"]
-
-for run in runs:
-    fig.add_trace(
-        go.Violin(
-            x=data["run_name"][data["run_name"] == run],
-            y=data["time_passed"][data["run_name"] == run],
-            name=run,
-            box_visible=True,
-            meanline_visible=True,
-            points="all",
+    i = 0
+    for key, value in traces.items():
+        fig1.add_trace(
+            go.Box(
+                jitter=0.7,
+                pointpos=-1.95,
+                boxmean=True,
+                boxpoints="all",
+                y=get_run_data(data, value, "time_passed"), 
+                name=key,
+                marker=dict(
+                    size=5.5,
+                    line=dict(
+                        width=1, 
+                        color="#222222"
+                        )
+                    ),
+                marker_color=COLORS[i],
+                fillcolor=rgb_to_rgba(COLORS[i], 0.8),
+                line=dict(
+                    width=2,
+                    color="#222222"
+                    )
+            ))
+        i+=1
+    fig1.update_yaxes(
+        title_text="runtime in s",
+        range=[-3, 35],
+        gridcolor="rgba(200,200,200,0.5)",
+        gridwidth=2.5,
         )
-    )
-
-fig.show()
-
-fig = go.Figure()
-
-for run in runs:
-    fig.add_trace(
-        go.Violin(
-            x=data["run_name"][data["run_name"] == run],
-            y=data["nodes_visited"][data["run_name"] == run],
-            name=run,
-            box_visible=True,
-            meanline_visible=True,
-            points="all",
+    fig1.update_layout(    
+        title=dict(
+            text="Run time of move search variants for depth=7",
+            x=0.5,
+            y=0.9,
+            xanchor="center",
+            yanchor="bottom",
+            font=dict(
+                size=16,
+            )
+            ),
+        showlegend=False,
+        height=1000, 
+        width=1280,  
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin = dict(pad=20, r=0)
         )
-    )
+    fig1.show()
+    save_image(fig=fig1, outfile=OUTFILE1)
 
-fig.show()
-
-# # Create distplot with custom bin_size
-# fig = ff.create_distplot(list(r), list(r.index), bin_size=0.2)
-# fig.show()

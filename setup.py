@@ -8,7 +8,7 @@ class BuildExt(build_ext):
     def build_extension(self, ext) -> None:
         version = os.environ.get("CHESSAI_VERSION", None)
 
-        ext.extra_compile_args = ["-g", "-std=c++20"]
+        ext.extra_compile_args = ["-g", "-std=c++20", "-O3"]
         if version:
             with open("versions.json", "r") as f:
                 versions = json.load(f)

@@ -27,9 +27,11 @@ add_compile_options(
 -DCUSTOM_ASPI
 -DCUSTOM_MH
 -DCUSTOM_QS
-
-
-
+-DCUSTOM_EVMAT
+-DCUSTOM_EVMOB
+-DCUSTOM_EVPS
+-DCUSTOM_EVKS
+-DCUSTOM_EVREST
 )
 enable_testing()
 """

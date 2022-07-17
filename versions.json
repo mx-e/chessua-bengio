@@ -1,38 +1,127 @@
 {
     "bare": {
-        "flags": []
+        "flags": [
+            "-DCUSTOM_EVMAT",
+            "-DCUSTOM_EVMOB",
+            "-DCUSTOM_EVPS",
+            "-DCUSTOM_EVKS",
+            "-DCUSTOM_EVREST"
+        ]
     },
     "pvs": {
         "flags": [
-            "-DCUSTOM_PVS"
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_EVMAT",
+            "-DCUSTOM_EVMOB",
+            "-DCUSTOM_EVPS",
+            "-DCUSTOM_EVKS",
+            "-DCUSTOM_EVREST"
         ]
     },
     "pvs+qs": {
         "flags": [
             "-DCUSTOM_PVS",
-            "-DCUSTOM_QS"
+            "-DCUSTOM_QS",
+            "-DCUSTOM_EVMAT",
+            "-DCUSTOM_EVMOB",
+            "-DCUSTOM_EVPS",
+            "-DCUSTOM_EVKS",
+            "-DCUSTOM_EVREST"
         ]
     },
     "aspiration": {
         "flags": [
             "-DCUSTOM_PVS",
             "-DCUSTOM_QS",
-            "-DCUSTOM_ASPI"
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_EVMAT",
+            "-DCUSTOM_EVMOB",
+            "-DCUSTOM_EVPS",
+            "-DCUSTOM_EVKS",
+            "-DCUSTOM_EVREST"
         ]
     },
     "hash": {
         "flags": [
             "-DCUSTOM_PVS",
             "-DCUSTOM_QS",
-            "-DCUSTOM_MH"
+            "-DCUSTOM_MH",
+            "-DCUSTOM_EVMAT",
+            "-DCUSTOM_EVMOB",
+            "-DCUSTOM_EVPS",
+            "-DCUSTOM_EVKS",
+            "-DCUSTOM_EVREST"
         ]
     },
     "hash+aspiration": {
         "flags": [
             "-DCUSTOM_PVS",
             "-DCUSTOM_QS",
+            "-DCUSTOM_MH",
             "-DCUSTOM_ASPI",
-            "-DCUSTOM_MH"
+            "-DCUSTOM_EVMAT",
+            "-DCUSTOM_EVMOB",
+            "-DCUSTOM_EVPS",
+            "-DCUSTOM_EVKS",
+            "-DCUSTOM_EVREST"
+        ]
+    },
+    "eval_mat": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_MH",
+            "-DCUSTOM_EVMAT"
+        ]
+    },
+    "eval_mob": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_MH",
+            "-DCUSTOM_EVMOB"
+        ]
+    },
+    "eval_ps": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_MH",
+            "-DCUSTOM_EVPS"
+        ]
+    },
+    "eval_ks": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_MH",
+            "-DCUSTOM_EVKS"
+        ]
+    },
+    "eval_other": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_MH",
+            "-DCUSTOM_EVREST"
+        ]
+    },
+    "all": {
+        "flags": [
+            "-DCUSTOM_PVS",
+            "-DCUSTOM_QS",
+            "-DCUSTOM_ASPI",
+            "-DCUSTOM_MH",
+            "-DCUSTOM_EVMAT",
+            "-DCUSTOM_EVMOB",
+            "-DCUSTOM_EVPS",
+            "-DCUSTOM_EVKS",
+            "-DCUSTOM_EVREST"
         ]
     }
 }

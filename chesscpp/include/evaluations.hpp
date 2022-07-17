@@ -308,13 +308,20 @@ inline float evaluate(C_BoardState &board_state)
 {
     Scores score = {0., 0.};
 
-    evaluate_material(board_state, score);
-    evaluate_pawn_structure(board_state, score);
-    evaluate_rooks_on_open_file(board_state, score);
-    evaluate_has_bishop_pair(board_state, score);
-    evaluate_king_shield(board_state, score);
-    evaluate_mobility(board_state, score);
-    evaluate_ps_tables(board_state, score);
+    if (MATERIAL_EVAL_ENABLED)
+        evaluate_material(board_state, score);
+    if (MOBILITY_EVAL_ENABLED)
+        evaluate_mobility(board_state, score);
+    if (PAWN_STRUCT_EVAL_ENABLED)
+        evaluate_pawn_structure(board_state, score);
+    if (KING_SHIELD_EVAL_ENABLED)
+        evaluate_king_shield(board_state, score);
+    if (EVAL_REST_ENABLED)
+    {
+        evaluate_rooks_on_open_file(board_state, score);
+        evaluate_has_bishop_pair(board_state, score);
+        evaluate_ps_tables(board_state, score);
+    }
 
     return board_state.turn * interpolate_scores(board_state, score);
 }

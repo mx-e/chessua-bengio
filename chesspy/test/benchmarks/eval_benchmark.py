@@ -4,7 +4,7 @@ from chesscpp import evaluate_benchmark
 from benchmark_utils import get_random_positions, write_benchmark_results
 
 N_REPEATS = 10000
-N_POSITIONS = 10
+N_POSITIONS = 500
 RANDOM_SEED = 329
 OUTNAME = "results_eval_benchmark.csv"
 
