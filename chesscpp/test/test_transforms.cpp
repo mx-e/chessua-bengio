@@ -53,6 +53,18 @@
 //               false);
 // }
 
+TEST(Transform, GetPieceTypeOfField)
+{
+    C_Session session = construct_session(10);
+    C_BoardState board = session.board_state;
+    uint64_t kings = fill_bitboard_max(empty_board, {0, 64});
+    board.pieces[b_kings] = kings;
+
+    EXPECT_EQ(get_piece_type_of_field(board, 0), pKing);
+    EXPECT_EQ(get_piece_type_of_field(board, 64), pKing);
+    EXPECT_EQ(get_piece_type_of_field(board, 32), 0);
+}
+
 TEST(Transforms, SetPieces)
 {
     C_Session session = construct_session(10);

@@ -22,7 +22,7 @@ if __name__ == "__main__":
         go.Box(
             y=get_run_data(data, "bitboards", "time_passed_ns"),
             name="Full Move Generation",      
-            boxpoints=False, # represent all points
+            boxpoints=False,
             boxmean=True,
             fillcolor=rgb_to_rgba(COLORS[COLOR_VAL], 0.8),
             line=dict(width=2,
@@ -63,6 +63,8 @@ if __name__ == "__main__":
         )
     fig1.update_xaxes(
         title_text="no. moves generated",
+        gridcolor="rgba(200,200,200,0.5)",
+        gridwidth=2.5,
         row=1, col=2,
         )
 
