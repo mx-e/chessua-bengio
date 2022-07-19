@@ -1,6 +1,7 @@
 #ifndef PSTABLES_H
 #define PSTABLES_H
 
+#include <array>
 #include <vector>
 #include <map>
 #include "utils.hpp"
@@ -8,10 +9,13 @@
 
 // Source: https://github.com/GunshipPenguin/shallow-blue/blob/master/src/psquaretable.cc
 const std::map<float, int> color_to_pstable_idx = {{1., 0}, {-1, 1}};
-const std::vector<std::vector<std::vector<std::vector<float>>>> PSTABLES = {
+
+// 
+const float PSTABLES[2][2][6][64] = {
     // White
     {{// King
-      {30, 20, -10, -20, -30, -30, -30, -30,
+      {
+       30, 20, -10, -20, -30, -30, -30, -30,
        30, 20, -20, -30, -40, -40, -40, -40,
        20, 0, -20, -30, -40, -40, -40, -40,
        20, 0, -20, -40, -50, -50, -50, -50,

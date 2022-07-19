@@ -120,6 +120,10 @@ inline bool check_castling_move_illegal(C_BoardState &board, const move &m, cons
 
 inline void push_move(C_BoardState &board, move m, MoveList &move_list)
 {
+    // update ps tables
+    update_score(Make, OPENING, board.ps_score[color_to_pstable_idx.at(board.turn)][OPENING], board.ps_score[color_to_pstable_idx.at(-board.turn)][OPENING], board, m);
+    update_score(Make, ENDGAME, board.ps_score[color_to_pstable_idx.at(board.turn)][ENDGAME], board.ps_score[color_to_pstable_idx.at(-board.turn)][ENDGAME], board, m);
+
     execute_move_forward(board, m);
 
     m.prev_c = board.castling_rights;
@@ -135,10 +139,6 @@ inline void push_move(C_BoardState &board, move m, MoveList &move_list)
     board.half_moves += 1.;
     board.half_moves *= ((!(piece_type == pPawn) && !(m.capture)));
     board.moves += (board.turn == -1.) * 1.;
-
-    // update ps tables
-    // update_score(Make, OPENING, board.ps_score[color_to_pstable_idx.at(board.turn)][OPENING], board.ps_score[color_to_pstable_idx.at(-board.turn)][OPENING], board, m);
-    // update_score(Make, ENDGAME, board.ps_score[color_to_pstable_idx.at(board.turn)][ENDGAME], board.ps_score[color_to_pstable_idx.at(-board.turn)][ENDGAME], board, m);
 
     board.turn *= -1;
 
@@ -171,13 +171,14 @@ inline move pop_move(C_BoardState &board)
 
     board.turn *= -1;
 
-    // update ps tables
-    // update_score(Unmake, OPENING, board.ps_score[color_to_pstable_idx.at(board.turn)][OPENING], board.ps_score[color_to_pstable_idx.at(-board.turn)][OPENING], board, m);
-    // update_score(Unmake, ENDGAME, board.ps_score[color_to_pstable_idx.at(board.turn)][ENDGAME], board.ps_score[color_to_pstable_idx.at(-board.turn)][ENDGAME], board, m);
-
     board.king_attack = false;
     board.castling_move_illegal = false;
     board.move_stack.pop_back();
+
+    // update ps tables
+    update_score(Unmake, OPENING, board.ps_score[color_to_pstable_idx.at(board.turn)][OPENING], board.ps_score[color_to_pstable_idx.at(-board.turn)][OPENING], board, m);
+    update_score(Unmake, ENDGAME, board.ps_score[color_to_pstable_idx.at(board.turn)][ENDGAME], board.ps_score[color_to_pstable_idx.at(-board.turn)][ENDGAME], board, m);
+
     return m;
 }
 
