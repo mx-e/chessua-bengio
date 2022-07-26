@@ -224,6 +224,49 @@ TEST(BestMoveMateIn3, ZukertortPotter1875)
     EXPECT_EQ(value, "c3e5");
 }
 
+TEST(Search, PSTablesIntegrationTest1)
+{
+    Board board = {{{pRook, 0, 0, pPawn, 0, -pBishop, -pPawn, -pRook},
+                    {0, pPawn, pKnight, 0, 0, -pPawn, 0, -pKnight},
+                    {pBishop, 0, pKnight, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, 0, pPawn, -pPawn, 0, 0},
+                    {pQueen, pBishop, 0, pPawn, 0, 0, -pQueen, -pRook},
+                    {pRook, 0, pPawn, 0, 0, 0, -pPawn, 0},
+                    {pKing, pPawn, 0, 0, 0, -pPawn, -pBishop, -pKing},
+                    {0, pPawn, 0, 0, -pKnight, 0, -pPawn, 0}}};
+
+    auto [value, _] = bestmove_benchmark(5, board, 1., {}, false, false, false, false, 0, 0);
+}
+
+TEST(Search, PSTablesIntegrationTest2)
+{
+    Board board = {{{pRook, pPawn, 0, 0, -pPawn, 0, 0, 0},
+                    {0, 0, pPawn, -pRook, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, pPawn, 0, 0, 0, 0, 0},
+                    {pKing, 0, pPawn, 0, pKnight, 0, 0, 0},
+                    {0, pPawn, 0, 0, -pBishop, -pKnight, pBishop, -pKing},
+                    {0, pPawn, 0, -pPawn, 0, 0, 0, 0},
+                    {pRook, 0, 0, pPawn, -pPawn, 0, 0, 0}}};
+
+    auto [value, _] = bestmove_benchmark(6, board, 1., {}, true, true, false, false, 0, 0);
+}
+
+TEST(Search, PSTablesIntegrationTest3)
+{
+    Board board = {{{pRook, 0, 0, pPawn, 0, -pBishop, -pPawn, -pRook},
+                    {0, pPawn, pKnight, 0, 0, -pPawn, 0, -pKnight},
+                    {pBishop, 0, pKnight, 0, -pPawn, 0, 0, 0},
+                    {0, 0, 0, 0, pPawn, -pPawn, 0, 0},
+                    {pQueen, pBishop, 0, pPawn, 0, 0, -pQueen, -pRook},
+                    {pRook, 0, pPawn, 0, 0, 0, -pPawn, 0},
+                    {pKing, pPawn, 0, 0, 0, -pPawn, -pBishop, -pKing},
+                    {0, pPawn, 0, 0, -pKnight, 0, -pPawn, 0}}};
+
+    auto [value, _] = bestmove_benchmark(6, board, 1., {}, false, false, false, false, 5, 15);
+    EXPECT_EQ(value, "c3e5");
+}
+
 // broken because of new evaluation function
 //  TEST(Bestmove, QuiesenceSearch1)
 //  {
