@@ -133,3 +133,5 @@ dmypy.json
 **vscode
 .pdm.toml
 **/.DS_Store
+
+fen_positions.csv
