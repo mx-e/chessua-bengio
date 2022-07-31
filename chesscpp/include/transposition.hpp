@@ -124,10 +124,13 @@ inline std::optional<TT_Entry> find_tt_entry(HashState &hash_state)
     return std::optional<TT_Entry>();
 }
 
-inline void hash_move(HashState &hash_state, move m)
+inline void hash_move(HashState &hash_state, move m, int depth)
 {
-    if (MV_HASH_ENABLED)
-        hash_state.tt_ht[hash_state.hash] = TT_Entry{.best_move = m};
+    if (MV_HASH_ENABLED) {
+        move mm = m;
+        hash_state.tt_ht[hash_state.hash] = TT_Entry{depth, mm};
+    }
+        
 }
 
 #endif

@@ -111,16 +111,27 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
     bool search_pv = true;
     float score;
 
-    if (auto entry = find_tt_entry(session.hash_state))
+    if (MV_HASH_ENABLED)
     {
-        move_list.insert(move_list.begin(), entry->best_move);
+        if (auto entry = find_tt_entry(session.hash_state))
+        {
+            for (auto m : move_list)
+            {
+                if (
+                    m.src == entry->best_move.src && m.dest == entry->best_move.dest && m.capture == entry->best_move.capture && m.castling == entry->best_move.castling && m.ep == entry->best_move.ep && m.ep_field == entry->best_move.ep_field && m.promotion == entry->best_move.promotion)
+                {
+                    move_list.insert(move_list.begin(), entry->best_move);
+                    break;
+                }
+            }
+        }
     }
 
     for (move m : move_list)
     {
         ++session.alpha_beta_state.nodes_at_depth[session.alpha_beta_state.current_max_depth];
-        push_move(session.board_state, m, session.move_list_stack[depth + 1]);
         update_hash(session.hash_state, session.board_state, m);
+        push_move(session.board_state, m, session.move_list_stack[depth + 1]);
 
         if (search_pv)
         {
@@ -138,7 +149,7 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
 
         if (score >= beta)
         {
-            hash_move(session.hash_state, m);
+            hash_move(session.hash_state, m, depth);
             return beta;
         }
 
@@ -157,7 +168,7 @@ float pv_search(C_Session &session, float alpha, float beta, int depth_left, Lin
         }
     }
 
-    hash_move(session.hash_state, pline.argmove[0]);
+    hash_move(session.hash_state, pline.argmove[0], 0);
     return alpha;
 }
 
